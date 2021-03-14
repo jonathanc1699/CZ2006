@@ -16,8 +16,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,12 +33,14 @@ public class AdminPage extends AppCompatActivity {
 
 
 
-    ArrayList<User> User = new ArrayList<>();
+    ArrayList<User> User=new ArrayList<User>();
 
     AdminController mAdminController;
     ListView listView;
-    FirebaseAuth fAuth;
-    String name="ff";
+    FirebaseAuth fAuth=FirebaseAuth.getInstance();
+    String newtext;
+
+
 
 
 
@@ -62,24 +66,38 @@ public class AdminPage extends AppCompatActivity {
 //        User.add(new User(email, name));
 
         // Start listing users from the beginning, 1000 at a time.
+
+
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
         DatabaseReference usersdRef = rootRef.child("Users");
         ValueEventListener eventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot ds : dataSnapshot.getChildren()) {
-                    name = ds.child("email").getValue(String.class);
-                    Log.d("TAG", name+"fff");
 
+                for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                    String uid = ds.getKey();
+                    Log.d("TAG", uid);
+                    String email=ds.child("email").getValue(String.class);
+                    String name=ds.child("fullName").getValue(String.class);
+                    User.add(new User(email,name,uid));
                 }
+                mAdminController = new AdminController(AdminPage.this,User);
+                listView.setAdapter(mAdminController);
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+
+                        showdeleteDialog(mAdminController.getItemId(position));
+
+                    }
+                });
+
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {}
         };
         usersdRef.addListenerForSingleValueEvent(eventListener);
-
-
 
 
         //
@@ -90,24 +108,16 @@ public class AdminPage extends AppCompatActivity {
 //            User.add(new User(useremail[i],username[i]));
 //        }
         //
-        User.add(new User());
 
 
-        mAdminController = new AdminController(this,User);
-        listView.setAdapter(mAdminController);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
-                showdeleteDialog(position);
 
-            }
-        });
 
 
 
 
     }
+
 
 
 
@@ -131,6 +141,7 @@ public class AdminPage extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                newtext=newText;
 
                 Log.e("Main"," data search"+newText);
 
@@ -178,7 +189,7 @@ public class AdminPage extends AppCompatActivity {
 
 
 
-    private void showdeleteDialog(final int position) {
+    private void showdeleteDialog(final long position) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Delete User?");
@@ -187,7 +198,14 @@ public class AdminPage extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 //delete user and refresh page
-                mAdminController.remove(User.get(position));
+
+                mAdminController.remove(User.get((int) position));
+                mAdminController.getFilter().filter(newtext);
+
+
+
+                //TODO fAuth.deleteUser(User.get((int) position).uid);
+                //delete in authentication
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
