@@ -1,29 +1,34 @@
 package com.example.loginapp;
 
-import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
+
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
+
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalTime;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class ClinicPage extends AppCompatActivity {
 
@@ -35,6 +40,7 @@ public class ClinicPage extends AppCompatActivity {
     TextView mTextView_phoneClinic;
     TextView mTextView_addressClinic;
     ImageView mImageView_Clinic;
+
 
 
     @Override
@@ -110,12 +116,53 @@ public class ClinicPage extends AppCompatActivity {
         alertDialogBuilder.setView(promptsView);
 
         alertDialogBuilder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             public void onClick(DialogInterface dialog, int id) {
                 //TODO add to database
+                //TODO set boundary for booking of qppt
 
-                sendConfirmationEmail();
-                Log.e("Email sent", "Email sent to user");
+                LocalTime startTime = LocalTime.parse("08:00:00");
+                LocalTime closingTime =LocalTime.parse("20:00:00");
+
+                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH);
+                TimeZone tz = TimeZone.getTimeZone("Asia/Singapore");
+                sdf.setTimeZone(tz);
+
+                java.util.Date date= new java.util.Date();
+                Timestamp local = new Timestamp(date.getTime());
+                String strTime = sdf.format(date);
+                System.out.println("Local in String format " + strTime);
+
+                if (startTime.isBefore(LocalTime.parse(strTime)) && closingTime.isAfter(LocalTime.parse(strTime)) )
+                {
+                    sendConfirmationEmail();
+                    Log.e("Email sent", "Email sent to user");
+                }
+                else
+                {
+                    final ProgressDialog faildialog = new ProgressDialog(ClinicPage.this);
+                    faildialog.setTitle("Fail to book appointment");
+                    faildialog.setMessage("Clinic is closed \n Please try again when the clinic is open");
+                    faildialog.show();
+
+
+                    //set timer for dialog window to close
+                    Runnable progressRunnable = new Runnable() {
+
+                        @Override
+                        public void run() {
+                            faildialog.cancel();
+                        }
+                    };
+
+                    Handler pdCanceller = new Handler();
+                    pdCanceller.postDelayed(progressRunnable, 3000);
+
+                    System.out.println("Cannot book appt");
+
+                }
             }
+
         });
 
 
