@@ -20,6 +20,7 @@ public class ChatbotActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     List<ResponseMessage> responseMessageList;
     MessageAdapter messageAdapter;
+    List<String> tempList =new ArrayList<String>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,37 +37,41 @@ public class ChatbotActivity extends AppCompatActivity {
                 if(actionId == EditorInfo.IME_ACTION_SEND){
                     ResponseMessage userMessage = new ResponseMessage(userInput.getText().toString(), true);
                     responseMessageList.add(userMessage);
+                    String userinput = userInput.getText().toString();
+                    tempList.add(userinput);
+                    String symptomString = tempList.get(0);
 
-                    //add in if else for chatbot's side of the response message, if user enters stop....else...
-/*                    if (userInput.getText().toString() == "stop"){
-                        ResponseMessage chatbotMessage = new ResponseMessage("i havent done this part yet", false);
-                        responseMessageList.add(chatbotMessage);
+                    ResponseMessage chatbotMessage;
+                    if(!userInput.getText().toString().equals("stop")) {
+                        if(responseMessageList.size() == 1) {
+                            chatbotMessage = new ResponseMessage("Your symptoms are: " + userInput.getText().toString() + ". Enter 'stop' if you do not have anymore symptoms to add", false);
+                            responseMessageList.add(chatbotMessage);
+                        }
+
+                        else {
+                            for (int i = 1; i < tempList.size(); i++) {
+                                symptomString = symptomString + ", " + tempList.get(i);
+                            }
+                            chatbotMessage = new ResponseMessage("Your symptoms are: " + symptomString + ". Enter 'stop' if you do not have anymore symptoms to add", false);
+                            responseMessageList.add(chatbotMessage);
+
+                        }
                     }
                     else {
-                        ArrayList tempList = new ArrayList();
-                        for (int i = 1; i < responseMessageList.size(); i=+2)
-                        {
-                            tempList.add(responseMessageList.get(i));
-                        }
-                        if (tempList.size() == 1) {
-                            ResponseMessage chatbotMessage = new ResponseMessage("Your symptoms are: " + userInput.getText().toString() + ". Enter 'stop' if you do not have anymore symptoms to add", false);
-                            responseMessageList.add(chatbotMessage);
-                        }
-                        else {
-                            ResponseMessage chatbotMessage = new ResponseMessage("Your symptoms are: " + tempList + ". Enter 'stop' if you do not have anymore symptoms to add", false);
-                            responseMessageList.add(chatbotMessage);
-                        }
-                    }*/
-                    ResponseMessage chatbotMessage = new ResponseMessage("Your symptoms are: " + userInput.getText().toString() + ". Enter 'stop' if you do not have anymore symptoms to add", false);
-                    responseMessageList.add(chatbotMessage);
+                        chatbotMessage = new ResponseMessage("You have entered stop.", false);
+                        responseMessageList.add(chatbotMessage);
+                    }
+
                     messageAdapter.notifyDataSetChanged();
+
                     if(!isVisible()){
                         recyclerView.scrollToPosition(messageAdapter.getItemCount()-1);
                     }
-
+                    userInput.getText().clear();
                 }
                 return true;
             }
+
         });
     }
 
