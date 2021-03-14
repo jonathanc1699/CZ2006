@@ -142,7 +142,7 @@ public class ClinicPage extends AppCompatActivity {
         String recipientemail = userEmail;// fetch user's email
 
         final ProgressDialog dialog = new ProgressDialog(ClinicPage.this);
-        dialog.setTitle("Comfirming your Booking");
+        dialog.setTitle("Confirming your Booking");
         dialog.setMessage("Please wait");
         dialog.show();
         Thread sender = new Thread(new Runnable(){
