@@ -61,7 +61,19 @@ public class AdminController extends ArrayAdapter<User> implements Filterable {
 
     @Override
     public long getItemId(int position) {
-        return position;
+
+        int itemID;
+
+        // orig will be null only if we haven't filtered yet:
+        if (UsersTotal == null)
+        {
+            itemID = position;
+        }
+        else
+        {
+            itemID = UsersTotal.indexOf(Usersfiltered.get(position));
+        }
+        return itemID;
     }
 
 
@@ -76,7 +88,7 @@ public class AdminController extends ArrayAdapter<User> implements Filterable {
         }
 
         ((TextView) convertView.findViewById(R.id.textView_userEmail)).setText(getItem(position).getUserEmail());
-        ((TextView) convertView.findViewById(R.id.textView_userName)).setText(getItem(position).getUserName());
+        ((TextView) convertView.findViewById(R.id.textView_userName)).setText(getItem(position).getFullName());
 
         return convertView;
 
@@ -111,7 +123,7 @@ public class AdminController extends ArrayAdapter<User> implements Filterable {
                     String searchStr = constraint.toString().toLowerCase();
 
                     for(User user:UsersTotal){
-                        if(user.getUserName().toLowerCase().contains(searchStr) || user.getUserEmail().toLowerCase().contains(searchStr)){
+                        if(user.getFullName().toLowerCase().contains(searchStr) || user.getUserEmail().toLowerCase().contains(searchStr)){
                             results.add(user);
 
                         }

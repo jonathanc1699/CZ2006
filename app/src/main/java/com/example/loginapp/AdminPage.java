@@ -79,7 +79,7 @@ public class AdminPage extends AppCompatActivity {
                     Log.d("TAG", uid);
                     String email=ds.child("email").getValue(String.class);
                     String name=ds.child("fullName").getValue(String.class);
-                    User.add(new User(email,name,uid));
+                    User.add(new User(email,name,0, "nil"));
                 }
                 mAdminController = new AdminController(AdminPage.this,User);
                 listView.setAdapter(mAdminController);
