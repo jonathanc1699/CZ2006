@@ -1,5 +1,6 @@
 package com.example.loginapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ActionBar;
@@ -8,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,13 +19,28 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.io.Console;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ListofClinics extends AppCompatActivity {
     ListView listView;
     EditText SearchFilter;
     private ArrayAdapter arrayAdapter;
+
+    //To read clinic database
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference clinicRef = db.collection("clinic");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,25 +50,28 @@ public class ListofClinics extends AppCompatActivity {
         listView = (ListView)findViewById(R.id.listview);
         SearchFilter = (EditText)findViewById(R.id.searchFilter);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//arraylist of items to be on the list
-        //to be changed with database of clinics
+
+        //fetch Clinic Names from Clinic Database and assign to List View Page
+
         ArrayList<String> arrayList=new ArrayList<>();
+        clinicRef.get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot ClinicList : task.getResult()) {
+                                Log.d("Clinic Names","Clinic Names" + ClinicList.getString("Clinic Name"));
+                                //Log.d("fetch clinic works", ClinicList.getId() + " => " + ClinicList.getData());
+                                arrayList.add(ClinicList.getString("Clinic Name"));
+                                arrayAdapter=new ArrayAdapter(ListofClinics.this, android.R.layout.simple_list_item_1,arrayList);
+                                listView.setAdapter(arrayAdapter);
+                            }
+                        } else {
+                            Log.d("fetch clinic error", "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
 
-        arrayList.add("Some cool clinic");
-        arrayList.add("Chua Clinic");
-        arrayList.add("Some cooler clinic");
-        arrayList.add("Some better clinic");
-        arrayList.add("Some clinic");
-        arrayList.add("Best clinic");
-        arrayList.add("Neo Clinic");
-        arrayList.add("Chang clinic");
-        arrayList.add("Goh clinic");
-        arrayList.add("Running out of ideas clinic");
-        arrayList.add("Need real clinics clinic");
-        arrayList.add("Test clinic");
-
-        arrayAdapter=new ArrayAdapter(ListofClinics.this, android.R.layout.simple_list_item_1,arrayList);
-        listView.setAdapter(arrayAdapter);
 
 //pop up message when an item on the list is clicked
         //to be changed such that clicking on item redirects user to page containing info on clinic and queue
