@@ -14,12 +14,19 @@ public class Clinic extends MedicalLocation{
     private int ClinicCurrentQ;
     private LocalTime startTime;
     private LocalTime closingTime;
+    private String ClinicID;
 
 
-    public Clinic(float Latitude, float Longitude, String ClinicName, String Block, String Floor,
+    public Clinic()
+    {
+        super();
+
+    }
+    public Clinic(String ClinicID, float Latitude, float Longitude, String ClinicName, String Block, String Floor,
                   int Postal, String Streetname, String UnitNumber, int Telephone, int ClinicCurrentQ,
                   LocalTime startTime, LocalTime closingTime ) {
         super(Latitude, Longitude);
+        this.ClinicID = ClinicID;
         this.ClinicName = ClinicName;
         this.Block = Block;
         this.Floor = Floor;
@@ -31,6 +38,13 @@ public class Clinic extends MedicalLocation{
         this.closingTime = closingTime;
         this.startTime =startTime;
 
+    }
+    public String getClinicID() {
+        return ClinicID;
+    }
+
+    public void setClinicID(String clinicID) {
+        ClinicID = clinicID;
     }
 
     public String getClinicName() {

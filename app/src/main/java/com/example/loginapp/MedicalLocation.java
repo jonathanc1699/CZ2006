@@ -9,6 +9,11 @@ public class MedicalLocation {
         this.Latitude=Latitude;
         this.Longitude = Longitude;
     }
+
+    public MedicalLocation() {
+
+    }
+
     public float getLongitude() {
         return Longitude;
     }

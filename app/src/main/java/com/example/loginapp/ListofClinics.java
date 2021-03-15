@@ -54,14 +54,17 @@ public class ListofClinics extends AppCompatActivity {
         //fetch Clinic Names from Clinic Database and assign to List View Page
 
         ArrayList<String> arrayList=new ArrayList<>();
+
+        //clinicRef.limit(10).get() show only 10 clinic
+        //TODO show only 10 clinic based on distance
+        //TODO Add another button to show all clinic
         clinicRef.get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot ClinicList : task.getResult()) {
-                                Log.d("Clinic Names","Clinic Names" + ClinicList.getString("Clinic Name"));
-                                //Log.d("fetch clinic works", ClinicList.getId() + " => " + ClinicList.getData());
+                                //Log.d("Clinic Names","Clinic Names" + ClinicList.getString("Clinic Name"));
                                 arrayList.add(ClinicList.getString("Clinic Name"));
                                 arrayAdapter=new ArrayAdapter(ListofClinics.this, android.R.layout.simple_list_item_1,arrayList);
                                 listView.setAdapter(arrayAdapter);

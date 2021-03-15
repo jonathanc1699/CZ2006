@@ -23,10 +23,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -34,10 +37,15 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TimeZone;
+import java.util.concurrent.Future;
 
 public class ClinicPage extends AppCompatActivity {
 
@@ -55,7 +63,11 @@ public class ClinicPage extends AppCompatActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference clinicRef = db.collection("clinic");
     //
-    String Telephone="2345678";
+    int Telephone;
+    String streetName ="";
+    Map<String, Object> postal;
+
+    Clinic selectedClinic;
 
 
     @Override
@@ -76,26 +88,33 @@ public class ClinicPage extends AppCompatActivity {
         mTextView_openingHoursClinic = (TextView) findViewById(R.id.textview_openingHoursClinic);
         mTextView_phoneClinic = (TextView) findViewById(R.id.textview_phoneClinic);
         mTextView_addressClinic = (TextView) findViewById(R.id.textview_addressClinic);
-/*
-        clinicRef.get()
+
+        //TODO Need to assign to clinic id instead of ("Clinic Name", name)
+        clinicRef.whereEqualTo("Clinic Name", name).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot ClinicList : task.getResult()) {
-                                Log.d("Clinic Number:", Telephone);
+                            for (QueryDocumentSnapshot AddressList : task.getResult()) {
+                                Map<String, Object> map = AddressList.getData();
+                                Log.d("Lmao", String.valueOf(map));
+                                Log.d("check Streetname", String.valueOf(map.get("Streetname")));
+
+                                //selectedClinic.setStreetname(String.valueOf(map.get("Streetname")));
+
+                                //streetName=selectedClinic.getStreetname();
                             }
                         } else {
                             Log.d("fetch clinic error", "Error getting documents: ", task.getException());
                         }
                     }
-                });*/
+                });
 
         mTextView_nameClinic.setText("Name of Clinic:   " + name);
         mTextView_openingHoursClinic.setText("Opening Hours:   " + "8am - 8pm");
 
         //TODO once you get the info, change the hardcode
-        mTextView_addressClinic.setText("Clinic Address:   " + "Adrian road 123456");
+        mTextView_addressClinic.setText("Clinic Address:   " + streetName + " ");
         mTextView_phoneClinic.setText("Telephone:   " + Telephone);
 
 
