@@ -9,10 +9,11 @@ public class Clinic extends MedicalLocation{
     private String Streetname;
     private String UnitNumber;
     private int Telephone;
+    private int ClinicCurrentQ;
 
 
     public Clinic(float Latitude, float Longitude, String ClinicName, String Block, String Floor,
-                  int Postal, String Streetname, String UnitNumber, int Telephone) {
+                  int Postal, String Streetname, String UnitNumber, int Telephone, int ClinicCurrentQ) {
         super(Latitude, Longitude);
         this.ClinicName = ClinicName;
         this.Block = Block;
@@ -21,6 +22,7 @@ public class Clinic extends MedicalLocation{
         this.Streetname = Streetname;
         this.UnitNumber = UnitNumber;
         this.Telephone = Telephone;
+        this.ClinicCurrentQ =ClinicCurrentQ;
 
     }
 
@@ -78,5 +80,13 @@ public class Clinic extends MedicalLocation{
 
     public void setTelephone(int telephone) {
         Telephone = telephone;
+    }
+
+    public int getClinicCurrentQ() {
+        return ClinicCurrentQ;
+    }
+
+    public void setClinicCurrentQ(int clinicCurrentQ) {
+        ClinicCurrentQ = clinicCurrentQ;
     }
 }
