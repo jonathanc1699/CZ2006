@@ -34,16 +34,13 @@ public class QueueController extends AppCompatActivity {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Users");
     // opens up the current user's database reference
         final DatabaseReference currentUser = databaseReference.child(firebaseUser.getUid());
+        User user;
 
-public void TakeQueueNumber() {
-   // if (currentUser.child("currentQueue") != 0 && currentUser.child("currentClinic") != null) {
-        //havent add currentQueue to database
+public void TakeQueueNumber(Clinic currentClinic) {
         ValueEventListener userListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.getValue(User.class);
-                String userCurrentClinic = user.getCurrentClinic();
-                int userCurrentQueue = user.getCurrentQueue();
+                user = dataSnapshot.getValue(User.class);
             }
 
             @Override
@@ -53,7 +50,16 @@ public void TakeQueueNumber() {
 
 
         };
-        currentUser.addValueEventListener(userListener);
+         currentUser.addValueEventListener(userListener);
+         String userCurrentClinic = user.getCurrentClinic();
+         int userCurrentQueue = user.getCurrentQueue();
+
+         if (userCurrentQueue == 0 && userCurrentClinic == null){
+             // need a currentClinic object in clinic page from Clinic class
+             user.setCurrentQueue(currentClinic.getClinicCurrentQ()+1);
+             user.setCurrentClinic(currentClinic.getClinicName());
+             // current user's queue number and clinic would be set to the selected one after this
+         }
 
 
     }
