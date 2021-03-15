@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,10 +17,18 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -42,6 +51,12 @@ public class ClinicPage extends AppCompatActivity {
     ImageView mImageView_Clinic;
 
 
+    //To read clinic database
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference clinicRef = db.collection("clinic");
+    //
+    String Telephone="2345678";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,13 +76,27 @@ public class ClinicPage extends AppCompatActivity {
         mTextView_openingHoursClinic = (TextView) findViewById(R.id.textview_openingHoursClinic);
         mTextView_phoneClinic = (TextView) findViewById(R.id.textview_phoneClinic);
         mTextView_addressClinic = (TextView) findViewById(R.id.textview_addressClinic);
+/*
+        clinicRef.get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot ClinicList : task.getResult()) {
+                                Log.d("Clinic Number:", Telephone);
+                            }
+                        } else {
+                            Log.d("fetch clinic error", "Error getting documents: ", task.getException());
+                        }
+                    }
+                });*/
 
         mTextView_nameClinic.setText("Name of Clinic:   " + name);
         mTextView_openingHoursClinic.setText("Opening Hours:   " + "8am - 8pm");
 
         //TODO once you get the info, change the hardcode
         mTextView_addressClinic.setText("Clinic Address:   " + "Adrian road 123456");
-        mTextView_phoneClinic.setText("Phone Number:   " + "12345678");
+        mTextView_phoneClinic.setText("Telephone:   " + Telephone);
 
 
         mbutton_queue.setOnClickListener(new View.OnClickListener() {

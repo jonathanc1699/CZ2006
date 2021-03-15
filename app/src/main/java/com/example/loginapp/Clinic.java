@@ -1,5 +1,7 @@
 package com.example.loginapp;
 
+import java.time.LocalTime;
+
 public class Clinic extends MedicalLocation{
 
     private String ClinicName;
@@ -10,10 +12,13 @@ public class Clinic extends MedicalLocation{
     private String UnitNumber;
     private int Telephone;
     private int ClinicCurrentQ;
+    private LocalTime startTime;
+    private LocalTime closingTime;
 
 
     public Clinic(float Latitude, float Longitude, String ClinicName, String Block, String Floor,
-                  int Postal, String Streetname, String UnitNumber, int Telephone, int ClinicCurrentQ) {
+                  int Postal, String Streetname, String UnitNumber, int Telephone, int ClinicCurrentQ,
+                  LocalTime startTime, LocalTime closingTime ) {
         super(Latitude, Longitude);
         this.ClinicName = ClinicName;
         this.Block = Block;
@@ -23,6 +28,8 @@ public class Clinic extends MedicalLocation{
         this.UnitNumber = UnitNumber;
         this.Telephone = Telephone;
         this.ClinicCurrentQ =ClinicCurrentQ;
+        this.closingTime = closingTime;
+        this.startTime =startTime;
 
     }
 
@@ -88,5 +95,21 @@ public class Clinic extends MedicalLocation{
 
     public void setClinicCurrentQ(int clinicCurrentQ) {
         ClinicCurrentQ = clinicCurrentQ;
+    }
+
+    public LocalTime getStartTime() {
+        return startTime;
+    }
+
+    public LocalTime getClosingTime() {
+        return closingTime;
+    }
+
+    public void setStartTime(LocalTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public void setClosingTime(LocalTime closingTime) {
+        this.closingTime = closingTime;
     }
 }

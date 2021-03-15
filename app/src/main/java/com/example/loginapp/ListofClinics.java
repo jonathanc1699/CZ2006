@@ -73,11 +73,15 @@ public class ListofClinics extends AppCompatActivity {
                 });
 
 
+        //TODO Filter location : Default (nearest 10), by location.....
+        //TODO REMINDER TO SET UP THE SEARCH FUNCTION
+
 //pop up message when an item on the list is clicked
         //to be changed such that clicking on item redirects user to page containing info on clinic and queue
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
+
                 Toast.makeText(ListofClinics.this, "clicked item"+i+" "+arrayList.get(i).toString(),Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(ListofClinics.this,ClinicPage.class);
                 intent.putExtra("CLINIC_NAME", arrayList.get(i));
