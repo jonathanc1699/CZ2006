@@ -25,10 +25,10 @@ import java.util.Map;
 public class User {
 
 
-    public String fullName;
-    public String email;
-    public int currentQueue;
-    public String currentClinic;
+    private String fullName;
+    private String email;
+    private int currentQueue;
+    private String currentClinic;
 
     public User(String fullName, String email, int currentQueue, String currentClinic) {
         this.fullName = fullName;
@@ -46,6 +46,14 @@ public class User {
     public void setCurrentQueue(int currentQueue) {
         this.currentQueue = currentQueue;
     }
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
 
     public String getCurrentClinic() {
         return currentClinic;
@@ -59,9 +67,6 @@ public class User {
         return fullName;
     }
 
-    public String getUserEmail() {
-        return email;
-    }
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
