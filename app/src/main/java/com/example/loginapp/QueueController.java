@@ -25,14 +25,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class QueueController extends AppCompatActivity {
+public class QueueController  {
 
-// upon registration, default for queue and current clinic are 0 and null respectively
-// queueController is used to modify the values in firebase
+         // upon registration, default for queue and current clinic are 0 and null respectively
+         // queueController is used to modify the values in firebase
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         //should be another way to ensure its the same current user thats logged in
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Users");
-    // opens up the current user's database reference
+        // opens up the current user's database reference
         final DatabaseReference currentUser = databaseReference.child(firebaseUser.getUid());
         User user;
 
@@ -51,18 +51,43 @@ public void TakeQueueNumber(Clinic currentClinic) {
 
         };
          currentUser.addValueEventListener(userListener);
+
          String userCurrentClinic = user.getCurrentClinic();
          int userCurrentQueue = user.getCurrentQueue();
+         Log.d("USER QUEUE STATUS", String.valueOf(userCurrentQueue));
+         Log.d("USER CLINIC STATUS", userCurrentClinic);
 
-         if (userCurrentQueue == 0 && userCurrentClinic == null){
-             // need a currentClinic object in clinic page from Clinic class
+         //check if currentQueue and clinic are default values
+         if (userCurrentQueue == 0 && userCurrentClinic == null)
+         {
+             // set current user clinic and queue status to updated one
              user.setCurrentQueue(currentClinic.getClinicCurrentQ()+1);
              user.setCurrentClinic(currentClinic.getClinicName());
              // current user's queue number and clinic would be set to the selected one after this
+             Log.d("IF QUEUE SET SUCCESS", String.valueOf(user.getCurrentQueue()));
+             Log.d("IF CLINIC SET SUCCESS", user.getCurrentClinic());
+             //TODO: Increment current queue number in firestore - could add a function for this
+             // add function here
+             Log.d("CLINIC QUEUE STATUS", String.valueOf(currentClinic.getClinicCurrentQ()));
+
+
          }
+         else{
+             Log.d("USER STATUS DEFAULT", user.getCurrentClinic());
+             //TODO: User has a current booking
+
+         }
+
+         //TODO : Store new queue status and clinic status in user collection in firebase - can add a function for this
+
+    }
+
+    public void UpdateClinicQueueNumber(Clinic currentClinic)
+    {
 
 
     }
+
 }
 
 
