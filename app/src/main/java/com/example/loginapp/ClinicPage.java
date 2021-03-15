@@ -64,7 +64,7 @@ public class ClinicPage extends AppCompatActivity {
     private CollectionReference clinicRef = db.collection("clinic");
     //
     int Telephone;
-    String streetName ="";
+    String streetName ;
     Map<String, Object> postal;
 
     Clinic selectedClinic;
@@ -97,25 +97,23 @@ public class ClinicPage extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot AddressList : task.getResult()) {
                                 Map<String, Object> map = AddressList.getData();
-                                Log.d("Lmao", String.valueOf(map));
-                                Log.d("check Streetname", String.valueOf(map.get("Streetname")));
+                                selectedClinic = AddressList.toObject(Clinic.class);
+                                //Log.d("hmmmmmm", String.valueOf(selectedClinic.getStreetname()));
 
-                                //selectedClinic.setStreetname(String.valueOf(map.get("Streetname")));
+                                streetName=selectedClinic.getStreetname();
 
-                                //streetName=selectedClinic.getStreetname();
+                                mTextView_nameClinic.setText("Name of Clinic:   " + name);
+                                mTextView_openingHoursClinic.setText("Opening Hours:   " + "8am - 8pm");
+
+                                //TODO once you get the info, change the hardcode
+                                mTextView_addressClinic.setText("Clinic Address:   " + streetName + " ");
+                                mTextView_phoneClinic.setText("Telephone:   " + Telephone);
                             }
                         } else {
                             Log.d("fetch clinic error", "Error getting documents: ", task.getException());
                         }
                     }
                 });
-
-        mTextView_nameClinic.setText("Name of Clinic:   " + name);
-        mTextView_openingHoursClinic.setText("Opening Hours:   " + "8am - 8pm");
-
-        //TODO once you get the info, change the hardcode
-        mTextView_addressClinic.setText("Clinic Address:   " + streetName + " ");
-        mTextView_phoneClinic.setText("Telephone:   " + Telephone);
 
 
         mbutton_queue.setOnClickListener(new View.OnClickListener() {

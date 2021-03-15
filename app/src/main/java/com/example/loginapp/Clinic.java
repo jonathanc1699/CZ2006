@@ -2,48 +2,40 @@ package com.example.loginapp;
 
 import java.time.LocalTime;
 
-public class Clinic extends MedicalLocation{
+public class Clinic extends MedicalLocation {
 
     private String ClinicName;
-    private String Block;
-    private String Floor;
-    private int Postal;
+    private long Block;
+    private long Floor;
+    private long Postal;
     private String Streetname;
     private String UnitNumber;
-    private int Telephone;
+    private long Telephone;
     private int ClinicCurrentQ;
     private LocalTime startTime;
     private LocalTime closingTime;
     private String ClinicID;
 
 
-    public Clinic()
-    {
+    public Clinic() {
         super();
 
     }
-    public Clinic(String ClinicID, float Latitude, float Longitude, String ClinicName, String Block, String Floor,
-                  int Postal, String Streetname, String UnitNumber, int Telephone, int ClinicCurrentQ,
-                  LocalTime startTime, LocalTime closingTime ) {
+
+    public Clinic(float Latitude, float Longitude, String clinicName, long block, long floor,
+                  long postal, String streetname, String unitNumber, long telephone, int clinicCurrentQ, LocalTime startTime,
+                  LocalTime closingTime, String clinicID) {
         super(Latitude, Longitude);
-        this.ClinicID = ClinicID;
-        this.ClinicName = ClinicName;
-        this.Block = Block;
-        this.Floor = Floor;
-        this.Postal = Postal;
-        this.Streetname = Streetname;
-        this.UnitNumber = UnitNumber;
-        this.Telephone = Telephone;
-        this.ClinicCurrentQ =ClinicCurrentQ;
+        ClinicName = clinicName;
+        Block = block;
+        Floor = floor;
+        Postal = postal;
+        Streetname = streetname;
+        UnitNumber = unitNumber;
+        Telephone = telephone;
+        ClinicCurrentQ = clinicCurrentQ;
+        this.startTime = startTime;
         this.closingTime = closingTime;
-        this.startTime =startTime;
-
-    }
-    public String getClinicID() {
-        return ClinicID;
-    }
-
-    public void setClinicID(String clinicID) {
         ClinicID = clinicID;
     }
 
@@ -51,55 +43,55 @@ public class Clinic extends MedicalLocation{
         return ClinicName;
     }
 
-    public String getBlock() {
+    public void setClinicName(String clinicName) {
+        ClinicName = clinicName;
+    }
+
+    public long getBlock() {
         return Block;
     }
 
-    public String getFloor() {
+    public void setBlock(long block) {
+        Block = block;
+    }
+
+    public long getFloor() {
         return Floor;
     }
 
-    public int getPostal() {
+    public void setFloor(long floor) {
+        Floor = floor;
+    }
+
+    public long getPostal() {
         return Postal;
+    }
+
+    public void setPostal(long postal) {
+        Postal = postal;
     }
 
     public String getStreetname() {
         return Streetname;
     }
 
-    public String getUnitNumber() {
-        return UnitNumber;
-    }
-
-    public int getTelephone() {
-        return Telephone;
-    }
-
-    public void setClinicName(String clinicName) {
-        ClinicName = clinicName;
-    }
-
-    public void setBlock(String block) {
-        Block = block;
-    }
-
-    public void setFloor(String floor) {
-        Floor = floor;
-    }
-
-    public void setPostal(int postal) {
-        Postal = postal;
-    }
-
     public void setStreetname(String streetname) {
         Streetname = streetname;
+    }
+
+    public String getUnitNumber() {
+        return UnitNumber;
     }
 
     public void setUnitNumber(String unitNumber) {
         UnitNumber = unitNumber;
     }
 
-    public void setTelephone(int telephone) {
+    public long getTelephone() {
+        return Telephone;
+    }
+
+    public void setTelephone(long telephone) {
         Telephone = telephone;
     }
 
@@ -115,15 +107,26 @@ public class Clinic extends MedicalLocation{
         return startTime;
     }
 
-    public LocalTime getClosingTime() {
-        return closingTime;
-    }
-
     public void setStartTime(LocalTime startTime) {
         this.startTime = startTime;
+    }
+
+    public LocalTime getClosingTime() {
+        return closingTime;
     }
 
     public void setClosingTime(LocalTime closingTime) {
         this.closingTime = closingTime;
     }
+
+    public String getClinicID() {
+        return ClinicID;
+    }
+
+    public void setClinicID(String clinicID) {
+        ClinicID = clinicID;
+    }
+
 }
+
+

@@ -38,6 +38,8 @@ public class User {
 
     }
 
+    public User() {
+    }
 
     public int getCurrentQueue() {
         return currentQueue;

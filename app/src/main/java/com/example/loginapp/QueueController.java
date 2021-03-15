@@ -45,7 +45,7 @@ public void TakeQueueNumber(Clinic currentClinic) {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.w("DB error", "Failed to load data properly", databaseError.toException());
+                Log.w("TakeQNUM error", "Failed to load data properly", databaseError.toException());
             }
 
 
@@ -84,6 +84,7 @@ public void TakeQueueNumber(Clinic currentClinic) {
 
     public void UpdateClinicQueueNumber(Clinic currentClinic)
     {
+
 
 
     }
