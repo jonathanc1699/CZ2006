@@ -26,7 +26,7 @@ public class AdminController extends ArrayAdapter<User> implements Filterable {
 
 
 
-    public AdminController(Activity context, ArrayList<User> Users)  {
+    public AdminController(Activity context, ArrayList<User> Users) {
         // Here, we initialize the ArrayAdapter's internal storage for the context and the list.
         // the second argument is used when the ArrayAdapter is populating a single TextView.
         // Because this is a custom adapter for two TextViews and an ImageView, the adapter is not
