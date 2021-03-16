@@ -16,7 +16,6 @@ public class Clinic extends MedicalLocation {
 
 
     public Clinic() {
-        super();
 
     }
 
@@ -83,7 +82,7 @@ public class Clinic extends MedicalLocation {
     }
 
     public void setUnitnumber(String unitnumber) {
-        Unitnumber = unitnumber;
+        this.Unitnumber = unitnumber;
     }
 
     public long getTelephone() {

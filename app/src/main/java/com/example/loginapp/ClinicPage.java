@@ -38,6 +38,7 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -64,7 +65,7 @@ public class ClinicPage extends AppCompatActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference clinicRef = db.collection("clinic");
     //
-    long Telephone;
+    long telephone;
     String streetName ;
     String clinicName;
     long Floor;
@@ -107,14 +108,12 @@ public class ClinicPage extends AppCompatActivity {
                                 Map<String, Object> map = ClinicDetailList.getData();
                                 selectedClinic = ClinicDetailList.toObject(Clinic.class);
 
-
                                 streetName=selectedClinic.getStreetname();
-                                //Telephone = selectedClinic.getTelephone();
+                                telephone = selectedClinic.getTelephone();
                                 postal=selectedClinic.getPostal();
                                 block = selectedClinic.getBlock();
-                                unitNumber = selectedClinic.getUnitnumber();
+                                //unitNumber = selectedClinic.getUnitnumber();
                                 //floor = selectedClinic.getFloor();
-                                clinicName = selectedClinic.getClinicName();
 
 
                                 mTextView_nameClinic.setText("Name of Clinic:   " + name);
@@ -124,7 +123,7 @@ public class ClinicPage extends AppCompatActivity {
                                 mTextView_addressClinic.setText("Clinic Address: "+ block+ " " +
                                         streetName + " #0"+ floor+ "-"+ unitNumber + " Block " +
                                         block+" s" + postal);
-                                mTextView_phoneClinic.setText("Telephone:   " + Telephone);
+                                mTextView_phoneClinic.setText("Telephone:   " + telephone);
                             }
                         } else {
                             Log.d("fetch clinic error", "Error getting documents: ", task.getException());
@@ -182,7 +181,7 @@ public class ClinicPage extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.O)
             public void onClick(DialogInterface dialog, int id) {
                 //TODO add to database
-                //TODO set boundary for booking of qppt
+                //TODO set boundary for booking of appt
                 String start = selectedClinic.getStartTime();
                 String close = selectedClinic.getClosingTime();
 
@@ -198,16 +197,63 @@ public class ClinicPage extends AppCompatActivity {
                 String strTime = sdf.format(date);
                 System.out.println("Local in String format " + strTime);
 
-                if (startTime.isBefore(LocalTime.parse(strTime)) && closingTime.isAfter(LocalTime.parse(strTime)) )
+
+                //one hour before closing dont allow booking
+                LocalTime onehrbefore = closingTime.minus(1, ChronoUnit.HOURS);
+
+
+                if (startTime.isBefore(LocalTime.parse(strTime)) && (onehrbefore.isAfter(LocalTime.parse(strTime)))&& closingTime.isAfter(LocalTime.parse(strTime)) )
                 {
                     sendConfirmationEmail();
                     Log.e("Email sent", "Email sent to user");
+                }
+                else if (startTime.isBefore(LocalTime.parse(strTime)) && (onehrbefore.isBefore(LocalTime.parse(strTime)))&& closingTime.isAfter(LocalTime.parse(strTime)) )
+                {
+                    final ProgressDialog closingdialog = new ProgressDialog(ClinicPage.this);
+                    closingdialog.setTitle("Fail to book appointment");
+                    closingdialog.setMessage("Clinic is closing soon \nIf it is an emergency, please visit the hospital\nPlease try again from 0800 to 1900. \nThank you");
+                    closingdialog.show();
+
+
+                    //set timer for dialog window to close
+                    Runnable progressRunnable = new Runnable() {
+
+                        @Override
+                        public void run() {
+                            closingdialog.cancel();
+                        }
+                    };
+
+                    Handler pdCanceller = new Handler();
+                    pdCanceller.postDelayed(progressRunnable, 7000);
+
+                    System.out.println("Cannot book appt");
+
+                }
+                else if(startTime.isAfter(LocalTime.parse(strTime))&&closingTime.isAfter(LocalTime.parse(strTime))){
+                    final ProgressDialog notopenyet = new ProgressDialog(ClinicPage.this);
+                    notopenyet.setTitle("Fail to book appointment");
+                    notopenyet.setMessage("Clinic is not open yet \nPlease try again when the clinic is open at 8am.\nIf it is an emergency, please visit the hospital\nThank you.");
+                    notopenyet.show();
+                    //set timer for dialog window to close
+                    Runnable progressRunnable = new Runnable() {
+
+                        @Override
+                        public void run() {
+                            notopenyet.cancel();
+                        }
+                    };
+
+                    Handler pdCanceller = new Handler();
+                    pdCanceller.postDelayed(progressRunnable, 7000);
+
+                    System.out.println("Cannot book appt");
                 }
                 else
                 {
                     final ProgressDialog faildialog = new ProgressDialog(ClinicPage.this);
                     faildialog.setTitle("Fail to book appointment");
-                    faildialog.setMessage("Clinic is closed \n Please try again when the clinic is open");
+                    faildialog.setMessage("Clinic is closed \nPlease try again when the clinic is open.\nIf it is an emergency, please visit the hospital\nThank you.");
                     faildialog.show();
 
 
@@ -221,7 +267,7 @@ public class ClinicPage extends AppCompatActivity {
                     };
 
                     Handler pdCanceller = new Handler();
-                    pdCanceller.postDelayed(progressRunnable, 3000);
+                    pdCanceller.postDelayed(progressRunnable, 7000);
 
                     System.out.println("Cannot book appt");
 
