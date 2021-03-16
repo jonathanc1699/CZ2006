@@ -1,7 +1,6 @@
 package com.example.loginapp;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,43 +10,29 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-
-
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.Source;
 
 import java.sql.Timestamp;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
-import java.util.concurrent.Future;
 
 public class ClinicPage extends AppCompatActivity {
 
@@ -59,7 +44,6 @@ public class ClinicPage extends AppCompatActivity {
     TextView mTextView_phoneClinic;
     TextView mTextView_addressClinic;
     ImageView mImageView_Clinic;
-
 
     //To read clinic database
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -73,6 +57,7 @@ public class ClinicPage extends AppCompatActivity {
     long block;
     long floor;
     String unitNumber;
+    long unit;
 
     Clinic selectedClinic;
 
@@ -108,21 +93,42 @@ public class ClinicPage extends AppCompatActivity {
                                 Map<String, Object> map = ClinicDetailList.getData();
                                 selectedClinic = ClinicDetailList.toObject(Clinic.class);
 
+                                clinicName = selectedClinic.getClinicName();
                                 streetName=selectedClinic.getStreetname();
                                 telephone = selectedClinic.getTelephone();
                                 postal=selectedClinic.getPostal();
                                 block = selectedClinic.getBlock();
-//                                unitNumber = selectedClinic.getUnitnumber();
                                 floor = selectedClinic.getFloor();
 
+                                if(ClinicDetailList.contains("Unit number"))
+                                {
+                                    if(ClinicDetailList.get("Unit number") instanceof String) {
+                                        unitNumber = (String) ClinicDetailList.get("Unit number");
 
-                                mTextView_nameClinic.setText("Name of Clinic:   " + name);
+                                        mTextView_addressClinic.setText("Clinic Address: " + block + " " +
+                                                streetName + " #0" + floor + "-" + unitNumber + " Block " +
+                                                block + " Singapore" + postal);
+                                    }
+
+                                    else {
+                                        unit = (long) ClinicDetailList.get("Unit number");
+
+                                        mTextView_addressClinic.setText("Clinic Address: " + block + " " +
+                                                streetName + " #0" + floor + "-" + unit + " Block " +
+                                                block + " Singapore" + postal);
+                                    }
+
+                                }
+                                else
+                                {
+                                    mTextView_addressClinic.setText("Clinic Address: "+ block+ " " +
+                                            streetName + ", Level: "+ floor+ " Block " +
+                                            block+" s" + postal);
+                                }
+
+
+                                mTextView_nameClinic.setText("Name of Clinic:   " + clinicName);
                                 mTextView_openingHoursClinic.setText("Opening Hours:   " + "8am - 8pm");
-
-                                //TODO once you get the info, change the hardcode
-                                mTextView_addressClinic.setText("Clinic Address: "+ block+ " " +
-                                        streetName + " #0"+ floor+ "-"+ unitNumber + " Block " +
-                                        block+" s" + postal);
                                 mTextView_phoneClinic.setText("Telephone:   " + telephone);
                             }
                         } else {
