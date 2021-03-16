@@ -1,7 +1,5 @@
 package com.example.loginapp;
 
-import java.time.LocalTime;
-
 public class Clinic extends MedicalLocation {
 
     private String ClinicName;
@@ -9,11 +7,11 @@ public class Clinic extends MedicalLocation {
     private long Floor;
     private long Postal;
     private String Streetname;
-    private String UnitNumber;
+    private String Unitnumber;
     private long Telephone;
     private int ClinicCurrentQ;
-    private LocalTime startTime;
-    private LocalTime closingTime;
+    private static String startTime = "08:00:00";
+    private static String closingTime = "20:00:00";
     private String ClinicID;
 
 
@@ -23,20 +21,21 @@ public class Clinic extends MedicalLocation {
     }
 
     public Clinic(float Latitude, float Longitude, String clinicName, long block, long floor,
-                  long postal, String streetname, String unitNumber, long telephone, int clinicCurrentQ, LocalTime startTime,
-                  LocalTime closingTime, String clinicID) {
+                  long postal, String streetname, String unitnumber, long telephone, int clinicCurrentQ,
+                  String startTime,
+                  String closingTime, String clinicID) {
         super(Latitude, Longitude);
-        ClinicName = clinicName;
-        Block = block;
-        Floor = floor;
-        Postal = postal;
-        Streetname = streetname;
-        UnitNumber = unitNumber;
-        Telephone = telephone;
-        ClinicCurrentQ = clinicCurrentQ;
+        this.ClinicName = clinicName;
+        this.Block = block;
+        this.Floor = floor;
+        this.Postal = postal;
+        this.Streetname = streetname;
+        this.Unitnumber = unitnumber;
+        this.Telephone = telephone;
+        this.ClinicCurrentQ = clinicCurrentQ;
         this.startTime = startTime;
         this.closingTime = closingTime;
-        ClinicID = clinicID;
+        this.ClinicID = clinicID;
     }
 
     public String getClinicName() {
@@ -79,12 +78,12 @@ public class Clinic extends MedicalLocation {
         Streetname = streetname;
     }
 
-    public String getUnitNumber() {
-        return UnitNumber;
+    public String getUnitnumber() {
+        return Unitnumber;
     }
 
-    public void setUnitNumber(String unitNumber) {
-        UnitNumber = unitNumber;
+    public void setUnitnumber(String unitnumber) {
+        Unitnumber = unitnumber;
     }
 
     public long getTelephone() {
@@ -103,20 +102,12 @@ public class Clinic extends MedicalLocation {
         ClinicCurrentQ = clinicCurrentQ;
     }
 
-    public LocalTime getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(LocalTime startTime) {
-        this.startTime = startTime;
-    }
-
-    public LocalTime getClosingTime() {
+    public String getClosingTime() {
         return closingTime;
-    }
-
-    public void setClosingTime(LocalTime closingTime) {
-        this.closingTime = closingTime;
     }
 
     public String getClinicID() {

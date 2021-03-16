@@ -32,6 +32,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.Source;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -63,11 +64,17 @@ public class ClinicPage extends AppCompatActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference clinicRef = db.collection("clinic");
     //
-    int Telephone;
+    long Telephone;
     String streetName ;
-    Map<String, Object> postal;
+    String clinicName;
+    long Floor;
+    long postal;
+    long block;
+    long floor;
+    String unitNumber;
 
     Clinic selectedClinic;
+
 
 
     @Override
@@ -77,6 +84,7 @@ public class ClinicPage extends AppCompatActivity {
 
         String name = getIntent().getStringExtra("CLINIC_NAME");
         //TODO get intents for image, phone and address
+
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -95,18 +103,27 @@ public class ClinicPage extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot AddressList : task.getResult()) {
-                                Map<String, Object> map = AddressList.getData();
-                                selectedClinic = AddressList.toObject(Clinic.class);
-                                //Log.d("hmmmmmm", String.valueOf(selectedClinic.getStreetname()));
+                            for (QueryDocumentSnapshot ClinicDetailList : task.getResult()) {
+                                Map<String, Object> map = ClinicDetailList.getData();
+                                selectedClinic = ClinicDetailList.toObject(Clinic.class);
+
 
                                 streetName=selectedClinic.getStreetname();
+                                //Telephone = selectedClinic.getTelephone();
+                                postal=selectedClinic.getPostal();
+                                block = selectedClinic.getBlock();
+                                unitNumber = selectedClinic.getUnitnumber();
+                                //floor = selectedClinic.getFloor();
+                                clinicName = selectedClinic.getClinicName();
+
 
                                 mTextView_nameClinic.setText("Name of Clinic:   " + name);
                                 mTextView_openingHoursClinic.setText("Opening Hours:   " + "8am - 8pm");
 
                                 //TODO once you get the info, change the hardcode
-                                mTextView_addressClinic.setText("Clinic Address:   " + streetName + " ");
+                                mTextView_addressClinic.setText("Clinic Address: "+ block+ " " +
+                                        streetName + " #0"+ floor+ "-"+ unitNumber + " Block " +
+                                        block+" s" + postal);
                                 mTextView_phoneClinic.setText("Telephone:   " + Telephone);
                             }
                         } else {
@@ -166,9 +183,11 @@ public class ClinicPage extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int id) {
                 //TODO add to database
                 //TODO set boundary for booking of qppt
+                String start = selectedClinic.getStartTime();
+                String close = selectedClinic.getClosingTime();
 
-                LocalTime startTime = LocalTime.parse("08:00:00");
-                LocalTime closingTime =LocalTime.parse("20:00:00");
+                LocalTime startTime = LocalTime.parse(start);
+                LocalTime closingTime =LocalTime.parse(close);
 
                 SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH);
                 TimeZone tz = TimeZone.getTimeZone("Asia/Singapore");
