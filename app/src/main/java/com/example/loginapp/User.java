@@ -29,13 +29,22 @@ public class User {
     private String email;
     private int currentQueue;
     private String currentClinic;
+    private int isAdmin;
+    private String userId;
 
-    public User(String fullName, String email, int currentQueue, String currentClinic) {
+    public User(String fullName, String email, int currentQueue, String currentClinic,String userId) {
         this.fullName = fullName;
         this.email = email;
         this.currentQueue = currentQueue;
         this.currentClinic = currentClinic;
+        this.userId=userId;
 
+    }
+
+    public User(String fullName,String email,String userId){
+        this.fullName=fullName;
+        this.email=email;
+        this.userId=userId;
     }
 
     public User() {
@@ -69,6 +78,9 @@ public class User {
         return fullName;
     }
 
+    public String getUserID() {return userId;}
+
+    public void setUserID(String userID){this.userId=userId;}
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
