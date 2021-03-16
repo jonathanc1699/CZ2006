@@ -36,7 +36,7 @@ public class QueueController  {
         final DatabaseReference currentUser = databaseReference.child(firebaseUser.getUid());
         User user;
 
-public void TakeQueueNumber(Clinic selectedClinic) {
+public void TakeQueueNumber(Clinic currentClinic) {
         ValueEventListener userListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -58,14 +58,18 @@ public void TakeQueueNumber(Clinic selectedClinic) {
          Log.d("USER CLINIC STATUS", userCurrentClinic);
 
          //check if currentQueue and clinic are default values
-         if (userCurrentQueue == 0 && userCurrentClinic == "nil")
+         if (userCurrentQueue == 0 && userCurrentClinic == null)
          {
              // set current user clinic and queue status to updated one
-             user.setCurrentQueue();//TODO: change to latestQueueNumber + 1 and need to pass latestQueueNumber into this class
-             user.setCurrentClinic(selectedClinic.getClinicName());
+             user.setCurrentQueue(currentClinic.getClinicCurrentQ()+1);
+             user.setCurrentClinic(currentClinic.getClinicName());
              // current user's queue number and clinic would be set to the selected one after this
              Log.d("IF QUEUE SET SUCCESS", String.valueOf(user.getCurrentQueue()));
              Log.d("IF CLINIC SET SUCCESS", user.getCurrentClinic());
+             //TODO: Increment current queue number in firestore - could add a function for this
+             // add function here (UpdateClinicQueueNumber)
+             Log.d("CLINIC QUEUE STATUS", String.valueOf(currentClinic.getClinicCurrentQ()));
+
 
          }
          else{
@@ -79,8 +83,10 @@ public void TakeQueueNumber(Clinic selectedClinic) {
 
     }
 
-    public void UpdateUserStatus(User user)
+    public void UpdateClinicQueueNumber(Clinic currentClinic)
     {
+
+
 
     }
 

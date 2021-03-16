@@ -75,13 +75,11 @@ public class AdminPage extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 for(DataSnapshot ds : dataSnapshot.getChildren()) {
-
-
+                    String uid = ds.getKey();
+                    Log.d("TAG", uid);
                     String email=ds.child("email").getValue(String.class);
-                String fullName=ds.child("fullName").getValue(String.class);
-                    String userId = ds.getKey();
-                    User.add(new User(fullName, email,0, "nil" ,userId, false , false));
-
+                    String name=ds.child("fullName").getValue(String.class);
+                    User.add(new User(email,name,0, "nil",uid,false,false));
                     //TODO: Change user stuff
                 }
 

@@ -210,7 +210,6 @@ public class ClinicPage extends AppCompatActivity {
 
                 if (startTime.isBefore(LocalTime.parse(strTime)) && (onehrbefore.isAfter(LocalTime.parse(strTime)))&& closingTime.isAfter(LocalTime.parse(strTime)) )
                 {
-                    //TODO: add count for latestQueueNumber
                     sendConfirmationEmail();
                     Log.e("Email sent", "Email sent to user");
                 }
