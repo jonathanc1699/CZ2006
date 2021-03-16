@@ -80,6 +80,7 @@ public class AdminPage extends AppCompatActivity {
                     String email=ds.child("email").getValue(String.class);
                     String name=ds.child("fullName").getValue(String.class);
                     User.add(new User(email,name,0, "nil",uid));
+                    //TODO: Change user stuff
                 }
 
                 mAdminController = new AdminController(AdminPage.this,User);

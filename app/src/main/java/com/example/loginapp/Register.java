@@ -81,8 +81,8 @@ public class Register extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             String userId=FirebaseAuth.getInstance().getCurrentUser().getUid();
-                            User user = new User(fullName, email, 0, null,userId); // Set default to 0 and null
-
+                            User user = new User(fullName, email,0, "nil" ,userId, false , false); // Set default to 0 and null
+                            //TODO: Add the rest of the attributes other than UserID
                             FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {

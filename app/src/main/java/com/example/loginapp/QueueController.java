@@ -67,7 +67,7 @@ public void TakeQueueNumber(Clinic currentClinic) {
              Log.d("IF QUEUE SET SUCCESS", String.valueOf(user.getCurrentQueue()));
              Log.d("IF CLINIC SET SUCCESS", user.getCurrentClinic());
              //TODO: Increment current queue number in firestore - could add a function for this
-             // add function here
+             // add function here (UpdateClinicQueueNumber)
              Log.d("CLINIC QUEUE STATUS", String.valueOf(currentClinic.getClinicCurrentQ()));
 
 
@@ -79,6 +79,7 @@ public void TakeQueueNumber(Clinic currentClinic) {
          }
 
          //TODO : Store new queue status and clinic status in user collection in firebase - can add a function for this
+         //TODO add function here: UpdateUserStatus
 
     }
 
