@@ -29,25 +29,40 @@ public class User {
     private String email;
     private int currentQueue;
     private String currentClinic;
-    private int isAdmin;
+    private boolean isAdmin;
     private String userId;
+    private boolean isDisabled;
 
-    public User(String fullName, String email, int currentQueue, String currentClinic,String userId) {
+    public User(String fullName, String email, int currentQueue, String currentClinic,String userId, boolean isDisabled, boolean isAdmin) {
         this.fullName = fullName;
         this.email = email;
         this.currentQueue = currentQueue;
         this.currentClinic = currentClinic;
         this.userId=userId;
+        this.isAdmin = isAdmin;
+        this.isDisabled = isDisabled;
 
-    }
-
-    public User(String fullName,String email,String userId){
-        this.fullName=fullName;
-        this.email=email;
-        this.userId=userId;
     }
 
     public User() {
+    }
+
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
+    }
+
+
+    public boolean isDisabled() {
+        return isDisabled;
+    }
+
+    public void setDisabled(boolean disabled) {
+        isDisabled = disabled;
     }
 
     public int getCurrentQueue() {
@@ -78,9 +93,9 @@ public class User {
         return fullName;
     }
 
-    public String getUserID() {return userId;}
+    public String getUserId() {return userId;}
 
-    public void setUserID(String userID){this.userId=userId;}
+    public void setUserId(String userId){this.userId=userId;}
 
     public void setFullName(String fullName) {
         this.fullName = fullName;

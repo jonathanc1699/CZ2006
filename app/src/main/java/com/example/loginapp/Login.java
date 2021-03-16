@@ -71,6 +71,7 @@ public class Login extends AppCompatActivity {
                             FirebaseUser firebaseUser = fAuth.getCurrentUser();
 
                             if (firebaseUser.isEmailVerified()){
+                                //TODO: isAdmin, we need reference to AdminActivity
                                 Toast.makeText(Login.this, "Login Successful", Toast.LENGTH_SHORT).show();
                                 startActivity(new Intent(getApplicationContext(),MainActivity.class));
                             }
