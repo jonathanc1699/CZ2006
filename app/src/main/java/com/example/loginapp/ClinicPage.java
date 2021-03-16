@@ -112,8 +112,8 @@ public class ClinicPage extends AppCompatActivity {
                                 telephone = selectedClinic.getTelephone();
                                 postal=selectedClinic.getPostal();
                                 block = selectedClinic.getBlock();
-                                //unitNumber = selectedClinic.getUnitnumber();
-                                //floor = selectedClinic.getFloor();
+//                                unitNumber = selectedClinic.getUnitnumber();
+                                floor = selectedClinic.getFloor();
 
 
                                 mTextView_nameClinic.setText("Name of Clinic:   " + name);
