@@ -78,11 +78,12 @@ public class Clinic extends MedicalLocation {
     public void setStreetname(String streetname) {
         Streetname = streetname;
     }
-    @PropertyName("Unit number")
+
+    //@PropertyName("Unit number")
     public String getUnitnumber() {
         return Unitnumber;
     }
-    @PropertyName("Unit number")
+    //@PropertyName("Unit number")
     public void setUnitnumber(String unitnumber) {
         this.Unitnumber = unitnumber;
     }

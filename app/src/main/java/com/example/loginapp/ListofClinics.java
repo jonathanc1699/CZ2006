@@ -70,6 +70,8 @@ public class ListofClinics extends AppCompatActivity {
 
 
         //TODO Filter location : Default (nearest 10), by location.....
+
+
         //TODO REMINDER TO SET UP THE SEARCH FUNCTION
 
 //pop up message when an item on the list is clicked
