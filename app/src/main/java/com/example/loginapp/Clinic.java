@@ -16,9 +16,9 @@ public class Clinic extends MedicalLocation {
     private static String closingTime = "20:00:00";
     private String ClinicID;
 
-
-    public Clinic() {
-
+    public Clinic(){}
+    public Clinic(String ClinicName) {
+        this.ClinicName=ClinicName;
     }
 
     public Clinic(float Latitude, float Longitude, String clinicName, long block, long floor,

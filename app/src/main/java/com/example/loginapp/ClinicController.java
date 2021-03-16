@@ -2,40 +2,45 @@ package com.example.loginapp;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Filterable;
 import android.widget.TextView;
 import android.widget.Filter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 //TODO
 //load data: arraylist<admin>
 //save data(adminlist)
 
-public class AdminController extends ArrayAdapter<User> implements Filterable {
+public class ClinicController extends ArrayAdapter<Clinic> implements Filterable {
 
 
-    ArrayList<User> UsersTotal;
-    ArrayList<User> Usersfiltered;
+    ArrayList<Clinic> ClinicsTotal = new ArrayList<>();
+    ArrayList<Clinic> Clinicsfiltered = new ArrayList<Clinic>();
     Context context;
     LayoutInflater inflater;
 
 
 
-    public AdminController(Activity context, ArrayList<User> Users)  {
+
+
+    public ClinicController(Activity context, ArrayList<Clinic> Clinics) {
         // Here, we initialize the ArrayAdapter's internal storage for the context and the list.
         // the second argument is used when the ArrayAdapter is populating a single TextView.
         // Because this is a custom adapter for two TextViews and an ImageView, the adapter is not
         // going to use this second argument, so it can be any value. Here, we used 0.
-        super(context, 0, Users);
 
 
-        Usersfiltered = Users;
-        UsersTotal = Users;
+        super(context, 0, Clinics);
+        Clinicsfiltered = Clinics;
+        ClinicsTotal = Clinics;
         inflater = LayoutInflater.from(context);
 
 
@@ -51,12 +56,13 @@ public class AdminController extends ArrayAdapter<User> implements Filterable {
 
     @Override
     public int getCount() {
-        return Usersfiltered.size();
+
+        return Clinicsfiltered.size();
     }
 
     @Override
-    public User getItem(int position) {
-        return Usersfiltered.get(position);
+    public Clinic getItem(int position) {
+        return Clinicsfiltered.get(position);
     }
 
     @Override
@@ -65,13 +71,13 @@ public class AdminController extends ArrayAdapter<User> implements Filterable {
         int itemID;
 
         // orig will be null only if we haven't filtered yet:
-        if (UsersTotal == null)
+        if (ClinicsTotal == null)
         {
             itemID = position;
         }
         else
         {
-            itemID = UsersTotal.indexOf(Usersfiltered.get(position));
+            itemID = ClinicsTotal.indexOf(Clinicsfiltered.get(position));
         }
         return itemID;
     }
@@ -87,8 +93,8 @@ public class AdminController extends ArrayAdapter<User> implements Filterable {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.userlist_admin_page,parent, false);
         }
 
-        ((TextView) convertView.findViewById(R.id.textView_userEmail)).setText(getItem(position).getEmail());
-        ((TextView) convertView.findViewById(R.id.textView_userName)).setText(getItem(position).getFullName());
+        //((TextView) convertView.findViewById(R.id.textView_userEmail)).setText(getItem(position).getEmail());
+        ((TextView) convertView.findViewById(R.id.textView_userName)).setText(getItem(position).getClinicName());
 
         return convertView;
 
@@ -110,21 +116,21 @@ public class AdminController extends ArrayAdapter<User> implements Filterable {
             protected FilterResults performFiltering(CharSequence constraint) {
 
                 FilterResults filterResults = new FilterResults();
-                ArrayList<User> results = new ArrayList<User>();
-                if (UsersTotal == null) {
-                    UsersTotal = new ArrayList<User>(Usersfiltered); // saves the original data in mOriginalValues
+                ArrayList<Clinic> results = new ArrayList<Clinic>();
+                if (ClinicsTotal == null) {
+                    ClinicsTotal = new ArrayList<Clinic>(Clinicsfiltered); // saves the original data in mOriginalValues
                 }
                 if(constraint == null || constraint.length() == 0){
-                    filterResults.count = UsersTotal.size();
-                    filterResults.values = UsersTotal;
+                    filterResults.count = ClinicsTotal.size();
+                    filterResults.values = ClinicsTotal;
 
                 }else{
 
                     String searchStr = constraint.toString().toLowerCase();
 
-                    for(User user:UsersTotal){
-                        if(user.getFullName().toLowerCase().contains(searchStr) || user.getEmail().toLowerCase().contains(searchStr)){
-                            results.add(user);
+                    for(Clinic Clinic:ClinicsTotal){
+                        if(Clinic.getClinicName().toLowerCase().contains(searchStr)){
+                            results.add(Clinic);
 
                         }
                     }
@@ -136,17 +142,33 @@ public class AdminController extends ArrayAdapter<User> implements Filterable {
 
                 return filterResults;
             }
+
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
 
-                Usersfiltered = (ArrayList<User>) results.values;
+                ArrayList<Clinic> filterList = (ArrayList<Clinic>) results.values;
+                filteringFinished(filterList.size());
 
+                if (results != null && results.count > 0)
+                {
+                    clear();
+                    for (Clinic clinic : filterList)
+                    {
+                        add(clinic);
+                        notifyDataSetChanged();
+                    }
+                }
+
+                Clinicsfiltered = (ArrayList<Clinic>) results.values;
                 notifyDataSetChanged();
 
             }
         };
         return filter;
     }
-
+    private void filteringFinished(int filteredItemsCount)
+    {
+        Log.i("LOG_TAG", " filteringFinished  count = " + filteredItemsCount);
+    }
 
 }

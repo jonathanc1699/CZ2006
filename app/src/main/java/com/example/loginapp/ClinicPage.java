@@ -134,8 +134,8 @@ public class ClinicPage extends AppCompatActivity {
                         } else {
                             Log.d("fetch clinic error", "Error getting documents: ", task.getException());
                         }
-                    }
-                });
+                   }
+             });
 
 
         mbutton_queue.setOnClickListener(new View.OnClickListener() {
