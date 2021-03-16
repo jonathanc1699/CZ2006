@@ -78,8 +78,9 @@ public class AdminPage extends AppCompatActivity {
                     String uid = ds.getKey();
                     Log.d("TAG", uid);
                     String email=ds.child("email").getValue(String.class);
-                    String name=ds.child("fullName").getValue(String.class);
-                    User.add(new User(email,name,0, "nil",uid));
+                    String fullName=ds.child("fullName").getValue(String.class);
+                    String userId = ds.getKey();
+                    User.add(new User(fullName, email,0, "nil" ,userId, false , false));
                     //TODO: Change user stuff
                 }
 
@@ -200,7 +201,7 @@ public class AdminPage extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 //delete user and refresh page
-                DatabaseReference removeUser =FirebaseDatabase.getInstance().getReference("Users").child((User.get(((int)position))).getUserID());
+                DatabaseReference removeUser =FirebaseDatabase.getInstance().getReference("Users").child((User.get(((int)position))).getUserId());
                 removeUser.removeValue();
                 mAdminController.remove(User.get((int) position));
                 mAdminController.getFilter().filter(newtext);
