@@ -58,16 +58,10 @@ public class ClinicPage extends AppCompatActivity {
     long floor;
     String unitNumber;
     long unit;
+
     Clinic selectedClinic;
-    int currentlyservingQ;
-    int latestclinicq;
-    int serveTime = 10;
 
 
-    //for Q no
-    int userCurrentQ;
-    int clinicCurrentQ;
-    int latestQno;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +92,7 @@ public class ClinicPage extends AppCompatActivity {
                             for (QueryDocumentSnapshot ClinicDetailList : task.getResult()) {
                                 Map<String, Object> map = ClinicDetailList.getData();
                                 selectedClinic = ClinicDetailList.toObject(Clinic.class);
+
                                 clinicName = selectedClinic.getClinicName();
                                 streetName=selectedClinic.getStreetname();
                                 telephone = selectedClinic.getTelephone();
@@ -144,7 +139,6 @@ public class ClinicPage extends AppCompatActivity {
 
 
         mbutton_queue.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
             public void onClick(View v) {
                 showfilterselection();
             }
@@ -169,7 +163,6 @@ public class ClinicPage extends AppCompatActivity {
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public void showfilterselection() {
         LayoutInflater li = LayoutInflater.from(context);
         View promptsView = li.inflate(R.layout.popup_clinic_page, null);
@@ -177,41 +170,12 @@ public class ClinicPage extends AppCompatActivity {
         final TextView mTextview_currentqueuenumber = (TextView) promptsView.findViewById(R.id.textView_currentQueueNumber);
         final TextView mTextview_estimatedwaitingtime = (TextView) promptsView.findViewById(R.id.textview_estimatedWaitingTime);
 
-        currentlyservingQ = selectedClinic.getClinicCurrentQ();
-        latestclinicq = selectedClinic.getLatestQNo();
-
-        String start = selectedClinic.getStartTime();
-        String close = selectedClinic.getClosingTime();
-        LocalTime startTime = LocalTime.parse(start);
-        LocalTime closingTime =LocalTime.parse(close);
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH);
-        TimeZone tz = TimeZone.getTimeZone("Asia/Singapore");
-        sdf.setTimeZone(tz);
-
-        java.util.Date date= new java.util.Date();
-        Timestamp local = new Timestamp(date.getTime());
-        String strTime = sdf.format(date);
-        System.out.println("Local in String format " + strTime);
-
-
-        //one hour before closing dont allow booking
-        LocalTime onehrbefore = closingTime.minus(1, ChronoUnit.HOURS);
         //TODO get information for your queue number, current queue number
         //TODO estimate waiting time can be 10min*each person
+        mTextview_yourqueuenumber.setText("10");
+        mTextview_currentqueuenumber.setText("7");
+        mTextview_estimatedwaitingtime.setText("30" + " mins");
 
-        mTextview_yourqueuenumber.setText(String.valueOf((latestclinicq+1)));
-        mTextview_currentqueuenumber.setText(String.valueOf((currentlyservingQ)));
-        int waitingTime = (latestclinicq-currentlyservingQ)*serveTime;
-        Log.d(" ", String.valueOf(waitingTime));
-        if(waitingTime>60)
-        {
-            int hour = waitingTime/60;
-            int min = waitingTime%60;
-            mTextview_estimatedwaitingtime.setText(String.valueOf(hour) + "hr " + String.valueOf(min) +" mins");
-        }
-        else
-            mTextview_estimatedwaitingtime.setText(String.valueOf(waitingTime) + " mins");
-        
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                 context);
@@ -222,6 +186,28 @@ public class ClinicPage extends AppCompatActivity {
         alertDialogBuilder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             public void onClick(DialogInterface dialog, int id) {
+                //TODO add to database
+                //TODO set boundary for booking of appt
+                String start = selectedClinic.getStartTime();
+                String close = selectedClinic.getClosingTime();
+
+                LocalTime startTime = LocalTime.parse(start);
+                LocalTime closingTime =LocalTime.parse(close);
+
+                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH);
+                TimeZone tz = TimeZone.getTimeZone("Asia/Singapore");
+                sdf.setTimeZone(tz);
+
+                java.util.Date date= new java.util.Date();
+                Timestamp local = new Timestamp(date.getTime());
+                String strTime = sdf.format(date);
+                System.out.println("Local in String format " + strTime);
+
+
+                //one hour before closing dont allow booking
+                LocalTime onehrbefore = closingTime.minus(1, ChronoUnit.HOURS);
+
+
                 if (startTime.isBefore(LocalTime.parse(strTime)) && (onehrbefore.isAfter(LocalTime.parse(strTime)))&& closingTime.isAfter(LocalTime.parse(strTime)) )
                 {
                     sendConfirmationEmail();
@@ -293,20 +279,6 @@ public class ClinicPage extends AppCompatActivity {
 
                 }
             }
-
-            //TODO
-            /*
-            if (((latestclinicq-clinicCurrentQ)<=10)&&(onehrbefore.isBefore(LocalTime.parse(strTime))))
-            {
-                clinicCurrentQ++;
-                Log.d("curren clinic q", String.valueOf(clinicCurrentQ));
-            }
-            else
-            {
-                clinicCurrentQ = latestclinicq;
-            }
-
-             */
 
         });
 

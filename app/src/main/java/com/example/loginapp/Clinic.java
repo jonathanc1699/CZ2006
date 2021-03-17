@@ -16,8 +16,6 @@ public class Clinic extends MedicalLocation {
     private static String closingTime = "20:00:00";
     private String ClinicID;
 
-    private int latestQNo;
-
 
     public Clinic() {
 
@@ -26,7 +24,7 @@ public class Clinic extends MedicalLocation {
     public Clinic(float Latitude, float Longitude, String clinicName, long block, long floor,
                   long postal, String streetname, String unitnumber, long telephone, int clinicCurrentQ,
                   String startTime,
-                  String closingTime, String clinicID, int latestqno) {
+                  String closingTime, String clinicID) {
         super(Latitude, Longitude);
         this.ClinicName = clinicName;
         this.Block = block;
@@ -39,7 +37,6 @@ public class Clinic extends MedicalLocation {
         this.startTime = startTime;
         this.closingTime = closingTime;
         this.ClinicID = clinicID;
-        this.latestQNo = latestqno;
     }
     @PropertyName("Clinic Name")
     public String getClinicName() {
@@ -124,13 +121,6 @@ public class Clinic extends MedicalLocation {
         ClinicID = clinicID;
     }
 
-    public int getLatestQNo() {
-        return latestQNo;
-    }
-
-    public void setLatestQNo(int latestQNo) {
-        this.latestQNo = latestQNo;
-    }
 }
 
 
