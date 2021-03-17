@@ -1,10 +1,10 @@
 package com.example.loginapp;
 
 public class MedicalLocation {
-    private float Latitude;
-    private float Longitude;
+    private long Latitude;
+    private long Longitude;
 
-    public MedicalLocation(float Latitude, float Longitude)
+    public MedicalLocation(long Latitude, long Longitude)
     {
         this.Latitude=Latitude;
         this.Longitude = Longitude;
@@ -14,19 +14,19 @@ public class MedicalLocation {
 
     }
 
-    public float getLongitude() {
+    public long getLongitude() {
         return Longitude;
     }
 
-    public void setLongitude(float Longitude) {
+    public void setLongitude(long Longitude) {
         this.Latitude = Longitude;
     }
 
-    public float getLatitude() {
+    public long getLatitude() {
         return Latitude;
     }
 
-    public void setLatitude(float Latitude) {
+    public void setLatitude(long Latitude) {
         this.Latitude = Latitude;
     }
 
