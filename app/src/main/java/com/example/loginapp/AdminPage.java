@@ -28,6 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class AdminPage extends AppCompatActivity {
 
@@ -79,7 +80,12 @@ public class AdminPage extends AppCompatActivity {
                     Log.d("TAG", uid);
                     String email=ds.child("email").getValue(String.class);
                     String name=ds.child("fullName").getValue(String.class);
-                    User.add(new User(email,name,0, "nil",uid,false,false));
+                    Boolean isDisabled = ds.child("disabled").getValue(Boolean.class);
+                    Boolean isAdmin = ds.child("admin").getValue(Boolean.class);
+                    if(isAdmin==false && isDisabled==false){
+                        User.add(new User(email,name,0, "nil",uid,false,false));
+                    }
+
                     //TODO: Change user stuff
                 }
 
@@ -200,8 +206,11 @@ public class AdminPage extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 //delete user and refresh page
-                DatabaseReference removeUser =FirebaseDatabase.getInstance().getReference("Users").child((User.get(((int)position))).getUserId());
-                removeUser.removeValue();
+                DatabaseReference UserToUpdate =FirebaseDatabase.getInstance().getReference("Users").child((User.get(((int)position))).getUserId());
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("disabled", true);
+                UserToUpdate.updateChildren(map);
+                //removeUser.removeValue();
                 mAdminController.remove(User.get((int) position));
                 mAdminController.getFilter().filter(newtext);
 

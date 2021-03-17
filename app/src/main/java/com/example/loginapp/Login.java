@@ -6,7 +6,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -17,8 +19,13 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class Login extends AppCompatActivity {
     EditText mEmail, mPassword;
@@ -26,6 +33,11 @@ public class Login extends AppCompatActivity {
     TextView mCreateBtn;
     ProgressBar progressBar;
     FirebaseAuth fAuth;
+    String uid;
+    Boolean isAdmin;
+    Boolean isDisabled;
+
+
 
 
 
@@ -67,13 +79,71 @@ public class Login extends AppCompatActivity {
                 fAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             FirebaseUser firebaseUser = fAuth.getCurrentUser();
+                            uid = fAuth.getCurrentUser().getUid();
+                            Log.d("TAG", uid);
+                            isAdmin=false;
+                            isDisabled=false;
+
+
+                            DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+                            DatabaseReference usersdRef = rootRef.child("Users");
+
+                            ValueEventListener eventListener = new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+
+
+                                    DataSnapshot ds = dataSnapshot.child(uid);
+                                    isAdmin = ds.child("admin").getValue(Boolean.class);
+                                    isDisabled = ds.child("disabled").getValue(Boolean.class);
+
+                                    //TODO ERRROR
+
+
+//                for(DataSnapshot ds : dataSnapshot.getChildren()) {
+//
+//                    if(uid==ds.child("userId").getValue(String.class)){
+//                         isAdmin = ds.child("admin").getValue(Boolean.class);
+//                        Log.d("TAG", String.valueOf(isAdmin));
+//                        isDisabled = ds.child("disabled").getValue(Boolean.class);
+//                        Log.d("TAG", String.valueOf(isDisabled));
+//                    }
+                                    //TODO: Change user stuff
+
+
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                }
+                            };
+                            usersdRef.addListenerForSingleValueEvent(eventListener);
+
+
+
+
+
+                            Log.d("AAAAAAAA", String.valueOf(isAdmin));
+                            Log.d("TAG", String.valueOf(isDisabled));
+
 
                             if (firebaseUser.isEmailVerified()){
                                 //TODO: isAdmin, we need reference to AdminActivity
-                                Toast.makeText(Login.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(getApplicationContext(),MainActivity.class));
+
+                                if(isAdmin==true){
+                                    Toast.makeText(Login.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                                    startActivity(new Intent(getApplicationContext(),mainactivityAdmin.class));
+                                }
+                                if(isDisabled==true){
+                                    Toast.makeText(getApplicationContext(), "Your account has been disabled", Toast.LENGTH_LONG).show();
+                                }
+                                if(isAdmin==false && isDisabled==false){
+                                    Toast.makeText(Login.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                                    startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                                }
+
                             }
                             else {
                                 firebaseUser.sendEmailVerification();
@@ -96,4 +166,9 @@ public class Login extends AppCompatActivity {
             }
         });
     }
+
+
+
+
+
 }
