@@ -64,6 +64,8 @@ public class ClinicPage extends AppCompatActivity {
     int currentlyservingQ;
     int latestclinicq;
     int serveTime = 10;
+    //so that the patients can make their way down when they receive their email
+    int buffertime =10;
 
 
 
@@ -198,7 +200,7 @@ public class ClinicPage extends AppCompatActivity {
 
         mTextview_yourqueuenumber.setText(String.valueOf((latestclinicq+1)));
         mTextview_currentqueuenumber.setText(String.valueOf((currentlyservingQ)));
-        int waitingTime = (latestclinicq-currentlyservingQ)*serveTime;
+        int waitingTime = (latestclinicq-currentlyservingQ)*serveTime +buffertime;
         Log.d(" ", String.valueOf(waitingTime));
         if(waitingTime>60)
         {
@@ -208,7 +210,6 @@ public class ClinicPage extends AppCompatActivity {
         }
         else
             mTextview_estimatedwaitingtime.setText(String.valueOf(waitingTime) + " mins");
-
 
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
@@ -226,11 +227,23 @@ public class ClinicPage extends AppCompatActivity {
 
                 int totalqueueleft = (((onehrbefore.getHour() - hours)*60) + (60 - mins))/ serveTime;
 
-
                 if ((((latestclinicq+1)-currentlyservingQ)<totalqueueleft)&&(startTime.isBefore(LocalTime.parse(strTime)) && (onehrbefore.isAfter(LocalTime.parse(strTime)))&& closingTime.isAfter(LocalTime.parse(strTime))))
                 {
-                    sendConfirmationEmail();
-                    Log.e("Email sent", "Email sent to user");
+                    //more than 3 group
+                    if (waitingTime>40)
+                    {
+                        sendConfirmationEmail();
+                        Log.e("Email sent", "Email sent to user");
+                    }
+                    //less than 3 group, make way down now
+                    else if (waitingTime<=40)
+                    {
+                        sendConfirmationEmail();
+                        Log.e("Email sent", "Email sent to user");
+                        Log.e("Notification", "There are currently " + (((latestclinicq + 1) - currentlyservingQ) + " group(s) ahead of you in the queue. You may make your way to " + clinicName));
+                        makeYourWayDown();
+                    }
+
                 }
                 //one hour before closing dont allow booking
                 else if (startTime.isBefore(LocalTime.parse(strTime)) && (onehrbefore.isBefore(LocalTime.parse(strTime)))&& closingTime.isAfter(LocalTime.parse(strTime)) )
@@ -239,8 +252,6 @@ public class ClinicPage extends AppCompatActivity {
                     closingdialog.setTitle("Fail to book appointment");
                     closingdialog.setMessage("Clinic is closing soon \nIf it is an emergency, please visit the hospital\nPlease try again from 0800 to 1900. \nThank you");
                     closingdialog.show();
-
-
                     //set timer for dialog window to close
                     Runnable progressRunnable = new Runnable() {
 
@@ -320,7 +331,9 @@ public class ClinicPage extends AppCompatActivity {
                     System.out.println("Cannot book appt");
 
                 }
+
             }
+
 
         });
 
@@ -368,6 +381,25 @@ public class ClinicPage extends AppCompatActivity {
         });
         sender.start();
 
+    }
+    private void makeYourWayDown()
+    {
+        AlertDialog.Builder goClinicAlert = new AlertDialog.Builder(context);
+        goClinicAlert.setMessage("Booking is confirmed. Check your email for your booking confirmation. \n \nThere are currently " + ((latestclinicq + 1) - currentlyservingQ) +
+                " group(s) ahead of you in the queue. You may make your way to " + clinicName);
+        goClinicAlert.setCancelable(true);
+
+        goClinicAlert.setPositiveButton(
+                "Got it!",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+
+        AlertDialog alertPatient = goClinicAlert.create();
+        alertPatient.show();
     }
 }
 
