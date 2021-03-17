@@ -39,8 +39,8 @@ public class Login extends AppCompatActivity {
     ProgressBar progressBar;
     FirebaseAuth fAuth;
     String uid;
-    static Boolean isAdmin = false;
-    static Boolean isDisabled = false;
+    Boolean isAdmin;
+    Boolean isDisabled;
 
 
     @Override
@@ -87,12 +87,28 @@ public class Login extends AppCompatActivity {
                             uid = fAuth.getCurrentUser().getUid();
                             Log.d("TAG", uid);
 
-                            DatabaseReference User = FirebaseDatabase.getInstance().getReference("Users").child(uid);
-                            User.addValueEventListener(new ValueEventListener() {
+                            if (firebaseUser.isEmailVerified()) {
+                                DatabaseReference User = FirebaseDatabase.getInstance().getReference("Users").child(uid);
+                                User.addValueEventListener(new ValueEventListener() {
+
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                                     isDisabled = snapshot.child("disabled").getValue(Boolean.class);
                                     isAdmin = snapshot.child("admin").getValue(Boolean.class);
+                                    if (isAdmin == true) {
+                                        Toast.makeText(getApplicationContext(), "Welcome Admin", Toast.LENGTH_LONG).show();
+                                        startActivity(new Intent(getApplicationContext(), mainactivityAdmin.class));
+                                    } else if (isDisabled == false) {
+                                        Toast.makeText(Login.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(Login.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+
+
+//                                    Intent intent = new Intent(ListofClinics.this,ClinicPage.class);
+//                                    intent.putExtra("CLINIC_NAME", arrayList.get(i));
+                                    } else {
+                                        Toast.makeText(getApplicationContext(), "Your account has been disabled", Toast.LENGTH_LONG).show();
+                                    }
 
 
                                 }
@@ -104,23 +120,10 @@ public class Login extends AppCompatActivity {
                             });
 
 
-                            if (firebaseUser.isEmailVerified()) {
+
                                 //TODO: isAdmin, we need reference to AdminActivity
 
-                                if (isAdmin == true) {
-                                    Toast.makeText(getApplicationContext(), "Welcome Admin", Toast.LENGTH_LONG).show();
-                                    startActivity(new Intent(getApplicationContext(), mainactivityAdmin.class));
-                                } else if (isDisabled == false) {
-                                    Toast.makeText(Login.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                                    Toast.makeText(Login.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
 
-
-//                                    Intent intent = new Intent(ListofClinics.this,ClinicPage.class);
-//                                    intent.putExtra("CLINIC_NAME", arrayList.get(i));
-                                } else {
-                                    Toast.makeText(getApplicationContext(), "Your account has been disabled", Toast.LENGTH_LONG).show();
-                                }
 
 
                             } else {
