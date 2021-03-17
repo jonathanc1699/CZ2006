@@ -39,19 +39,14 @@ public class Login extends AppCompatActivity {
     ProgressBar progressBar;
     FirebaseAuth fAuth;
     String uid;
-    Boolean isAdmin=false;
-    Boolean isDisabled=false;
-
-
-
-
+    static Boolean isAdmin = false;
+    static Boolean isDisabled = false;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
 
 
         mEmail = findViewById(R.id.Email);
@@ -67,15 +62,15 @@ public class Login extends AppCompatActivity {
                 String email = mEmail.getText().toString().trim();
                 String password = mPassword.getText().toString().trim();
 
-                if(TextUtils.isEmpty(email)){
+                if (TextUtils.isEmpty(email)) {
                     mEmail.setError("Email field must not be empty.");
                     return;
                 }
-                if(TextUtils.isEmpty(password)){
+                if (TextUtils.isEmpty(password)) {
                     mPassword.setError("Password field must not be empty.");
                     return;
                 }
-                if (password.length() < 6){
+                if (password.length() < 6) {
                     mPassword.setError("Password must be >= 6 characters.");
                     return;
                 }
@@ -84,7 +79,7 @@ public class Login extends AppCompatActivity {
 
                 //authenticate the user
 
-                fAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                fAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
@@ -93,11 +88,12 @@ public class Login extends AppCompatActivity {
                             Log.d("TAG", uid);
 
                             DatabaseReference User = FirebaseDatabase.getInstance().getReference("Users").child(uid);
-                            User.addListenerForSingleValueEvent(new ValueEventListener() {
+                            User.addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                                     isDisabled = snapshot.child("disabled").getValue(Boolean.class);
                                     isAdmin = snapshot.child("admin").getValue(Boolean.class);
+
 
                                 }
 
@@ -112,27 +108,26 @@ public class Login extends AppCompatActivity {
                                 //TODO: isAdmin, we need reference to AdminActivity
 
                                 if (isAdmin == true) {
-
+                                    Toast.makeText(getApplicationContext(), "Welcome Admin", Toast.LENGTH_LONG).show();
                                     startActivity(new Intent(getApplicationContext(), mainactivityAdmin.class));
+                                } else if (isDisabled == false) {
+                                    Toast.makeText(Login.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(Login.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+
 
 //                                    Intent intent = new Intent(ListofClinics.this,ClinicPage.class);
 //                                    intent.putExtra("CLINIC_NAME", arrayList.get(i));
-                                }
-                                if (isDisabled == true) {
+                                } else {
                                     Toast.makeText(getApplicationContext(), "Your account has been disabled", Toast.LENGTH_LONG).show();
                                 }
 
-                                Toast.makeText(Login.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                                Toast.makeText(Login.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
 
-
-                            }
-                            else {
+                            } else {
                                 firebaseUser.sendEmailVerification();
                                 Toast.makeText(getApplicationContext(), "check your email to verify your acccount", Toast.LENGTH_LONG).show();
                             }
-                        }else {
+                        } else {
                             Toast.makeText(Login.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             progressBar.setVisibility(View.GONE);
                         }
@@ -145,13 +140,14 @@ public class Login extends AppCompatActivity {
         mCreateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),Register.class));
+                startActivity(new Intent(getApplicationContext(), Register.class));
             }
         });
     }
 
-
-
-
-
 }
+
+
+
+
+
