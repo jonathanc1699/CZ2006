@@ -100,6 +100,7 @@ public class ClinicPage extends AppCompatActivity {
                                 block = selectedClinic.getBlock();
                                 floor = selectedClinic.getFloor();
 
+
                                 if(ClinicDetailList.contains("Unit number"))
                                 {
                                     if(ClinicDetailList.get("Unit number") instanceof String) {
