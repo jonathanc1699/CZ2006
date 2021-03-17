@@ -1,6 +1,7 @@
 package com.example.loginapp;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -19,13 +20,17 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
 
 public class Login extends AppCompatActivity {
     EditText mEmail, mPassword;
@@ -34,8 +39,9 @@ public class Login extends AppCompatActivity {
     ProgressBar progressBar;
     FirebaseAuth fAuth;
     String uid;
-    Boolean isAdmin;
-    Boolean isDisabled;
+    Boolean isAdmin=false;
+    Boolean isDisabled=false;
+
 
 
 
@@ -45,6 +51,8 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+
 
         mEmail = findViewById(R.id.Email);
         mPassword = findViewById(R.id.Password);
@@ -83,66 +91,41 @@ public class Login extends AppCompatActivity {
                             FirebaseUser firebaseUser = fAuth.getCurrentUser();
                             uid = fAuth.getCurrentUser().getUid();
                             Log.d("TAG", uid);
-                            isAdmin=false;
-                            isDisabled=false;
 
-
-                            DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
-                            DatabaseReference usersdRef = rootRef.child("Users");
-
-                            ValueEventListener eventListener = new ValueEventListener() {
+                            DatabaseReference User = FirebaseDatabase.getInstance().getReference("Users").child(uid);
+                            User.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-
-
-                                    DataSnapshot ds = dataSnapshot.child(uid);
-                                    isAdmin = ds.child("admin").getValue(Boolean.class);
-                                    isDisabled = ds.child("disabled").getValue(Boolean.class);
-
-                                    //TODO ERRROR
-
-
-//                for(DataSnapshot ds : dataSnapshot.getChildren()) {
-//
-//                    if(uid==ds.child("userId").getValue(String.class)){
-//                         isAdmin = ds.child("admin").getValue(Boolean.class);
-//                        Log.d("TAG", String.valueOf(isAdmin));
-//                        isDisabled = ds.child("disabled").getValue(Boolean.class);
-//                        Log.d("TAG", String.valueOf(isDisabled));
-//                    }
-                                    //TODO: Change user stuff
-
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    isDisabled = snapshot.child("disabled").getValue(Boolean.class);
+                                    isAdmin = snapshot.child("admin").getValue(Boolean.class);
 
                                 }
 
                                 @Override
-                                public void onCancelled(DatabaseError databaseError) {
+                                public void onCancelled(@NonNull DatabaseError error) {
+
                                 }
-                            };
-                            usersdRef.addListenerForSingleValueEvent(eventListener);
+                            });
 
 
-
-
-
-                            Log.d("AAAAAAAA", String.valueOf(isAdmin));
-                            Log.d("TAG", String.valueOf(isDisabled));
-
-
-                            if (firebaseUser.isEmailVerified()){
+                            if (firebaseUser.isEmailVerified()) {
                                 //TODO: isAdmin, we need reference to AdminActivity
 
-                                if(isAdmin==true){
-                                    Toast.makeText(Login.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                                    startActivity(new Intent(getApplicationContext(),mainactivityAdmin.class));
+                                if (isAdmin == true) {
+
+                                    startActivity(new Intent(getApplicationContext(), mainactivityAdmin.class));
+
+//                                    Intent intent = new Intent(ListofClinics.this,ClinicPage.class);
+//                                    intent.putExtra("CLINIC_NAME", arrayList.get(i));
                                 }
-                                if(isDisabled==true){
+                                if (isDisabled == true) {
                                     Toast.makeText(getApplicationContext(), "Your account has been disabled", Toast.LENGTH_LONG).show();
                                 }
-                                if(isAdmin==false && isDisabled==false){
-                                    Toast.makeText(Login.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                                    startActivity(new Intent(getApplicationContext(),MainActivity.class));
-                                }
+
+                                Toast.makeText(Login.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(Login.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+
 
                             }
                             else {
