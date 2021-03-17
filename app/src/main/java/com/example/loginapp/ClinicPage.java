@@ -66,11 +66,6 @@ public class ClinicPage extends AppCompatActivity {
     int serveTime = 10;
 
 
-    //for Q no
-    int userCurrentQ;
-    int clinicCurrentQ;
-    int latestQno;
-
 
 
     @Override
@@ -226,14 +221,17 @@ public class ClinicPage extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.O)
             public void onClick(DialogInterface dialog, int id) {
                 //TODO add to database
-                //TODO set boundary for booking of appt
+                int mins = (LocalTime.parse(strTime)).getMinute();
+                int hours = (LocalTime.parse(strTime)).getHour();
 
-                if (startTime.isBefore(LocalTime.parse(strTime)) && (onehrbefore.isAfter(LocalTime.parse(strTime)))&& closingTime.isAfter(LocalTime.parse(strTime)) )
+                int totalqueueleft = (((onehrbefore.getHour() - hours)*60) + (60 - mins))/ serveTime;
+
+
+                if ((((latestclinicq+1)-currentlyservingQ)<totalqueueleft)&&(startTime.isBefore(LocalTime.parse(strTime)) && (onehrbefore.isAfter(LocalTime.parse(strTime)))&& closingTime.isAfter(LocalTime.parse(strTime))))
                 {
                     sendConfirmationEmail();
                     Log.e("Email sent", "Email sent to user");
                 }
-
                 //one hour before closing dont allow booking
                 else if (startTime.isBefore(LocalTime.parse(strTime)) && (onehrbefore.isBefore(LocalTime.parse(strTime)))&& closingTime.isAfter(LocalTime.parse(strTime)) )
                 {
@@ -257,6 +255,28 @@ public class ClinicPage extends AppCompatActivity {
 
                     System.out.println("Cannot book appt");
 
+                }
+                else if ((((latestclinicq+1)-currentlyservingQ)>totalqueueleft)&&(startTime.isBefore(LocalTime.parse(strTime)) && (onehrbefore.isAfter(LocalTime.parse(strTime)))&& closingTime.isAfter(LocalTime.parse(strTime))))
+                {
+                    final ProgressDialog bookingfulldialog = new ProgressDialog(ClinicPage.this);
+                    bookingfulldialog.setTitle("Fail to book appointment");
+                    bookingfulldialog.setMessage("Clinic is fully booked for the day.\nIf it is an emergency, please visit the hospital\nThank you");
+                    bookingfulldialog.show();
+
+
+                    //set timer for dialog window to close
+                    Runnable progressRunnable = new Runnable() {
+
+                        @Override
+                        public void run() {
+                            bookingfulldialog.cancel();
+                        }
+                    };
+
+                    Handler pdCanceller = new Handler();
+                    pdCanceller.postDelayed(progressRunnable, 7000);
+
+                    System.out.println("Booking full");
                 }
                 else if(startTime.isAfter(LocalTime.parse(strTime))&&closingTime.isAfter(LocalTime.parse(strTime))){
                     final ProgressDialog notopenyet = new ProgressDialog(ClinicPage.this);
