@@ -54,7 +54,7 @@ public class ClinicPage extends AppCompatActivity {
     private CollectionReference clinicRef = db.collection("clinic");
     //
     long telephone;
-    String streetName ;
+    String streetName;
     String clinicName;
     long Floor;
     long postal;
@@ -62,6 +62,8 @@ public class ClinicPage extends AppCompatActivity {
     long floor;
     String unitNumber;
     long unit;
+    String ClinicID;
+    String address;
 
     Clinic selectedClinic;
 
@@ -69,7 +71,8 @@ public class ClinicPage extends AppCompatActivity {
     int latestclinicq;
     int serveTime = 10;
     //so that the patients can make their way down when they receive their email
-    int buffertime =15;
+    int buffertime = 15;
+    boolean godown = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +93,7 @@ public class ClinicPage extends AppCompatActivity {
         mTextView_addressClinic = (TextView) findViewById(R.id.textview_addressClinic);
 
         //TODO Need to assign to clinic id instead of ("Clinic Name", name)
+        //reference by Document ID because there are duplicated names with different longitude and latitude.
         clinicRef.whereEqualTo("Clinic Name", name).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -98,11 +102,11 @@ public class ClinicPage extends AppCompatActivity {
                             for (QueryDocumentSnapshot ClinicDetailList : task.getResult()) {
                                 Map<String, Object> map = ClinicDetailList.getData();
                                 selectedClinic = ClinicDetailList.toObject(Clinic.class);
-
+                                ClinicID = clinicRef.getId();
                                 clinicName = selectedClinic.getClinicName();
-                                streetName=selectedClinic.getStreetname();
+                                streetName = selectedClinic.getStreetname();
                                 telephone = selectedClinic.getTelephone();
-                                postal=selectedClinic.getPostal();
+                                postal = selectedClinic.getPostal();
                                 block = selectedClinic.getBlock();
                                 floor = selectedClinic.getFloor();
 
@@ -110,27 +114,22 @@ public class ClinicPage extends AppCompatActivity {
                                 currentlyservingQ = selectedClinic.getClinicCurrentQ();
                                 latestclinicq = selectedClinic.getLatestQNo();
 
-                                if(ClinicDetailList.contains("Unit number"))
-                                {
-                                    if(ClinicDetailList.get("Unit number") instanceof String) {
+                                if (ClinicDetailList.contains("Unit number")) {
+                                    if (ClinicDetailList.get("Unit number") instanceof String) {
                                         unitNumber = (String) ClinicDetailList.get("Unit number");
-
+                                        mTextView_addressClinic.setText("Clinic Address: " + block + " " +
+                                                streetName + " #0" + floor + "-" + unitNumber + " Block " +
+                                                block + " Singapore" + postal);
+                                    } else {
+                                        unit = (long) ClinicDetailList.get("Unit number");
                                         mTextView_addressClinic.setText("Clinic Address: " + block + " " +
                                                 streetName + " #0" + floor + "-" + unitNumber + " Block " +
                                                 block + " Singapore" + postal);
                                     }
-                                    else {
-                                        unit = (long) ClinicDetailList.get("Unit number");
-                                        mTextView_addressClinic.setText("Clinic Address: " + block + " " +
-                                                streetName + " #0" + floor + "-" + unit + " Block " +
-                                                block + " Singapore" + postal);
-                                    }
-                                }
-                                else
-                                {
-                                    mTextView_addressClinic.setText("Clinic Address: "+ block+ " " +
-                                            streetName + ", Level: "+ floor+ " Block " +
-                                            block+" s" + postal);
+                                } else {
+                                    mTextView_addressClinic.setText("Clinic Address: " + block + " " +
+                                            streetName + ", Level: " + floor + " Block " +
+                                            block + " s" + postal);
                                 }
 
 
@@ -182,12 +181,12 @@ public class ClinicPage extends AppCompatActivity {
         String start = selectedClinic.getStartTime();
         String close = selectedClinic.getClosingTime();
         LocalTime startTime = LocalTime.parse(start);
-        LocalTime closingTime =LocalTime.parse(close);
+        LocalTime closingTime = LocalTime.parse(close);
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH);
         TimeZone tz = TimeZone.getTimeZone("Asia/Singapore");
         sdf.setTimeZone(tz);
 
-        java.util.Date date= new java.util.Date();
+        java.util.Date date = new java.util.Date();
         Timestamp local = new Timestamp(date.getTime());
         String strTime = sdf.format(date);
         System.out.println("Local in String format " + strTime);
@@ -197,17 +196,15 @@ public class ClinicPage extends AppCompatActivity {
         LocalTime onehrbefore = closingTime.minus(1, ChronoUnit.HOURS);
 
         //Get queue number, patient's queue number and approx waiting time
-        mTextview_yourqueuenumber.setText(String.valueOf((latestclinicq+1)));
+        mTextview_yourqueuenumber.setText(String.valueOf((latestclinicq + 1)));
         mTextview_currentqueuenumber.setText(String.valueOf((currentlyservingQ)));
-        int waitingTime = (latestclinicq-currentlyservingQ)*serveTime +buffertime;
+        int waitingTime = (latestclinicq - currentlyservingQ) * serveTime + buffertime;
 
-        if(waitingTime>60)
-        {
-            int hour = waitingTime/60;
-            int min = waitingTime%60;
-            mTextview_estimatedwaitingtime.setText(String.valueOf(hour) + "hr " + String.valueOf(min) +" mins");
-        }
-        else
+        if (waitingTime > 60) {
+            int hour = waitingTime / 60;
+            int min = waitingTime % 60;
+            mTextview_estimatedwaitingtime.setText(String.valueOf(hour) + "hr " + String.valueOf(min) + " mins");
+        } else
             mTextview_estimatedwaitingtime.setText(String.valueOf(waitingTime) + " mins");
 
 
@@ -229,35 +226,31 @@ public class ClinicPage extends AppCompatActivity {
                 int mins = (LocalTime.parse(strTime)).getMinute();
                 int hours = (LocalTime.parse(strTime)).getHour();
 
-                int totalqueueleft = (((onehrbefore.getHour() - hours)*60) + (60 - mins))/ serveTime;
+                int totalqueueleft = (((onehrbefore.getHour() - hours) * 60) + (60 - mins)) / serveTime;
 
-                if ((((latestclinicq+1)-currentlyservingQ)<totalqueueleft)&&(startTime.isBefore(LocalTime.parse(strTime)) && (onehrbefore.isAfter(LocalTime.parse(strTime)))&& closingTime.isAfter(LocalTime.parse(strTime))))
-                {
-                    //more than 3 group
-                    if (waitingTime>40)
-                    {
+                if ((((latestclinicq + 1) - currentlyservingQ) < totalqueueleft) && (startTime.isBefore(LocalTime.parse(strTime)) && (onehrbefore.isAfter(LocalTime.parse(strTime))) && closingTime.isAfter(LocalTime.parse(strTime)))) {
+                    //more than 3 ppl
+                    if (waitingTime > 40) {
                         sendConfirmationEmail();
                         Log.e("Email sent", "Email sent to user");
                     }
-                    //less than 3 group, make way down now
-                    else if (waitingTime<=40)
-                    {
-                        sendConfirmationEmail();
-                        Log.e("Email sent", "Email sent to user");
-                        Log.e("Notification", "There are currently " + (((latestclinicq + 1) - currentlyservingQ) + " group(s) ahead of you in the queue. You may make your way to " + clinicName));
+                    //less than 3 ppl, make way down now
+                    else if (waitingTime <= 40) {
                         makeYourWayDown();
+
+                        Log.e("Email sent", "Email sent to user");
                     }
 
                     //UPDATE latestQNo when new booking is made
                     //TODO - change doc to id
                     latestclinicq++;
-                    clinicRef.document("00GPRB9RLccVrtGLO759")
+                    clinicRef.document(ClinicID)
                             .update("latestQNo", latestclinicq);
 
                     //TODO Logic for how to clinic current Q show run
                     //TODO i dont think the current q update belongs here***
                     currentlyservingQ++;
-                    clinicRef.document("00GPRB9RLccVrtGLO759")
+                    clinicRef.document(ClinicID)
                             .update("ClinicCurrentQ", currentlyservingQ);
                     Log.d("currentlyservingQ after", String.valueOf(latestclinicq));
                     Log.d("latestclinicq after", String.valueOf(currentlyservingQ));
@@ -265,8 +258,7 @@ public class ClinicPage extends AppCompatActivity {
 
                 }
                 //one hour before closing dont allow booking
-                else if (startTime.isBefore(LocalTime.parse(strTime)) && (onehrbefore.isBefore(LocalTime.parse(strTime)))&& closingTime.isAfter(LocalTime.parse(strTime)) )
-                {
+                else if (startTime.isBefore(LocalTime.parse(strTime)) && (onehrbefore.isBefore(LocalTime.parse(strTime))) && closingTime.isAfter(LocalTime.parse(strTime))) {
                     final ProgressDialog closingdialog = new ProgressDialog(ClinicPage.this);
                     closingdialog.setTitle("Fail to book appointment");
                     closingdialog.setMessage("Clinic is closing soon \nIf it is an emergency, please visit the hospital\nPlease try again from 0800 to 1900. \nThank you");
@@ -283,9 +275,7 @@ public class ClinicPage extends AppCompatActivity {
 
                     System.out.println("Cannot book appt");
 
-                }
-                else if ((((latestclinicq+1)-currentlyservingQ)>totalqueueleft)&&(startTime.isBefore(LocalTime.parse(strTime)) && (onehrbefore.isAfter(LocalTime.parse(strTime)))&& closingTime.isAfter(LocalTime.parse(strTime))))
-                {
+                } else if ((((latestclinicq + 1) - currentlyservingQ) > totalqueueleft) && (startTime.isBefore(LocalTime.parse(strTime)) && (onehrbefore.isAfter(LocalTime.parse(strTime))) && closingTime.isAfter(LocalTime.parse(strTime)))) {
                     final ProgressDialog bookingfulldialog = new ProgressDialog(ClinicPage.this);
                     bookingfulldialog.setTitle("Fail to book appointment");
                     bookingfulldialog.setMessage("Clinic is fully booked for the day.\nIf it is an emergency, please visit the hospital\nThank you");
@@ -305,8 +295,7 @@ public class ClinicPage extends AppCompatActivity {
                     pdCanceller.postDelayed(progressRunnable, 7000);
 
                     System.out.println("Booking full");
-                }
-                else if(startTime.isAfter(LocalTime.parse(strTime))&&closingTime.isAfter(LocalTime.parse(strTime))){
+                } else if (startTime.isAfter(LocalTime.parse(strTime)) && closingTime.isAfter(LocalTime.parse(strTime))) {
                     final ProgressDialog notopenyet = new ProgressDialog(ClinicPage.this);
                     notopenyet.setTitle("Fail to book appointment");
                     notopenyet.setMessage("Clinic is not open yet \nPlease try again when the clinic is open at 8am.\nIf it is an emergency, please visit the hospital\nThank you.");
@@ -324,9 +313,7 @@ public class ClinicPage extends AppCompatActivity {
                     pdCanceller.postDelayed(progressRunnable, 7000);
 
                     System.out.println("Cannot book appt");
-                }
-                else
-                {
+                } else {
                     final ProgressDialog faildialog = new ProgressDialog(ClinicPage.this);
                     faildialog.setTitle("Fail to book appointment");
                     faildialog.setMessage("Clinic is closed \nPlease try again when the clinic is open.\nIf it is an emergency, please visit the hospital\nThank you.");
@@ -381,14 +368,29 @@ public class ClinicPage extends AppCompatActivity {
         dialog.setTitle("Confirming your Booking");
         dialog.setMessage("Please wait");
         dialog.show();
-        Thread sender = new Thread(new Runnable(){
+        Thread sender = new Thread(new Runnable() {
             public void run() {
                 try {
                     //ToDO GET the booking details for the confirmation email.
                     GMailSender sender = new GMailSender("cz2006sickgowhere@gmail.com", "123456sickgowhere");
-                    sender.sendMail("Booking Confirmation",
-                            "This is your Confirmation email, you queue no is 7......",
-                            senderemail, recipientemail);
+                    if (godown=true)
+                    {
+                        //TODO add user queue number
+                        sender.sendMail("Booking Confirmation: "+ clinicName + ", Queue No:",
+                                "Hello,\nThis is your Confirmation email, you queue no is .....\n"+
+                                        "There are currently " + ((latestclinicq + 1) - currentlyservingQ)
+                                + "person(s) ahead of you in the queue. You may make your way to "+ clinicName
+                                        + "\n\nClinic Address:"  + block + " "+streetName + " #0" +
+                                        floor + "-" + unit + " Block " + block + " Singapore" + postal+
+                                        " \nThank you your using SickGoWhere.\n\nSickGoWhere",
+                                senderemail, recipientemail);
+                    }
+                    else
+                    {
+                        sender.sendMail("Booking Confirmation",
+                                "This is your Confirmation email, you queue no is 7......",
+                                senderemail, recipientemail);
+                    }
                     dialog.dismiss();
 
                 } catch (Exception e) {
@@ -399,11 +401,12 @@ public class ClinicPage extends AppCompatActivity {
         sender.start();
 
     }
-    private void makeYourWayDown()
-    {
+
+    private void makeYourWayDown() {
+        godown = true;
         AlertDialog.Builder goClinicAlert = new AlertDialog.Builder(context);
         goClinicAlert.setMessage("Booking is confirmed. Check your email for your booking confirmation. \n \nThere are currently " + ((latestclinicq + 1) - currentlyservingQ) +
-                " group(s) ahead of you in the queue. You may make your way to " + clinicName);
+                " person(s) ahead of you in the queue. You may make your way to " + clinicName);
         goClinicAlert.setCancelable(true);
 
         goClinicAlert.setPositiveButton(
@@ -417,8 +420,10 @@ public class ClinicPage extends AppCompatActivity {
 
         AlertDialog alertPatient = goClinicAlert.create();
         alertPatient.show();
+        sendConfirmationEmail();
     }
 }
+
 
 
 
