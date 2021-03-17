@@ -5,7 +5,7 @@ public class Pharmacy extends MedicalLocation{
     private String pharmacy_address;
     private String pharmacy_name;
 
-    public Pharmacy(float Latitude, float Longitude, String pharmacy_name, String pharmacy_address) {
+    public Pharmacy(long Latitude, long Longitude, String pharmacy_name, String pharmacy_address) {
         super(Latitude, Longitude);
         this.pharmacy_address=pharmacy_address;
         this.pharmacy_name =pharmacy_name;
