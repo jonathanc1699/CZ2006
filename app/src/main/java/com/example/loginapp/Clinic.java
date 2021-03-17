@@ -1,6 +1,10 @@
 package com.example.loginapp;
 
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.PropertyName;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class Clinic extends MedicalLocation {
 
@@ -13,7 +17,7 @@ public class Clinic extends MedicalLocation {
     private long Telephone;
     private int ClinicCurrentQ;
     private static String startTime = "08:00:00";
-    private static String closingTime = "20:00:00";
+    private static String closingTime = "23:00:00";
     private String ClinicID;
 
     private int latestQNo;
@@ -133,6 +137,7 @@ public class Clinic extends MedicalLocation {
     public void setLatestQNo(int latestQNo) {
         this.latestQNo = latestQNo;
     }
+
 }
 
 

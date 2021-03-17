@@ -19,12 +19,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firestore.v1.WriteResult;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -65,10 +69,7 @@ public class ClinicPage extends AppCompatActivity {
     int latestclinicq;
     int serveTime = 10;
     //so that the patients can make their way down when they receive their email
-    int buffertime =10;
-
-
-
+    int buffertime =15;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,8 +77,6 @@ public class ClinicPage extends AppCompatActivity {
         setContentView(R.layout.activity_clinic_page);
 
         String name = getIntent().getStringExtra("CLINIC_NAME");
-        //TODO get intents for image, phone and address
-
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -107,6 +106,9 @@ public class ClinicPage extends AppCompatActivity {
                                 block = selectedClinic.getBlock();
                                 floor = selectedClinic.getFloor();
 
+                                //Get clinic current and last Q number
+                                currentlyservingQ = selectedClinic.getClinicCurrentQ();
+                                latestclinicq = selectedClinic.getLatestQNo();
 
                                 if(ClinicDetailList.contains("Unit number"))
                                 {
@@ -117,15 +119,12 @@ public class ClinicPage extends AppCompatActivity {
                                                 streetName + " #0" + floor + "-" + unitNumber + " Block " +
                                                 block + " Singapore" + postal);
                                     }
-
                                     else {
                                         unit = (long) ClinicDetailList.get("Unit number");
-
                                         mTextView_addressClinic.setText("Clinic Address: " + block + " " +
                                                 streetName + " #0" + floor + "-" + unit + " Block " +
                                                 block + " Singapore" + postal);
                                     }
-
                                 }
                                 else
                                 {
@@ -144,7 +143,6 @@ public class ClinicPage extends AppCompatActivity {
                         }
                     }
                 });
-
 
         mbutton_queue.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -180,9 +178,7 @@ public class ClinicPage extends AppCompatActivity {
         final TextView mTextview_currentqueuenumber = (TextView) promptsView.findViewById(R.id.textView_currentQueueNumber);
         final TextView mTextview_estimatedwaitingtime = (TextView) promptsView.findViewById(R.id.textview_estimatedWaitingTime);
 
-        currentlyservingQ = selectedClinic.getClinicCurrentQ();
-        latestclinicq = selectedClinic.getLatestQNo();
-
+        //Get start, close and current time
         String start = selectedClinic.getStartTime();
         String close = selectedClinic.getClosingTime();
         LocalTime startTime = LocalTime.parse(start);
@@ -196,12 +192,15 @@ public class ClinicPage extends AppCompatActivity {
         String strTime = sdf.format(date);
         System.out.println("Local in String format " + strTime);
 
+        //one hour before so that last hour of operation , patients would not be anble to make any appointment
+        //time buffer
         LocalTime onehrbefore = closingTime.minus(1, ChronoUnit.HOURS);
 
+        //Get queue number, patient's queue number and approx waiting time
         mTextview_yourqueuenumber.setText(String.valueOf((latestclinicq+1)));
         mTextview_currentqueuenumber.setText(String.valueOf((currentlyservingQ)));
         int waitingTime = (latestclinicq-currentlyservingQ)*serveTime +buffertime;
-        Log.d(" ", String.valueOf(waitingTime));
+
         if(waitingTime>60)
         {
             int hour = waitingTime/60;
@@ -210,6 +209,11 @@ public class ClinicPage extends AppCompatActivity {
         }
         else
             mTextview_estimatedwaitingtime.setText(String.valueOf(waitingTime) + " mins");
+
+
+        Log.d("currentlyservingQ bef", String.valueOf(currentlyservingQ));
+
+        Log.d("latestclinicq before", String.valueOf(latestclinicq));
 
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
@@ -244,6 +248,21 @@ public class ClinicPage extends AppCompatActivity {
                         makeYourWayDown();
                     }
 
+                    //UPDATE latestQNo when new booking is made
+                    //TODO - change doc to id
+                    latestclinicq++;
+                    clinicRef.document("00GPRB9RLccVrtGLO759")
+                            .update("latestQNo", latestclinicq);
+
+                    //TODO Logic for how to clinic current Q show run
+                    //TODO i dont think the current q update belongs here***
+                    currentlyservingQ++;
+                    clinicRef.document("00GPRB9RLccVrtGLO759")
+                            .update("ClinicCurrentQ", currentlyservingQ);
+                    Log.d("currentlyservingQ after", String.valueOf(latestclinicq));
+                    Log.d("latestclinicq after", String.valueOf(currentlyservingQ));
+
+
                 }
                 //one hour before closing dont allow booking
                 else if (startTime.isBefore(LocalTime.parse(strTime)) && (onehrbefore.isBefore(LocalTime.parse(strTime)))&& closingTime.isAfter(LocalTime.parse(strTime)) )
@@ -254,13 +273,11 @@ public class ClinicPage extends AppCompatActivity {
                     closingdialog.show();
                     //set timer for dialog window to close
                     Runnable progressRunnable = new Runnable() {
-
                         @Override
                         public void run() {
                             closingdialog.cancel();
                         }
                     };
-
                     Handler pdCanceller = new Handler();
                     pdCanceller.postDelayed(progressRunnable, 7000);
 
@@ -331,7 +348,6 @@ public class ClinicPage extends AppCompatActivity {
                     System.out.println("Cannot book appt");
 
                 }
-
             }
 
 
@@ -351,6 +367,7 @@ public class ClinicPage extends AppCompatActivity {
 
         // show it
         alertDialog.show();
+
 
     }
 
