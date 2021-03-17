@@ -39,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        View six = findViewById(R.id.button6);
+        six.setVisibility(View.GONE);
             }
 
 
@@ -66,10 +68,7 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
-    public void adminuserlist(View view) {
-        startActivity(new Intent(getApplicationContext(), AdminPage.class));
-        finish();
-    }
+
 
     public void currentAppointment (View view){
 

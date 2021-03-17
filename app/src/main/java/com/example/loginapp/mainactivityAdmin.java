@@ -30,6 +30,16 @@ public class mainactivityAdmin extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        View two = findViewById(R.id.button2);
+        View three = findViewById(R.id.button3);
+        View four = findViewById(R.id.button4);
+        View five = findViewById(R.id.button5);
+        two.setVisibility(View.GONE);
+        three.setVisibility(View.GONE);
+        four.setVisibility(View.GONE);
+        five.setVisibility(View.GONE);
     }
 
     public void logout (View view){
