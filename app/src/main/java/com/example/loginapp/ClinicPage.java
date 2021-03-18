@@ -23,11 +23,22 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.Source;
+import com.google.firebase.firestore.Transaction;
 import com.google.firestore.v1.WriteResult;
 
 import java.sql.Timestamp;
@@ -52,11 +63,11 @@ public class ClinicPage extends AppCompatActivity {
     //To read clinic database
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference clinicRef = db.collection("clinic");
+
     //
     long telephone;
     String streetName;
     String clinicName;
-    long Floor;
     long postal;
     long block;
     long floor;
@@ -92,17 +103,19 @@ public class ClinicPage extends AppCompatActivity {
         mTextView_phoneClinic = (TextView) findViewById(R.id.textview_phoneClinic);
         mTextView_addressClinic = (TextView) findViewById(R.id.textview_addressClinic);
 
-        //TODO Need to assign to clinic id instead of ("Clinic Name", name)
-        //reference by Document ID because there are duplicated names with different longitude and latitude.
         clinicRef.whereEqualTo("Clinic Name", name).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot ClinicDetailList : task.getResult()) {
+
+                                ClinicID = ClinicDetailList.getId();
+                                Log.d("Clinic ID", ClinicID);
                                 Map<String, Object> map = ClinicDetailList.getData();
                                 selectedClinic = ClinicDetailList.toObject(Clinic.class);
-                                ClinicID = clinicRef.getId();
+
+                                Log.d("Clinic Info", String.valueOf(ClinicDetailList.getData()));
                                 clinicName = selectedClinic.getClinicName();
                                 streetName = selectedClinic.getStreetname();
                                 telephone = selectedClinic.getTelephone();
@@ -117,19 +130,22 @@ public class ClinicPage extends AppCompatActivity {
                                 if (ClinicDetailList.contains("Unit number")) {
                                     if (ClinicDetailList.get("Unit number") instanceof String) {
                                         unitNumber = (String) ClinicDetailList.get("Unit number");
-                                        mTextView_addressClinic.setText("Clinic Address: " + block + " " +
+                                        address = "Clinic Address: " + block + " " +
                                                 streetName + " #0" + floor + "-" + unitNumber + " Block " +
-                                                block + " Singapore" + postal);
+                                                block + " Singapore" + postal;
+                                        mTextView_addressClinic.setText(address);
                                     } else {
                                         unit = (long) ClinicDetailList.get("Unit number");
-                                        mTextView_addressClinic.setText("Clinic Address: " + block + " " +
-                                                streetName + " #0" + floor + "-" + unitNumber + " Block " +
-                                                block + " Singapore" + postal);
+                                        address="Clinic Address: " + block + " " +
+                                                streetName + " #0" + floor + "-" + unit + " Block " +
+                                                block + " Singapore" + postal;
+                                        mTextView_addressClinic.setText(address);
                                     }
                                 } else {
-                                    mTextView_addressClinic.setText("Clinic Address: " + block + " " +
+                                    address="Clinic Address: " + block + " " +
                                             streetName + ", Level: " + floor + " Block " +
-                                            block + " s" + postal);
+                                            block + " s" + postal;
+                                    mTextView_addressClinic.setText(address);
                                 }
 
 
@@ -189,24 +205,28 @@ public class ClinicPage extends AppCompatActivity {
         java.util.Date date = new java.util.Date();
         Timestamp local = new Timestamp(date.getTime());
         String strTime = sdf.format(date);
+
+        //String strTime = "14:00:00";
         System.out.println("Local in String format " + strTime);
 
         //one hour before so that last hour of operation , patients would not be anble to make any appointment
         //time buffer
         LocalTime onehrbefore = closingTime.minus(1, ChronoUnit.HOURS);
 
-        //Get queue number, patient's queue number and approx waiting time
+        int waitingTime = (latestclinicq - currentlyservingQ) * serveTime + buffertime;
+
+
         mTextview_yourqueuenumber.setText(String.valueOf((latestclinicq + 1)));
         mTextview_currentqueuenumber.setText(String.valueOf((currentlyservingQ)));
-        int waitingTime = (latestclinicq - currentlyservingQ) * serveTime + buffertime;
+
 
         if (waitingTime > 60) {
             int hour = waitingTime / 60;
             int min = waitingTime % 60;
-            mTextview_estimatedwaitingtime.setText(String.valueOf(hour) + "hr " + String.valueOf(min) + " mins");
-        } else
-            mTextview_estimatedwaitingtime.setText(String.valueOf(waitingTime) + " mins");
 
+            mTextview_estimatedwaitingtime.setText(hour + "hr " + min + " mins");
+        } else
+            mTextview_estimatedwaitingtime.setText(waitingTime + " mins");
 
         Log.d("currentlyservingQ bef", String.valueOf(currentlyservingQ));
 
@@ -219,10 +239,10 @@ public class ClinicPage extends AppCompatActivity {
         // set prompts.xml to alertdialog builder
         alertDialogBuilder.setView(promptsView);
 
+
         alertDialogBuilder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             public void onClick(DialogInterface dialog, int id) {
-                //TODO add to database
                 int mins = (LocalTime.parse(strTime)).getMinute();
                 int hours = (LocalTime.parse(strTime)).getHour();
 
@@ -235,26 +255,11 @@ public class ClinicPage extends AppCompatActivity {
                         Log.e("Email sent", "Email sent to user");
                     }
                     //less than 3 ppl, make way down now
-                    else if (waitingTime <= 40) {
+                    else{
                         makeYourWayDown();
 
                         Log.e("Email sent", "Email sent to user");
                     }
-
-                    //UPDATE latestQNo when new booking is made
-                    //TODO - change doc to id
-                    latestclinicq++;
-                    clinicRef.document(ClinicID)
-                            .update("latestQNo", latestclinicq);
-
-                    //TODO Logic for how to clinic current Q show run
-                    //TODO i dont think the current q update belongs here***
-                    currentlyservingQ++;
-                    clinicRef.document(ClinicID)
-                            .update("ClinicCurrentQ", currentlyservingQ);
-                    Log.d("currentlyservingQ after", String.valueOf(latestclinicq));
-                    Log.d("latestclinicq after", String.valueOf(currentlyservingQ));
-
 
                 }
                 //one hour before closing dont allow booking
@@ -322,7 +327,6 @@ public class ClinicPage extends AppCompatActivity {
 
                     //set timer for dialog window to close
                     Runnable progressRunnable = new Runnable() {
-
                         @Override
                         public void run() {
                             faildialog.cancel();
@@ -399,6 +403,50 @@ public class ClinicPage extends AppCompatActivity {
             }
         });
         sender.start();
+        //UPDATE latestQNo when new booking is made
+        //TODO - change doc to id
+        latestclinicq++;
+        clinicRef.document(ClinicID).
+                update("latestQNo", latestclinicq)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("ClinicCurrentQ", "Update ClinicCurrentQ successfully updated!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("ClinicCurrentQ", "Error updating document", e);
+                    }
+                });
+        UserQueueController userQueueController = new UserQueueController();
+        userQueueController.assignQToUser(latestclinicq,clinicName,ClinicID);
+
+
+        //TODO change to ALL clinic .
+        //TODO i dont think the current q update belongs here***
+        currentlyservingQ++;
+
+
+        clinicRef.document(ClinicID).
+                update("ClinicCurrentQ", currentlyservingQ)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("ClinicCurrentQ", "Update ClinicCurrentQ successfully updated!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("ClinicCurrentQ", "Error updating document", e);
+                    }
+                });
+
+
+        Log.d("currentlyservingQ after", String.valueOf(currentlyservingQ));
+        Log.d("latestclinicq after", String.valueOf(latestclinicq));
 
     }
 
@@ -411,17 +459,14 @@ public class ClinicPage extends AppCompatActivity {
 
         goClinicAlert.setPositiveButton(
                 "Got it!",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-
-
+                (dialog, id) -> dialog.cancel());
         AlertDialog alertPatient = goClinicAlert.create();
         alertPatient.show();
         sendConfirmationEmail();
     }
+
+
+
 }
 
 

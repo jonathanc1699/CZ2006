@@ -29,18 +29,18 @@ public class User {
     private String email;
     private int currentQueue;
     private String currentClinic;
-    private boolean isAdmin;
+    private boolean Admin;
     private String userId;
-    private boolean isDisabled;
+    private boolean Disabled;
 
-    public User(String fullName, String email, int currentQueue, String currentClinic,String userId, boolean isDisabled, boolean isAdmin) {
+    public User(String fullName, String email, int currentQueue, String currentClinic,String userId, boolean Disabled, boolean Admin) {
         this.fullName = fullName;
         this.email = email;
         this.currentQueue = currentQueue;
         this.currentClinic = currentClinic;
         this.userId=userId;
-        this.isAdmin = isAdmin;
-        this.isDisabled = isDisabled;
+        this.Admin = Admin;
+        this.Disabled = Disabled;
 
     }
 
@@ -48,21 +48,21 @@ public class User {
     }
 
 
-    public boolean isAdmin() {
-        return isAdmin;
+    public boolean getAdmin() {
+        return Admin;
     }
 
-    public void setAdmin(boolean admin) {
-        isAdmin = admin;
+    public void setAdmin(boolean Admin) {
+        Admin = Admin;
     }
 
 
-    public boolean isDisabled() {
-        return isDisabled;
+    public boolean getDisabled() {
+        return Disabled;
     }
 
-    public void setDisabled(boolean disabled) {
-        isDisabled = disabled;
+    public void setDisabled(boolean Disabled) {
+        Disabled = Disabled;
     }
 
     public int getCurrentQueue() {
