@@ -56,7 +56,6 @@ public class ClinicPage extends AppCompatActivity {
     long telephone;
     String streetName;
     String clinicName;
-    long Floor;
     long postal;
     long block;
     long floor;
@@ -102,6 +101,8 @@ public class ClinicPage extends AppCompatActivity {
                             for (QueryDocumentSnapshot ClinicDetailList : task.getResult()) {
                                 Map<String, Object> map = ClinicDetailList.getData();
                                 selectedClinic = ClinicDetailList.toObject(Clinic.class);
+
+                                Log.d("Clinic Info", String.valueOf(ClinicDetailList.getData()));
                                 ClinicID = clinicRef.getId();
                                 clinicName = selectedClinic.getClinicName();
                                 streetName = selectedClinic.getStreetname();
@@ -123,7 +124,7 @@ public class ClinicPage extends AppCompatActivity {
                                     } else {
                                         unit = (long) ClinicDetailList.get("Unit number");
                                         mTextView_addressClinic.setText("Clinic Address: " + block + " " +
-                                                streetName + " #0" + floor + "-" + unitNumber + " Block " +
+                                                streetName + " #0" + floor + "-" + unit + " Block " +
                                                 block + " Singapore" + postal);
                                     }
                                 } else {
@@ -235,26 +236,11 @@ public class ClinicPage extends AppCompatActivity {
                         Log.e("Email sent", "Email sent to user");
                     }
                     //less than 3 ppl, make way down now
-                    else if (waitingTime <= 40) {
+                    else{
                         makeYourWayDown();
 
                         Log.e("Email sent", "Email sent to user");
                     }
-
-                    //UPDATE latestQNo when new booking is made
-                    //TODO - change doc to id
-                    latestclinicq++;
-                    clinicRef.document(ClinicID)
-                            .update("latestQNo", latestclinicq);
-
-                    //TODO Logic for how to clinic current Q show run
-                    //TODO i dont think the current q update belongs here***
-                    currentlyservingQ++;
-                    clinicRef.document(ClinicID)
-                            .update("ClinicCurrentQ", currentlyservingQ);
-                    Log.d("currentlyservingQ after", String.valueOf(latestclinicq));
-                    Log.d("latestclinicq after", String.valueOf(currentlyservingQ));
-
 
                 }
                 //one hour before closing dont allow booking
@@ -322,7 +308,6 @@ public class ClinicPage extends AppCompatActivity {
 
                     //set timer for dialog window to close
                     Runnable progressRunnable = new Runnable() {
-
                         @Override
                         public void run() {
                             faildialog.cancel();
@@ -399,6 +384,43 @@ public class ClinicPage extends AppCompatActivity {
             }
         });
         sender.start();
+        //UPDATE latestQNo when new booking is made
+        //TODO - change doc to id
+        latestclinicq++;
+        clinicRef.document("00GPRB9RLccVrtGLO759").
+                update("latestQNo", latestclinicq)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("latestQNo", "Update latestQNo successfully updated!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("latestQNo", "Error updating document", e);
+                    }
+                });
+
+        //TODO Logic for how to clinic current Q show run
+        //TODO i dont think the current q update belongs here***
+        currentlyservingQ++;
+        clinicRef.document("00GPRB9RLccVrtGLO759").
+                update("ClinicCurrentQ", currentlyservingQ)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("ClinicCurrentQ", "Update ClinicCurrentQ successfully updated!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("ClinicCurrentQ", "Error updating document", e);
+                    }
+                });
+        Log.d("currentlyservingQ after", String.valueOf(currentlyservingQ));
+        Log.d("latestclinicq after", String.valueOf(latestclinicq));
 
     }
 
@@ -411,13 +433,7 @@ public class ClinicPage extends AppCompatActivity {
 
         goClinicAlert.setPositiveButton(
                 "Got it!",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-
-
+                (dialog, id) -> dialog.cancel());
         AlertDialog alertPatient = goClinicAlert.create();
         alertPatient.show();
         sendConfirmationEmail();

@@ -13,11 +13,11 @@ public class Clinic extends MedicalLocation {
     private long Floor;
     private long Postal;
     private String Streetname;
-    private String Unitnumber;
+    private Object Unitnumber;
     private long Telephone;
     private int ClinicCurrentQ;
     private static String startTime = "08:00:00";
-    private static String closingTime = "20:00:00";
+    private static String closingTime = "22:00:00";
     private String ClinicID;
 
     private int latestQNo;
@@ -29,7 +29,7 @@ public class Clinic extends MedicalLocation {
     }
 
     public Clinic(String clinicName, long block, long floor,
-                  long postal, String streetname, String unitnumber, long telephone, int clinicCurrentQ,
+                  long postal, String streetname, Object unitnumber, long telephone, int clinicCurrentQ,
                   String startTime,
                   String closingTime, String clinicID, long Longitude, long Latitude, int latestqno) {
 
@@ -88,13 +88,13 @@ public class Clinic extends MedicalLocation {
         Streetname = streetname;
     }
 
-    //@PropertyName("Unit number")
-    public String getUnitnumber() {
+    @PropertyName("Unit number")
+    public Object getUnitnumber() {
         return Unitnumber;
     }
-    //@PropertyName("Unit number")
-    public void setUnitnumber(String unitnumber) {
-        this.Unitnumber = unitnumber;
+    @PropertyName("Unit number")
+    public void setUnitnumber(Object unitnumber) {
+        Unitnumber = unitnumber;
     }
 
     @PropertyName("Telephone ")
@@ -106,10 +106,14 @@ public class Clinic extends MedicalLocation {
         Telephone = telephone;
     }
 
+
+    @PropertyName("ClinicCurrentQ")
     public int getClinicCurrentQ() {
         return ClinicCurrentQ;
     }
 
+
+    @PropertyName("ClinicCurrentQ")
     public void setClinicCurrentQ(int clinicCurrentQ) {
         ClinicCurrentQ = clinicCurrentQ;
     }
@@ -130,10 +134,14 @@ public class Clinic extends MedicalLocation {
         return closingTime;
     }
 
+
+    @PropertyName("latestQNo")
     public int getLatestQNo() {
         return latestQNo;
     }
 
+
+    @PropertyName("latestQNo")
     public void setLatestQNo(int latestQNo) {
         this.latestQNo = latestQNo;
     }
