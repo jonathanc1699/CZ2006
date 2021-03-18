@@ -24,10 +24,15 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.Source;
+import com.google.firebase.firestore.Transaction;
 import com.google.firestore.v1.WriteResult;
 
 import java.sql.Timestamp;
@@ -91,19 +96,19 @@ public class ClinicPage extends AppCompatActivity {
         mTextView_phoneClinic = (TextView) findViewById(R.id.textview_phoneClinic);
         mTextView_addressClinic = (TextView) findViewById(R.id.textview_addressClinic);
 
-        //TODO Need to assign to clinic id instead of ("Clinic Name", name)
-        //reference by Document ID because there are duplicated names with different longitude and latitude.
         clinicRef.whereEqualTo("Clinic Name", name).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot ClinicDetailList : task.getResult()) {
+
+                                ClinicID = ClinicDetailList.getId();
+                                Log.d("Clinic ID", ClinicID);
                                 Map<String, Object> map = ClinicDetailList.getData();
                                 selectedClinic = ClinicDetailList.toObject(Clinic.class);
 
                                 Log.d("Clinic Info", String.valueOf(ClinicDetailList.getData()));
-                                ClinicID = clinicRef.getId();
                                 clinicName = selectedClinic.getClinicName();
                                 streetName = selectedClinic.getStreetname();
                                 telephone = selectedClinic.getTelephone();
@@ -118,19 +123,22 @@ public class ClinicPage extends AppCompatActivity {
                                 if (ClinicDetailList.contains("Unit number")) {
                                     if (ClinicDetailList.get("Unit number") instanceof String) {
                                         unitNumber = (String) ClinicDetailList.get("Unit number");
-                                        mTextView_addressClinic.setText("Clinic Address: " + block + " " +
+                                        address = "Clinic Address: " + block + " " +
                                                 streetName + " #0" + floor + "-" + unitNumber + " Block " +
-                                                block + " Singapore" + postal);
+                                                block + " Singapore" + postal;
+                                        mTextView_addressClinic.setText(address);
                                     } else {
                                         unit = (long) ClinicDetailList.get("Unit number");
-                                        mTextView_addressClinic.setText("Clinic Address: " + block + " " +
+                                        address="Clinic Address: " + block + " " +
                                                 streetName + " #0" + floor + "-" + unit + " Block " +
-                                                block + " Singapore" + postal);
+                                                block + " Singapore" + postal;
+                                        mTextView_addressClinic.setText(address);
                                     }
                                 } else {
-                                    mTextView_addressClinic.setText("Clinic Address: " + block + " " +
+                                    address="Clinic Address: " + block + " " +
                                             streetName + ", Level: " + floor + " Block " +
-                                            block + " s" + postal);
+                                            block + " s" + postal;
+                                    mTextView_addressClinic.setText(address);
                                 }
 
 
@@ -204,9 +212,9 @@ public class ClinicPage extends AppCompatActivity {
         if (waitingTime > 60) {
             int hour = waitingTime / 60;
             int min = waitingTime % 60;
-            mTextview_estimatedwaitingtime.setText(String.valueOf(hour) + "hr " + String.valueOf(min) + " mins");
+            mTextview_estimatedwaitingtime.setText(hour + "hr " + min + " mins");
         } else
-            mTextview_estimatedwaitingtime.setText(String.valueOf(waitingTime) + " mins");
+            mTextview_estimatedwaitingtime.setText(waitingTime + " mins");
 
 
         Log.d("currentlyservingQ bef", String.valueOf(currentlyservingQ));
@@ -223,7 +231,6 @@ public class ClinicPage extends AppCompatActivity {
         alertDialogBuilder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             public void onClick(DialogInterface dialog, int id) {
-                //TODO add to database
                 int mins = (LocalTime.parse(strTime)).getMinute();
                 int hours = (LocalTime.parse(strTime)).getHour();
 
@@ -387,25 +394,28 @@ public class ClinicPage extends AppCompatActivity {
         //UPDATE latestQNo when new booking is made
         //TODO - change doc to id
         latestclinicq++;
-        clinicRef.document("00GPRB9RLccVrtGLO759").
+        clinicRef.document(ClinicID).
                 update("latestQNo", latestclinicq)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d("latestQNo", "Update latestQNo successfully updated!");
+                        Log.d("ClinicCurrentQ", "Update ClinicCurrentQ successfully updated!");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w("latestQNo", "Error updating document", e);
+                        Log.w("ClinicCurrentQ", "Error updating document", e);
                     }
                 });
 
-        //TODO Logic for how to clinic current Q show run
+
+        //TODO change to ALL clinic .
         //TODO i dont think the current q update belongs here***
         currentlyservingQ++;
-        clinicRef.document("00GPRB9RLccVrtGLO759").
+
+
+        clinicRef.document(ClinicID).
                 update("ClinicCurrentQ", currentlyservingQ)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -419,6 +429,8 @@ public class ClinicPage extends AppCompatActivity {
                         Log.w("ClinicCurrentQ", "Error updating document", e);
                     }
                 });
+
+
         Log.d("currentlyservingQ after", String.valueOf(currentlyservingQ));
         Log.d("latestclinicq after", String.valueOf(latestclinicq));
 
