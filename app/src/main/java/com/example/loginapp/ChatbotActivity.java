@@ -75,16 +75,16 @@ public class ChatbotActivity extends AppCompatActivity {
                         arraysymptoms.add(DiseaseList.getString("Symptom3"));
                         arraysymptoms.add(DiseaseList.getString("Symptom4"));
                         arraysymptoms.add(DiseaseList.getString("Symptom5"));
-                        //arraysymptoms.add(DiseaseList.getString("Symptom6"));
-                        //arraysymptoms.add(DiseaseList.getString("Symptom7"));
-                        //arraysymptoms.add(DiseaseList.getString("Symptom8"));
-                        //arraysymptoms.add(DiseaseList.getString("Symptom9"));
-                        //arraysymptoms.add(DiseaseList.getString("Symptom10"));
-                       // arraysymptoms.add(DiseaseList.getString("Symptom11"));
-                        //arraysymptoms.add(DiseaseList.getString("Symptom12"));
-                        //arraysymptoms.add(DiseaseList.getString("Symptom13"));
-                       // arraysymptoms.add(DiseaseList.getString("Symptom14"));
-                       // arraysymptoms.add(DiseaseList.getString("Symptom15"));
+                        arraysymptoms.add(DiseaseList.getString("Symptom6"));
+                        arraysymptoms.add(DiseaseList.getString("Symptom7"));
+                        arraysymptoms.add(DiseaseList.getString("Symptom8"));
+                        arraysymptoms.add(DiseaseList.getString("Symptom9"));
+                        arraysymptoms.add(DiseaseList.getString("Symptom10"));
+                        arraysymptoms.add(DiseaseList.getString("Symptom11"));
+                        arraysymptoms.add(DiseaseList.getString("Symptom12"));
+                        arraysymptoms.add(DiseaseList.getString("Symptom13"));
+                        arraysymptoms.add(DiseaseList.getString("Symptom14"));
+                        arraysymptoms.add(DiseaseList.getString("Symptom15"));
 
 
                         String diseasename = DiseaseList.getString("Disease ");
@@ -114,7 +114,7 @@ public class ChatbotActivity extends AppCompatActivity {
 
 
 
-                    /*for (Map.Entry<String,ArrayList<String>> entry: myMap.entrySet()) {
+                    for (Map.Entry<String,ArrayList<String>> entry: myMap.entrySet()) {
                         String key = entry.getKey();
                         alldisease.add(key);
                         Log.d("ChatbotActivity", "Diseasename:" + key);
@@ -124,7 +124,7 @@ public class ChatbotActivity extends AppCompatActivity {
 
                         }
 
-                    }*/
+                    }
 
 
 
@@ -199,7 +199,7 @@ public class ChatbotActivity extends AppCompatActivity {
                             chatbotMessage = new ResponseMessage("You have entered stop. Processing symptoms", false);
                             responseMessageList.add(chatbotMessage);
                             ArrayList<String> possiblediseases= new ArrayList<String>();
-                            possiblediseases.addAll(alldisease);
+                            possiblediseases=alldisease;
                             for (String s:possiblediseases){
                                 Log.d("Possible diseases", "startDisease:" + s);}
                             int matchcount=0;
@@ -235,8 +235,14 @@ public class ChatbotActivity extends AppCompatActivity {
                             Log.d("ChatbotActivity", "highestcount:" + highestcount);
                             Log.d("ChatbotActivity", "highestcountdisease:" + highestcountdisease);
                             Log.d("ChatbotActivity", "matchcount:" + matchcount);
+                            chatbotMessage = new ResponseMessage("Your are at risk of: " + highestcountdisease + "with a matchcount of "+matchcount, false);
+                            responseMessageList.add(chatbotMessage);
+
+
+                          
                             for (String s:possiblediseases){
                                 Log.d("Possible diseases", "Disease:" + s);}
+                            //TODO risk level assessement, recommend pharmacy or clinic
 
 
 
