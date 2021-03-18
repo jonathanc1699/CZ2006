@@ -23,6 +23,12 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -57,6 +63,7 @@ public class ClinicPage extends AppCompatActivity {
     //To read clinic database
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference clinicRef = db.collection("clinic");
+
     //
     long telephone;
     String streetName;
@@ -198,24 +205,28 @@ public class ClinicPage extends AppCompatActivity {
         java.util.Date date = new java.util.Date();
         Timestamp local = new Timestamp(date.getTime());
         String strTime = sdf.format(date);
+
+        //String strTime = "14:00:00";
         System.out.println("Local in String format " + strTime);
 
         //one hour before so that last hour of operation , patients would not be anble to make any appointment
         //time buffer
         LocalTime onehrbefore = closingTime.minus(1, ChronoUnit.HOURS);
 
-        //Get queue number, patient's queue number and approx waiting time
+        int waitingTime = (latestclinicq - currentlyservingQ) * serveTime + buffertime;
+
+
         mTextview_yourqueuenumber.setText(String.valueOf((latestclinicq + 1)));
         mTextview_currentqueuenumber.setText(String.valueOf((currentlyservingQ)));
-        int waitingTime = (latestclinicq - currentlyservingQ) * serveTime + buffertime;
+
 
         if (waitingTime > 60) {
             int hour = waitingTime / 60;
             int min = waitingTime % 60;
+
             mTextview_estimatedwaitingtime.setText(hour + "hr " + min + " mins");
         } else
             mTextview_estimatedwaitingtime.setText(waitingTime + " mins");
-
 
         Log.d("currentlyservingQ bef", String.valueOf(currentlyservingQ));
 
@@ -227,6 +238,7 @@ public class ClinicPage extends AppCompatActivity {
 
         // set prompts.xml to alertdialog builder
         alertDialogBuilder.setView(promptsView);
+
 
         alertDialogBuilder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -408,6 +420,8 @@ public class ClinicPage extends AppCompatActivity {
                         Log.w("ClinicCurrentQ", "Error updating document", e);
                     }
                 });
+        UserQueueController userQueueController = new UserQueueController();
+        userQueueController.assignQToUser(latestclinicq,clinicName,ClinicID);
 
 
         //TODO change to ALL clinic .
@@ -450,6 +464,9 @@ public class ClinicPage extends AppCompatActivity {
         alertPatient.show();
         sendConfirmationEmail();
     }
+
+
+
 }
 
 
