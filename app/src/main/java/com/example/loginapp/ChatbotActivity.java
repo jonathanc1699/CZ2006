@@ -151,6 +151,11 @@ public class ChatbotActivity extends AppCompatActivity {
         messageAdapter = new MessageAdapter(responseMessageList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(messageAdapter);
+        
+        //the very first message the chatbot displays
+        ResponseMessage initializeMessage = new ResponseMessage("Hi, what symptoms are you experiencing today?", false);
+        responseMessageList.add(initializeMessage);
+        
         userInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
 
