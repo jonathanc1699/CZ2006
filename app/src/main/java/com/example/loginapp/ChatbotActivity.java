@@ -46,8 +46,9 @@ public class ChatbotActivity extends AppCompatActivity {
     List<String> tempList =new ArrayList<String>();
     //private static ArrayList<String> diseaseDB =new ArrayList<String>();
     private static HashMap<String, ArrayList<String>> myMap = new HashMap<String, ArrayList<String>>(); // hashmap created.
-    private static ArrayList<String> allsymptoms; // contains all 15 symptoms possible.
+    private static ArrayList<String> allsymptoms = new ArrayList<String>(); // contains all 15 symptoms possible.
     private static ArrayList<String> alldisease=new ArrayList<String>(); // contains all possible diseases
+    String initializeAllSymptoms = "List of possible symptoms: ";
 
 
 
@@ -101,16 +102,14 @@ public class ChatbotActivity extends AppCompatActivity {
                         }
 
 
-
-
                     }
 
                     //for (ArrayList<String> v : myMap.values()) {
-                        //for (String s : v) {
-                            //Log.d("ChatbotActivity", "Symptom:" + s);
-                            //Log.d("ChatbotActivity", "Diseasename:" + myMap.key());
-                       // }
-                   // }
+                    //for (String s : v) {
+                    //Log.d("ChatbotActivity", "Symptom:" + s);
+                    //Log.d("ChatbotActivity", "Diseasename:" + myMap.key());
+                    // }
+                    // }
 
 
 
@@ -152,11 +151,22 @@ public class ChatbotActivity extends AppCompatActivity {
         messageAdapter = new MessageAdapter(responseMessageList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(messageAdapter);
-        
+
+
+
         //the very first message the chatbot displays
-        ResponseMessage initializeMessage = new ResponseMessage("Hi, what symptoms are you experiencing today?", false);
+        /*initializeAllSymptoms = initializeAllSymptoms + allsymptoms.get(0);
+        Log.d("initializeAllSymptoms", initializeAllSymptoms);
+        for (int x = 1; x < allsymptoms.size(); x++) {
+             initializeAllSymptoms = initializeAllSymptoms + ", " + allsymptoms.get(x);
+             Log.d("initializeAllSymptoms", initializeAllSymptoms);
+        }*/
+        //I GIVE UP
+        ResponseMessage initializeMessage = new ResponseMessage("List of possible symptoms: fatigue, nausea, swollen glands, rash, headache, abdominal pain, appetite loss, fever, dark urine, joint pain, jaundice, flu, diarrhea, cough, red eyes.", false);
         responseMessageList.add(initializeMessage);
-        
+
+
+
         userInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
 
@@ -178,12 +188,12 @@ public class ChatbotActivity extends AppCompatActivity {
 
 
                     //for (String s:alldisease){
-                            //Log.d("ChatbotActivity", "Disease:" + s);
-                        //}
-                        //for checking all disease in the list
+                    //Log.d("ChatbotActivity", "Disease:" + s);
+                    //}
+                    //for checking all disease in the list
 
 
-                        if((!userInput.getText().toString().equals("stop")) && (allsymptoms.contains(userinput))&& (!tempList.contains(userinput)))  {
+                    if((!userInput.getText().toString().equals("stop")) && (allsymptoms.contains(userinput))&& (!tempList.contains(userinput)))  {
                         tempList.add(userinput);
                         String symptomString = tempList.get(0);
                         if(responseMessageList.size() == 1) {
@@ -237,7 +247,7 @@ public class ChatbotActivity extends AppCompatActivity {
                                 }
 
 
-                                }
+                            }
                             Log.d("ChatbotActivity", "highestcount:" + highestcount);
                             Log.d("ChatbotActivity", "highestcountdisease:" + highestcountdisease);
                             Log.d("ChatbotActivity", "matchcount:" + matchcount);
@@ -245,7 +255,7 @@ public class ChatbotActivity extends AppCompatActivity {
                             responseMessageList.add(chatbotMessage);
 
 
-                          
+
                             for (String s:possiblediseases){
                                 Log.d("Possible diseases", "Disease:" + s);}
                             //TODO risk level assessement, recommend pharmacy or clinic
@@ -255,20 +265,15 @@ public class ChatbotActivity extends AppCompatActivity {
 
                             /*for (Map.Entry<String,ArrayList<String>> entry: myMap.entrySet()) {
                             String key = entry.getKey();
-
-
                             ArrayList<String> value = entry.getValue();
                             for (String s : value){
                                 Log.d("ChatbotActivity", "Symptom:" + s);
-
                         }
-
                     }*/
 
 
                             /*for (int i = 0; i < tempList.size(); i++) {
                                 Log.d("ChatbotActivity", "user's symptom" +  tempList.get(i) );
-
                             }
                             check templist symptoms */
 
