@@ -44,9 +44,9 @@ public class ChatbotActivity extends AppCompatActivity {
     MessageAdapter messageAdapter;
     List<String> tempList =new ArrayList<String>();
     //private static ArrayList<String> diseaseDB =new ArrayList<String>();
-    private static HashMap<String, ArrayList<String>> myMap = new HashMap<String, ArrayList<String>>();
-    private static ArrayList<String> allsymptoms;
-    private static ArrayList<String> alldisease=new ArrayList<String>();
+    private static HashMap<String, ArrayList<String>> myMap = new HashMap<String, ArrayList<String>>(); // hashmap created.
+    private static ArrayList<String> allsymptoms; // contains all 15 symptoms possible.
+    private static ArrayList<String> alldisease=new ArrayList<String>(); // contains all possible diseases
 
 
 
@@ -68,7 +68,7 @@ public class ChatbotActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot DiseaseList : task.getResult()) {
+                    for (QueryDocumentSnapshot DiseaseList : task.getResult()) { //gothrough index of diseaselist
                         ArrayList<String> arraysymptoms = new ArrayList<String>();
                         arraysymptoms.add(DiseaseList.getString("Symptom1"));
                         arraysymptoms.add(DiseaseList.getString("Symptom2"));
@@ -95,7 +95,7 @@ public class ChatbotActivity extends AppCompatActivity {
 
                         }
                         else{
-                            myMap.put(diseasename, arraysymptoms);
+                            myMap.put(diseasename, arraysymptoms); //create key value pair in hashmap
 
                         }
 
@@ -199,19 +199,19 @@ public class ChatbotActivity extends AppCompatActivity {
 
                         }
                     }
-                    else {
+                    else { // if there is an error, or user keys stop
                         if (userInput.getText().toString().equals("stop")) {
                             chatbotMessage = new ResponseMessage("You have entered stop. Processing symptoms", false);
                             responseMessageList.add(chatbotMessage);
                             ArrayList<String> possiblediseases= new ArrayList<String>();
-                            possiblediseases=alldisease;
+                            possiblediseases=alldisease; //start with all the disease
                             for (String s:possiblediseases){
                                 Log.d("Possible diseases", "startDisease:" + s);}
                             int matchcount=0;
                             int highestcount=0;
                             String highestcountdisease=null;
 
-                            for (Map.Entry<String,ArrayList<String>> entry: myMap.entrySet()) {
+                            for (Map.Entry<String,ArrayList<String>> entry: myMap.entrySet()) { //access hash map.
                                 String diseasename1 = entry.getKey();
                                 ArrayList<String> Symptomsarray = entry.getValue();
                                 matchcount=0;
