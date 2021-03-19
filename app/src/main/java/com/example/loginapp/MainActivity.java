@@ -43,18 +43,9 @@ public class MainActivity extends AppCompatActivity {
         six.setVisibility(View.GONE);
             }
 
-
-
     public void logout (View view){
         FirebaseAuth.getInstance().signOut();
         startActivity(new Intent(getApplicationContext(),Login.class));
-        finish();
-    }
-
-    public void MapView (View view){
-        startActivity(new Intent(getApplicationContext(), GoogleMap.class));
-        // insert on button click, start queueActivity
-        // startActivity(new Intent(getApplicationContexxt(), QueueController.class));
         finish();
     }
 
@@ -62,13 +53,10 @@ public class MainActivity extends AppCompatActivity {
         Intent chatbot = new Intent(this, ChatbotActivity.class);
         startActivity(chatbot);
     }
-    public void listView (View view){
-        startActivity(new Intent(getApplicationContext(), ListofClinics.class));
-        // insert on button click, start queueActivity
-        finish();
+
+    public void nearestClinic (View view) {
+        startActivity(new Intent(getApplicationContext(),NearestClinic.class));
     }
-
-
 
     public void currentAppointment (View view){
 
