@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void nearestClinic (View view) {
         startActivity(new Intent(getApplicationContext(),NearestClinic.class));
+        finish();
     }
 
     public void currentAppointment (View view){

@@ -21,6 +21,7 @@
         <activity android:name=".AdminPage"/>
         <activity android:name=".GoogleMap" />
         <activity android:name=".mainactivityAdmin"/>
+        <activity android:name=".NearestClinic"/>
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"

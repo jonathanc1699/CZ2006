@@ -27,6 +27,9 @@ public class Clinic extends MedicalLocation {
     public Clinic() {
 
     }
+    public Clinic(String clinicName) {
+        this.ClinicName = clinicName;
+    }
 
     public Clinic(String clinicName, long block, long floor,
                   long postal, String streetname, Object unitnumber, long telephone, int clinicCurrentQ,
