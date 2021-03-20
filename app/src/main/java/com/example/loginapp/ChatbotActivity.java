@@ -51,7 +51,7 @@ public class ChatbotActivity extends AppCompatActivity {
 
 
     private FirebaseFirestore fstore = FirebaseFirestore.getInstance();
-    private CollectionReference diseaseRef = fstore.collection("infectiousdisease");
+    private CollectionReference diseaseRef = fstore.collection("infectdisease");
 
 
     @Override
@@ -130,7 +130,8 @@ public class ChatbotActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(messageAdapter);
 
-
+        ResponseMessage initializeMessage1 = new ResponseMessage("Welcome to the chatbot", false);
+        responseMessageList.add(initializeMessage1);
         String initializeAllSymptoms = "Please only key in the following listed symptoms ";
         //the very first message the chatbot displays
         //Log.d("initializeAllSymptoms", initializeAllSymptoms);
@@ -191,51 +192,73 @@ public class ChatbotActivity extends AppCompatActivity {
                         if (userInput.getText().toString().equals("stop")) {
                             chatbotMessage = new ResponseMessage("You have entered stop. Processing symptoms", false);
                             responseMessageList.add(chatbotMessage);
-                            ArrayList<String> possiblediseases= new ArrayList<String>();
-                            possiblediseases = (ArrayList<String>)alldisease.clone();
-                             //start with all the disease
-                            for (String s:possiblediseases){
-                                Log.d("ChatbotActivity", "possibledisease at the start" + s);}
-                            int matchcount=0;
-                            int highestcount=0;
-                            String highestcountdisease=null;
+                            ArrayList<String> possiblediseases = new ArrayList<String>();
+                            possiblediseases = (ArrayList<String>) alldisease.clone();
+                            //start with all the disease
+                            for (String s : possiblediseases) {
+                                Log.d("ChatbotActivity", "possibledisease at the start" + s);
+                            }
+                            int matchcount = 0;
+                            int highestcount = 0;
+                            ArrayList<String> highestcountdiseasearray = new ArrayList<String>();
 
-                            for (Map.Entry<String,ArrayList<String>> entry: myMap.entrySet()) { //access hash map.
+                            for (Map.Entry<String, ArrayList<String>> entry : myMap.entrySet()) { //access hash map.
                                 String diseasename1 = entry.getKey();
                                 ArrayList<String> Symptomsarray = entry.getValue();
-                                matchcount=0;
+                                matchcount = 0;
+                                highestcount = 0;
+
                                 for (int i = 0; i < tempList.size(); i++) {
-                                    if (!Symptomsarray.contains(tempList.get(i))&& (matchcount==0)){
+                                    if (!Symptomsarray.contains(tempList.get(i))) {
                                         possiblediseases.remove(diseasename1);
                                         break;
-                                    }
-                                    else{
-                                        matchcount=matchcount+1;
-                                        if (matchcount>highestcount){
-                                            highestcount=matchcount;
-                                            highestcountdisease=diseasename1;
+                                    } else {
+                                        matchcount = matchcount + 1;
+                                        if ((matchcount > highestcount) && (matchcount == tempList.size())) {
+                                            highestcount = matchcount;
+                                            highestcountdiseasearray.add(diseasename1);
                                         }
 
                                     }
-
-
-
 
 
                                 }
 
 
                             }
-                            Log.d("ChatbotActivity", "highestcount:" + highestcount);
-                            Log.d("ChatbotActivity", "highestcountdisease:" + highestcountdisease);
-                            Log.d("ChatbotActivity", "matchcount:" + matchcount);
-                            chatbotMessage = new ResponseMessage("Your are at risk of: " + highestcountdisease + "with a matchcount of "+matchcount, false);
-                            responseMessageList.add(chatbotMessage);
+                            //if  (possiblediseases.size()==0)
+                                //print risk level= low , hence please visit a pharmacy, but alternatively, clinic visit too.
+                            //else if (possiblediseases>0)
+                                // print possible diseases for user.
+                                //calculate number of diseases matched, over total amount of disease: this forms risk A
+                                //double risk= (possiblediseases.size())/alldisease.size();
+                                //calculate number of symptoms matched for highestcountdisease too. need to access hashmap to get. do note that highestcountdisease
+                                //is an array
+                                 // after geting disease symptoms size.do highestmatchcount/diseasesymptomsize : this forms risk B
+                                // combine risk A and B into a number <= 1.0
+                                // another if else statements here.
+                                // this is just an eg. eg if (risk>0.5) == high risk, if lower than 0.5 maybe low risk? recommend pharmacy etc
+                            //if (risk>0.5)
+                              //tell user hi ur risk asssessment level is high , please go to ur nearby clinic asap, link to clinic page perhaps or map?
+                            // if not if user risk level is low, hi please visit the pharmacy. can still reocmmend doctor.
 
 
 
-                            for (String s:possiblediseases){
-                                Log.d("Possible diseases", "Disease:" + s);}
+
+                            for (int x = 0; x < possiblediseases.size(); x++) {
+                                Log.d("ChatbotActivity", "Disease after calculation:" + possiblediseases.get(x));
+
+                                Log.d("ChatbotActivity", "highestcount:" + highestcount);
+                                Log.d("ChatbotActivity", "highestcountdisease:" + highestcountdiseasearray.get(0));
+                                //Log.d("ChatbotActivity", "highestcountdisease:" + highestcountdiseasearray.get(1));
+                                //Log.d("ChatbotActivity", "highestcountdisease:" + highestcountdiseasearray.get(2));
+                                Log.d("ChatbotActivity", "matchcount:" + matchcount);
+
+                                //chatbotMessage = new ResponseMessage("You are at risk of: " + highestcountdiseasearray.get(0) + highestcountdiseasearray.get(1) + highestcountdiseasearray.get(2) + "with a highest count of " + highestcount, false);
+                                //responseMessageList.add(chatbotMessage);
+
+
+                            }
                             //TODO risk level assessement, recommend pharmacy or clinic
 
 
@@ -254,8 +277,6 @@ public class ChatbotActivity extends AppCompatActivity {
                                 Log.d("ChatbotActivity", "user's symptom" +  tempList.get(i) );
                             }
                             check templist symptoms */
-
-
 
 
                         }
