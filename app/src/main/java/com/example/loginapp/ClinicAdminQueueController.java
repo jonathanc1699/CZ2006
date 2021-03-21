@@ -24,7 +24,11 @@ public class ClinicAdminQueueController extends AppCompatActivity {
     private CollectionReference clinicRef = db.collection("clinic");
 
     //TODO alert button
+    //TODO remove q and current clinic from user
     public void incServeQ(String ClinicID, int currentlyservingQ) {
+
+        currentlyservingQ++;
+
         clinicRef.document(ClinicID).
                 update("ClinicCurrentQ", currentlyservingQ)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -42,85 +46,6 @@ public class ClinicAdminQueueController extends AppCompatActivity {
 
         Log.d("currentlyservingQ after", String.valueOf(currentlyservingQ));
 
-        /*
-        LayoutInflater li = LayoutInflater.from(context);
-        View promptsView = li.inflate(R.layout.popup_clinic_page, null);
-        final TextView mTextview_yourqueuenumber = (TextView) promptsView.findViewById(R.id.textView_yourQueueNumber);
-        final TextView mTextview_currentqueuenumber = (TextView) promptsView.findViewById(R.id.textView_currentQueueNumber);
-        final TextView mTextview_estimatedwaitingtime = (TextView) promptsView.findViewById(R.id.textview_estimatedWaitingTime);
-
-
-        //Alert to add serving q no
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-
-
-        // set prompts.xml to alertdialog builder
-        alertDialogBuilder.setView(promptsView);
-        int newq=currentlyservingQ;
-
-        alertDialogBuilder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-
-                clinicRef.document(ClinicID).
-                        update("ClinicCurrentQ", newq)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Log.d("ClinicCurrentQ", "Update ClinicCurrentQ successfully updated!");
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.w("ClinicCurrentQ", "Error updating document", e);
-                            }
-                        });
-
-                Log.d("currentlyservingQ after", String.valueOf(newq));
-            }
-
-
-        });
-
-
-        alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
-            }
-        });
-
-
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        // show it
-        alertDialog.show();
-
-         */
-
-
     }
-
-    //dec q number incase clinic admin made a mistake on incrementing the queue numvber
-
-    public void decServeQ(String ClinicID, int currentlyservingQ) {
-        clinicRef.document(ClinicID).
-                update("ClinicCurrentQ", currentlyservingQ)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("ClinicCurrentQ", "Update ClinicCurrentQ successfully updated!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w("ClinicCurrentQ", "Error updating document", e);
-                    }
-                });
-
-        Log.d("currentlyservingQ after", String.valueOf(currentlyservingQ));
-    }
-
 
     }

@@ -175,18 +175,36 @@ public class ClinicPage extends AppCompatActivity {
 
                 //TODO Shift the following code to ClinicAdmin class when the UI is completed
                 //Increment q function
-                /*currentlyservingQ++;
+                if(latestclinicq>currentlyservingQ)
+                {
+                    ClinicAdminQueueController clinicAdminQueueController = new ClinicAdminQueueController();
+                    clinicAdminQueueController.incServeQ(selectedClinic.getClinicID(),currentlyservingQ);
 
-                ClinicAdminQueueController clinicAdminQueueController = new ClinicAdminQueueController();
-                clinicAdminQueueController.incServeQ(ClinicID,currentlyservingQ);
+                    currentlyservingQ++;
+                }
+                else
+                {
+                    final ProgressDialog incqueue = new ProgressDialog(ClinicPage.this);
+                    incqueue.setTitle("Unable to increase current Queue");
+                    incqueue.setMessage("Maximum Queue number reached");
+                    incqueue.show();
+                    //set timer for dialog window to close
+                    Runnable progressRunnable = new Runnable() {
 
-                 */
+                        @Override
+                        public void run() {
+                            incqueue.cancel();
+                        }
+                    };
 
-                //decrement q function
-                currentlyservingQ--;
+                    Handler pdCanceller = new Handler();
+                    pdCanceller.postDelayed(progressRunnable, 4000);
 
-                ClinicAdminQueueController clinicAdminQueueController = new ClinicAdminQueueController();
-                clinicAdminQueueController.incServeQ(ClinicID,currentlyservingQ);
+                    System.out.println("Cannot increase Queue number");
+                }
+
+
+                Log.d("ClinicCurrentQ", String.valueOf(currentlyservingQ));
             }
         });
     }
@@ -224,10 +242,6 @@ public class ClinicPage extends AppCompatActivity {
         java.util.Date date = new java.util.Date();
         Timestamp local = new Timestamp(date.getTime());
         //String strTime = sdf.format(date);
-<<<<<<< Updated upstream
-        String strTime="14:00:00";
-=======
->>>>>>> Stashed changes
 
         String strTime = "14:00:00";
         System.out.println("Local in String format " + strTime);
@@ -446,10 +460,7 @@ public class ClinicPage extends AppCompatActivity {
                     }
                 });
         UserQueueController userQueueController = new UserQueueController();
-<<<<<<< Updated upstream
         userQueueController.assignQToUser(latestclinicq,clinicName,ClinicID);
-=======
-
         userQueueController.assignQToUser(latestclinicq,selectedClinic.getClinicName(),selectedClinic.getClinicID());
 
 
@@ -476,8 +487,7 @@ public class ClinicPage extends AppCompatActivity {
 
         Log.d("currentlyservingQ after", String.valueOf(currentlyservingQ));
         Log.d("latestclinicq after", String.valueOf(latestclinicq));
-
->>>>>>> Stashed changes
+        
     }
 
     private void makeYourWayDown() {

@@ -78,6 +78,8 @@ public class UserQueueController {
         };
         currentUser.addListenerForSingleValueEvent(userListener);
     }
+
+    //TODO remove Q from user
 }
 
 
