@@ -37,6 +37,7 @@ public class User {
     private String userId;
     private boolean Disabled;
 
+
     public User(String fullName, String email, int currentQueue, String currentClinic,String userId, boolean Disabled, boolean Admin) {
         this.fullName = fullName;
         this.email = email;

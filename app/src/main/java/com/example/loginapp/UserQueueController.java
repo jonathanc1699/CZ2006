@@ -76,7 +76,7 @@ public class UserQueueController {
             }
 
         };
-        currentUser.addValueEventListener(userListener);
+        currentUser.addListenerForSingleValueEvent(userListener);
     }
 }
 

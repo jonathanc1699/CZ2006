@@ -70,7 +70,7 @@ public class ClinicPage extends AppCompatActivity {
     String clinicName;
     long postal;
     long block;
-    long floor;
+    Object floor;
     String unitNumber;
     long unit;
     String ClinicID;
@@ -90,7 +90,9 @@ public class ClinicPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_clinic_page);
 
-        String name = getIntent().getStringExtra("CLINIC_NAME");
+        String clinicID= getIntent().getStringExtra("Clinic ID");
+        String clinicName= getIntent().getStringExtra("Clinic Name");
+
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -103,20 +105,19 @@ public class ClinicPage extends AppCompatActivity {
         mTextView_phoneClinic = (TextView) findViewById(R.id.textview_phoneClinic);
         mTextView_addressClinic = (TextView) findViewById(R.id.textview_addressClinic);
 
-        clinicRef.whereEqualTo("Clinic Name", name).get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        clinicRef.document(clinicID).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot ClinicDetailList : task.getResult()) {
+                            DocumentSnapshot ClinicDetailList = task.getResult();
 
-                                ClinicID = ClinicDetailList.getId();
-                                Log.d("Clinic ID", ClinicID);
                                 Map<String, Object> map = ClinicDetailList.getData();
                                 selectedClinic = ClinicDetailList.toObject(Clinic.class);
 
                                 Log.d("Clinic Info", String.valueOf(ClinicDetailList.getData()));
-                                clinicName = selectedClinic.getClinicName();
+
+                                selectedClinic.setClinicID(clinicID);
                                 streetName = selectedClinic.getStreetname();
                                 telephone = selectedClinic.getTelephone();
                                 postal = selectedClinic.getPostal();
@@ -127,15 +128,18 @@ public class ClinicPage extends AppCompatActivity {
                                 currentlyservingQ = selectedClinic.getClinicCurrentQ();
                                 latestclinicq = selectedClinic.getLatestQNo();
 
-                                if (ClinicDetailList.contains("Unit number")) {
-                                    if (ClinicDetailList.get("Unit number") instanceof String) {
+                                if (ClinicDetailList.contains("Unit number")&&ClinicDetailList.contains("Floor")) {
+                                    if (ClinicDetailList.get("Unit number") instanceof String && ClinicDetailList.get("Floor") instanceof String) {
                                         unitNumber = (String) ClinicDetailList.get("Unit number");
+                                        floor = String.valueOf(ClinicDetailList.get("Floor"));
                                         address = "Clinic Address: " + block + " " +
                                                 streetName + " #0" + floor + "-" + unitNumber + " Block " +
                                                 block + " Singapore" + postal;
                                         mTextView_addressClinic.setText(address);
                                     } else {
                                         unit = (long) ClinicDetailList.get("Unit number");
+                                        floor = (long) ClinicDetailList.get("Floor");
+
                                         address="Clinic Address: " + block + " " +
                                                 streetName + " #0" + floor + "-" + unit + " Block " +
                                                 block + " Singapore" + postal;
@@ -153,7 +157,7 @@ public class ClinicPage extends AppCompatActivity {
                                 mTextView_openingHoursClinic.setText("Opening Hours:   " + "8am - 8pm");
                                 mTextView_phoneClinic.setText("Telephone:   " + telephone);
                             }
-                        } else {
+                         else {
                             Log.d("fetch clinic error", "Error getting documents: ", task.getException());
                         }
                     }
@@ -220,9 +224,12 @@ public class ClinicPage extends AppCompatActivity {
         java.util.Date date = new java.util.Date();
         Timestamp local = new Timestamp(date.getTime());
         //String strTime = sdf.format(date);
+<<<<<<< Updated upstream
         String strTime="14:00:00";
+=======
+>>>>>>> Stashed changes
 
-        //String strTime = "14:00:00";
+        String strTime = "14:00:00";
         System.out.println("Local in String format " + strTime);
 
         //one hour before so that last hour of operation , patients would not be anble to make any appointment
@@ -421,8 +428,38 @@ public class ClinicPage extends AppCompatActivity {
 
         //UPDATE latestQNo when new booking is made
         latestclinicq++;
-        clinicRef.document(ClinicID).
+        clinicRef.document(selectedClinic.getClinicID()).
                 update("latestQNo", latestclinicq)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("ClinicCurrentQ", "Update ClinicCurrentQ successfully updated!");
+                        Log.d("clinicCurrentQ", selectedClinic.getClinicID());
+                        Log.d("clinicCurrentQ", selectedClinic.getClinicName());
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("ClinicCurrentQ", "Error updating document", e);
+                    }
+                });
+        UserQueueController userQueueController = new UserQueueController();
+<<<<<<< Updated upstream
+        userQueueController.assignQToUser(latestclinicq,clinicName,ClinicID);
+=======
+
+        userQueueController.assignQToUser(latestclinicq,selectedClinic.getClinicName(),selectedClinic.getClinicID());
+
+
+        //TODO change to ALL clinic .
+        //TODO i dont think the current q update belongs here***
+        currentlyservingQ++;
+
+
+        clinicRef.document(selectedClinic.getClinicID()).
+                update("ClinicCurrentQ", currentlyservingQ)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -435,8 +472,12 @@ public class ClinicPage extends AppCompatActivity {
                         Log.w("ClinicCurrentQ", "Error updating document", e);
                     }
                 });
-        UserQueueController userQueueController = new UserQueueController();
-        userQueueController.assignQToUser(latestclinicq,clinicName,ClinicID);
+
+
+        Log.d("currentlyservingQ after", String.valueOf(currentlyservingQ));
+        Log.d("latestclinicq after", String.valueOf(latestclinicq));
+
+>>>>>>> Stashed changes
     }
 
     private void makeYourWayDown() {

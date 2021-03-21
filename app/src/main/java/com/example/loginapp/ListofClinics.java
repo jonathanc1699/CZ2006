@@ -76,9 +76,11 @@ public class ListofClinics extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot ClinicList : task.getResult()) {
                                 //Log.d("Clinic Names","Clinic Names" + ClinicList.getString("Clinic Name"));
-                                String clinicname=ClinicList.getString("Clinic Name");
-                                //Log.d("TAG", clinicname);
-                                Clinic.add(new Clinic(clinicname));
+                                String clinicID=ClinicList.getId();
+                                String clinicName = ClinicList.getString("Clinic Name");
+                                //Log.d("TAG", clinicID);
+                                Clinic.add(new Clinic(clinicID,clinicName));
+
                             }
                             ClinicController=new ClinicController(ListofClinics.this,Clinic);
                             listView.setAdapter(ClinicController);
@@ -88,7 +90,10 @@ public class ListofClinics extends AppCompatActivity {
 
                                     //Toast.makeText(ListofClinics.this, "clicked item"+i+" "+arrayList.get(i).toString(),Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(ListofClinics.this,ClinicPage.class);
-                                    intent.putExtra("CLINIC_NAME", ClinicController.getItem(i).getClinicName());
+                                    intent.putExtra("Clinic Name",ClinicController.getItem(i).getClinicName());
+                                    intent.putExtra("Clinic ID",ClinicController.getItem(i).getClinicID());
+                                    Log.d("intent", String.valueOf(intent.getStringExtra("Clinic Name")));
+                                    Log.d("intent", String.valueOf(intent.getStringExtra("Clinic ID")));
                                     //TODO send intents for image, phone and address
                                     //TODO and your queue number, current queue number
                                     startActivity(intent);

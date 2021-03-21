@@ -10,7 +10,7 @@ public class Clinic extends MedicalLocation {
 
     private String ClinicName;
     private long Block;
-    private long Floor;
+    private Object Floor;
     private long Postal;
     private String Streetname;
     private Object Unitnumber;
@@ -31,7 +31,7 @@ public class Clinic extends MedicalLocation {
         this.ClinicName = clinicName;
     }
 
-    public Clinic(String clinicName, long block, long floor,
+    public Clinic(String clinicName, long block, Object floor,
                   long postal, String streetname, Object unitnumber, long telephone, int clinicCurrentQ,
                   String startTime,
                   String closingTime, String clinicID, long Longitude, long Latitude, int latestqno) {
@@ -50,6 +50,12 @@ public class Clinic extends MedicalLocation {
         this.ClinicID = clinicID;
         this.latestQNo = latestqno;
     }
+
+    public Clinic(String clinicID, String clinicName) {this.ClinicID = clinicID;
+        this.ClinicName = clinicName;
+    }
+
+
     @PropertyName("Clinic Name")
     public String getClinicName() {
         return ClinicName;
@@ -67,11 +73,11 @@ public class Clinic extends MedicalLocation {
         Block = block;
     }
     @PropertyName("Floor ")
-    public long getFloor() {
+    public Object getFloor() {
         return Floor;
     }
     @PropertyName("Floor ")
-    public void setFloor(long floor) {
+    public void setFloor(Object floor) {
         Floor = floor;
     }
 
@@ -148,6 +154,7 @@ public class Clinic extends MedicalLocation {
     public void setLatestQNo(int latestQNo) {
         this.latestQNo = latestQNo;
     }
+
 
 }
 
