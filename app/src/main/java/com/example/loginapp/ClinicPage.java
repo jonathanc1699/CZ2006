@@ -168,6 +168,21 @@ public class ClinicPage extends AppCompatActivity {
         mbutton_direction.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 //TODO need to link to googlemap
+
+                //TODO Shift the following code to ClinicAdmin class when the UI is completed
+                //Increment q function
+                /*currentlyservingQ++;
+
+                ClinicAdminQueueController clinicAdminQueueController = new ClinicAdminQueueController();
+                clinicAdminQueueController.incServeQ(ClinicID,currentlyservingQ);
+
+                 */
+
+                //decrement q function
+                currentlyservingQ--;
+
+                ClinicAdminQueueController clinicAdminQueueController = new ClinicAdminQueueController();
+                clinicAdminQueueController.incServeQ(ClinicID,currentlyservingQ);
             }
         });
     }
@@ -204,7 +219,8 @@ public class ClinicPage extends AppCompatActivity {
 
         java.util.Date date = new java.util.Date();
         Timestamp local = new Timestamp(date.getTime());
-        String strTime = sdf.format(date);
+        //String strTime = sdf.format(date);
+        String strTime="14:00:00";
 
         //String strTime = "14:00:00";
         System.out.println("Local in String format " + strTime);
@@ -355,7 +371,6 @@ public class ClinicPage extends AppCompatActivity {
 
 
         AlertDialog alertDialog = alertDialogBuilder.create();
-
         // show it
         alertDialog.show();
 
@@ -403,8 +418,8 @@ public class ClinicPage extends AppCompatActivity {
             }
         });
         sender.start();
+
         //UPDATE latestQNo when new booking is made
-        //TODO - change doc to id
         latestclinicq++;
         clinicRef.document(ClinicID).
                 update("latestQNo", latestclinicq)
@@ -422,32 +437,6 @@ public class ClinicPage extends AppCompatActivity {
                 });
         UserQueueController userQueueController = new UserQueueController();
         userQueueController.assignQToUser(latestclinicq,clinicName,ClinicID);
-
-
-        //TODO change to ALL clinic .
-        //TODO i dont think the current q update belongs here***
-        currentlyservingQ++;
-
-
-        clinicRef.document(ClinicID).
-                update("ClinicCurrentQ", currentlyservingQ)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("ClinicCurrentQ", "Update ClinicCurrentQ successfully updated!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w("ClinicCurrentQ", "Error updating document", e);
-                    }
-                });
-
-
-        Log.d("currentlyservingQ after", String.valueOf(currentlyservingQ));
-        Log.d("latestclinicq after", String.valueOf(latestclinicq));
-
     }
 
     private void makeYourWayDown() {
@@ -464,9 +453,6 @@ public class ClinicPage extends AppCompatActivity {
         alertPatient.show();
         sendConfirmationEmail();
     }
-
-
-
 }
 
 
