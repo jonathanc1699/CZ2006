@@ -19,9 +19,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.Exclude;
+import com.google.firebase.firestore.IgnoreExtraProperties;
+
 import java.util.HashMap;
 import java.util.Map;
 
+@IgnoreExtraProperties
 public class User {
 
 
@@ -99,6 +103,22 @@ public class User {
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
+    }
+
+    @Exclude
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("userId", userId);
+        result.put("fullName", fullName);
+        result.put("currentQueue", currentQueue);
+        result.put("currentClinic", currentClinic);
+        result.put("email", email);
+        result.put("Admin", Admin);
+        result.put("Disabled", Disabled);
+
+        return result;
+
+
     }
 
 }

@@ -47,7 +47,7 @@ public class UserQueueController {
     String fullName;
 
 
-
+    // update current user clinic and queue to firebase
     public void assignQToUser(int latestclinicq, String clinicName, String clinicID) {
         ValueEventListener userListener = new ValueEventListener() {
             @Override
@@ -60,12 +60,13 @@ public class UserQueueController {
                 user.setCurrentQueue(latestclinicq+1);
                 currentClinic=user.getCurrentClinic();
                 currentQNo = user.getCurrentQueue();
-
-                Map<String, Object> updateUser = new HashMap<>();
-                updateUser.put("/Users/" + userID, currentClinic);
-                currentUser.updateChildren(updateUser);
+                Map<String, Object> userValues = user.toMap();
+                Map<String, Object> childUpdates = new HashMap<>();
+                childUpdates.put(user.getUserId(), userValues);
+                databaseReference.updateChildren(childUpdates);
                 Log.d("currentClinic", fullName + "> "+currentClinic);
-                Log.d("currentQNo", fullName + "> "+String.valueOf(currentQNo));
+                Log.d("currentQNo", fullName + "> "+ currentQNo);
+
 
             }
 
