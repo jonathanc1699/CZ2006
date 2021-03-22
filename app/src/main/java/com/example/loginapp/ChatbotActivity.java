@@ -11,6 +11,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.firestore.CollectionReference;
 
 import com.google.firebase.firestore.FieldValue;
@@ -137,11 +138,11 @@ public class ChatbotActivity extends AppCompatActivity {
         //Log.d("initializeAllSymptoms", initializeAllSymptoms);
         for (int x = 0; x < allsymptoms.size(); x++) {
              initializeAllSymptoms = initializeAllSymptoms + ", " + allsymptoms.get(x);
-             //Log.d("initializeAllSymptoms", allsymptoms.get(x));
+             //Log.d("initializeAllSymptoms", initializeAllSymptoms);
         }
 
-        //ResponseMessage initializeMessage = new ResponseMessage("List of possible symptoms: fatigue, nausea, swollen glands, rash, headache, abdominal pain, appetite loss, fever, dark urine, joint pain, jaundice, flu, diarrhea, cough, red eyes.", false);
-        ResponseMessage initializeMessage = new ResponseMessage(initializeAllSymptoms, false);
+        ResponseMessage initializeMessage = new ResponseMessage("List of possible symptoms: fatigue, nausea, swollen glands, rash, headache, abdominal pain, appetite loss, fever, dark urine, joint pain, jaundice, flu, diarrhea, cough, red eyes.", false);
+        //ResponseMessage initializeMessage = new ResponseMessage(initializeAllSymptoms, false);
         responseMessageList.add(initializeMessage);
 
 
@@ -196,7 +197,7 @@ public class ChatbotActivity extends AppCompatActivity {
                             possiblediseases = (ArrayList<String>) alldisease.clone();
                             //start with all the disease
                             for (String s : possiblediseases) {
-                                Log.d("ChatbotActivity", "possibledisease at the start" + s);
+                                Log.d("ChatbotActivity", "possibledisease at the start " + s);
                             }
                             int matchcount = 0;
                             int highestcount = 0;
@@ -206,23 +207,31 @@ public class ChatbotActivity extends AppCompatActivity {
                                 String diseasename1 = entry.getKey();
                                 ArrayList<String> Symptomsarray = entry.getValue();
                                 matchcount = 0;
-                                highestcount = 0;
+                                //highestcount = 0;
 
                                 for (int i = 0; i < tempList.size(); i++) {
                                     if (!Symptomsarray.contains(tempList.get(i))) {
                                         possiblediseases.remove(diseasename1);
                                         break;
-                                    } else {
+                                    }
+                                    else {
                                         matchcount = matchcount + 1;
-                                        if ((matchcount > highestcount) && (matchcount == tempList.size())) {
+                                        if ((matchcount >= highestcount) && (matchcount == tempList.size())) {
                                             highestcount = matchcount;
                                             highestcountdiseasearray.add(diseasename1);
+                                            Log.d("ChatbotActivityAAA", highestcountdiseasearray.get(highestcountdiseasearray.size() - 1));
+                                            Log.d("ChatbotActivity", String.valueOf(highestcount));
                                         }
+                                        for (int a=0; a < highestcountdiseasearray.size(); a++) {
+                                            Log.d("ChatbotActivity", highestcountdiseasearray.get(a));
+                                        }
+
 
                                     }
 
-
                                 }
+                                //Log.d("ChatbotActivity", "i h8 lyfe");
+
 
 
                             }
@@ -243,23 +252,75 @@ public class ChatbotActivity extends AppCompatActivity {
                             // if not if user risk level is low, hi please visit the pharmacy. can still reocmmend doctor.
 
 
+                            int idk = 0;
+                            for (Map.Entry<String, ArrayList<String>> entry : myMap.entrySet()) {
+                                String diseasename2 = entry.getKey();
+                                for (int s = 0; s < highestcountdiseasearray.size(); s++) {
+                                    if (diseasename2.equals(highestcountdiseasearray.get(s))) {
+                                        Log.d("ChatbotActivityBBB", diseasename2);
+                                        ArrayList<String> highestcountdiseasesymptoms = new ArrayList<String>();
+                                        ArrayList<String> arraysymptoms= entry.getValue();
+                                        idk = 0;
+                                        for (int t = 0; t < arraysymptoms.size(); t++) {
+
+                                            if (arraysymptoms.get(t).equals("fatigue") || arraysymptoms.get(t).equals("nausea") || arraysymptoms.get(t).equals("swollen glands") || arraysymptoms.get(t).equals("rash") || arraysymptoms.get(t).equals("headache") || arraysymptoms.get(t).equals("abdominal pain") || arraysymptoms.get(t).equals("appetite loss") || arraysymptoms.get(t).equals("fever") || arraysymptoms.get(t).equals("dark urine") || arraysymptoms.get(t).equals("joint pain") || arraysymptoms.get(t).equals("jaundice") || arraysymptoms.get(t).equals("flu") || arraysymptoms.get(t).equals("diarrhea") || arraysymptoms.get(t).equals("cough") || arraysymptoms.get(t).equals("red eyes")) {
+                                                Log.d("ChatbotActivityCCC", arraysymptoms.get(t));
+                                                highestcountdiseasesymptoms.add(arraysymptoms.get(t));
+                                                idk++;
+                                            }
+                                        }
+                                        Log.d("ChatbotActivityDDD", String.valueOf(idk));
+                                    }
+                                }
+                            }
 
 
-                            for (int x = 0; x < possiblediseases.size(); x++) {
-                                Log.d("ChatbotActivity", "Disease after calculation:" + possiblediseases.get(x));
 
-                                Log.d("ChatbotActivity", "highestcount:" + highestcount);
-                                Log.d("ChatbotActivity", "highestcountdisease:" + highestcountdiseasearray.get(0));
+
+
+                            for (int y = 0; y < possiblediseases.size(); y++) {
+                                Log.d("ChatbotActivity99999", "Disease after calculation: " + possiblediseases.get(y));
+                            }
+
+                            for (int x = 0; x < highestcountdiseasearray.size(); x++) {
+                                Log.d("ChatbotActivity00000", "highest count disease: " + highestcountdiseasearray.get(x));
+                            }
+
+                                Log.d("ChatbotActivity", "highestcount: " + highestcount);
+                                Log.d("ChatbotActivity", "highestcountdisease: " + highestcountdiseasearray.get(0));
                                 //Log.d("ChatbotActivity", "highestcountdisease:" + highestcountdiseasearray.get(1));
-                                //Log.d("ChatbotActivity", "highestcountdisease:" + highestcountdiseasearray.get(2));
-                                Log.d("ChatbotActivity", "matchcount:" + matchcount);
+                                //Log.d("ChatbotActivity", "highestcountdisease :" + highestcountdiseasearray.get(2));
+                                //Log.d("ChatbotActivity", "matchcount :" + matchcount);
 
                                 //chatbotMessage = new ResponseMessage("You are at risk of: " + highestcountdiseasearray.get(0) + highestcountdiseasearray.get(1) + highestcountdiseasearray.get(2) + "with a highest count of " + highestcount, false);
                                 //responseMessageList.add(chatbotMessage);
 
 
+
+
+                            String highestcountdiseasestring = highestcountdiseasearray.get(0);
+                            Log.d("ChatbotActivity1111", highestcountdiseasestring);
+                            for (int b = 1; b < highestcountdiseasearray.size(); b++) {
+                                highestcountdiseasestring = highestcountdiseasestring + ", " + highestcountdiseasearray.get(b);
+                                Log.d("ChatbotActivity22222", highestcountdiseasestring);
                             }
+                            chatbotMessage = new ResponseMessage("You are at risk of: " + highestcountdiseasestring + " with a symptom match rate of " + (float) highestcount/idk * 100 + "%", false);
+                            responseMessageList.add(chatbotMessage);
+
                             //TODO risk level assessement, recommend pharmacy or clinic
+                            /*if (possiblediseases.size()==0) {
+                                chatbotMessage = new ResponseMessage("Your risk level is estimated to be low, we recommend that you visit a pharmacy to purchase medication and self-medicate.", false);
+                                responseMessageList.add(chatbotMessage);
+                            }*/
+                            if (possiblediseases.size() <=3 || (float) highestcount/idk <0.5) {
+                                chatbotMessage = new ResponseMessage("Your risk level is estimated to be low, we recommend that you visit a pharmacy to purchase medication and self-medicate.", false);
+                                responseMessageList.add(chatbotMessage);
+                                //Log.d("ChatbotActivity", toString((float) possiblediseases.size()/alldisease.size()));
+                            }
+                            else {
+                                chatbotMessage = new ResponseMessage("Your risk level is estimated to be high, we recommend that you visit a clinic to consult a doctor immediately.", false);
+                                responseMessageList.add(chatbotMessage);
+                            }
 
 
 
