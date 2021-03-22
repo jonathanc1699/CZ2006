@@ -53,7 +53,7 @@ public class mainactivityAdmin extends AppCompatActivity {
         finish();
     }
     public void ClinicAdminPage(View view) {
-        startActivity(new Intent(getApplicationContext(), AdminPage.class));
+        startActivity(new Intent(getApplicationContext(), Clinic_admin_page.class));
         finish();
     }
 
