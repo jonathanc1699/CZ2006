@@ -32,14 +32,14 @@ public class mainactivityAdmin extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        //View two = findViewById(R.id.button2);
-        //View three = findViewById(R.id.button3);
-        //View four = findViewById(R.id.button4);
-        //View five = findViewById(R.id.button5);
-        //two.setVisibility(View.GONE);
-        //three.setVisibility(View.GONE);
-        //four.setVisibility(View.GONE);
-        //five.setVisibility(View.GONE);
+        View two = findViewById(R.id.nearestClinic);
+        View three = findViewById(R.id.nearestPharmacy);
+        View four = findViewById(R.id.Appointmentlayout);
+        View five = findViewById(R.id.chatbot);
+        two.setVisibility(View.GONE);
+        three.setVisibility(View.GONE);
+        four.setVisibility(View.GONE);
+        five.setVisibility(View.GONE);
     }
 
     public void logout (View view){
@@ -49,6 +49,10 @@ public class mainactivityAdmin extends AppCompatActivity {
     }
 
     public void adminuserlist(View view) {
+        startActivity(new Intent(getApplicationContext(), AdminPage.class));
+        finish();
+    }
+    public void ClinicAdminPage(View view) {
         startActivity(new Intent(getApplicationContext(), AdminPage.class));
         finish();
     }

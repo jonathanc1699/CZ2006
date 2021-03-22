@@ -82,6 +82,13 @@ public class AdminPage extends AppCompatActivity {
                     String name=ds.child("fullName").getValue(String.class);
                     Boolean isDisabled = ds.child("disabled").getValue(Boolean.class);
                     Boolean isAdmin = ds.child("admin").getValue(Boolean.class);
+                    if(isDisabled==null){
+                        isDisabled = ds.child("Disabled").getValue(Boolean.class);
+                    }
+                    if(isAdmin==null){
+                        isAdmin = ds.child("Admin").getValue(Boolean.class);
+                    }
+
                     if(isAdmin==false && isDisabled==false){
                         User.add(new User(email,name,0, "nil",uid,false,false));
                     }

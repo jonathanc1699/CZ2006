@@ -39,8 +39,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        View six = findViewById(R.id.button6);
-        six.setVisibility(View.GONE);
+        View adminuserlist = findViewById(R.id.adminuserlist);
+        adminuserlist.setVisibility(View.GONE);
+
+//        View clinic = findViewById(R.id.ClinicAdminPage);
+//        clinic.setVisibility(View.GONE);
             }
 
     public void logout (View view){
@@ -56,6 +59,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void nearestClinic (View view) {
         startActivity(new Intent(getApplicationContext(),NearestClinic.class));
+        finish();
+    }
+
+    public void ClinicAdminPage(View view) {
+        startActivity(new Intent(getApplicationContext(), Clinic_admin_page.class));
         finish();
     }
 
