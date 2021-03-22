@@ -79,7 +79,40 @@ public class UserQueueController {
         currentUser.addListenerForSingleValueEvent(userListener);
     }
 
-    //TODO remove Q from user
+    //TODO add this to code
+    //userQueueController.cancelQUser(ClinicID)
+    // latestclinicq--;
+    // update current user clinic and queue to firebase when user cancel booking
+    public void cancelQUser(String clinicName) {
+        ValueEventListener userListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                user = dataSnapshot.getValue(User.class);
+                userID = user.getUserId();
+                fullName = user.getFullName();
+                user.setCurrentClinic("nil");
+                user.setCurrentQueue(0);
+
+                currentClinic=user.getCurrentClinic();
+                currentQNo = user.getCurrentQueue();
+
+                Map<String, Object> userValues = user.toMap();
+                Map<String, Object> childUpdates = new HashMap<>();
+                childUpdates.put(user.getUserId(), userValues);
+                databaseReference.updateChildren(childUpdates);
+
+                Log.d("currentClinic", fullName + "> "+currentClinic);
+                Log.d("currentQNo", fullName + "> "+ currentQNo);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w("cancelQ error", "Failed to load data properly", databaseError.toException());
+            }
+
+        };
+        currentUser.addListenerForSingleValueEvent(userListener);
+    }
 }
 
 
