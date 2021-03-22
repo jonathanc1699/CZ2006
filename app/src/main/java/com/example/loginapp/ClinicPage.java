@@ -416,10 +416,10 @@ public class ClinicPage extends AppCompatActivity {
                     if (godown=true)
                     {
                         //TODO add user queue number
-                        sender.sendMail("Booking Confirmation: "+ clinicName + ", Queue No:",
+                        sender.sendMail("Booking Confirmation: "+ selectedClinic.getClinicName() + ", Queue No:",
                                 "Hello,\nThis is your Confirmation email, you queue no is .....\n"+
                                         "There are currently " + ((latestclinicq + 1) - currentlyservingQ)
-                                + "person(s) ahead of you in the queue. You may make your way to "+ clinicName
+                                + "person(s) ahead of you in the queue. You may make your way to "+ selectedClinic.getClinicName()
                                         + "\n\nClinic Address:"  + block + " "+streetName + " #0" +
                                         floor + "-" + unit + " Block " + block + " Singapore" + postal+
                                         " \nThank you your using SickGoWhere.\n\nSickGoWhere",
@@ -460,7 +460,6 @@ public class ClinicPage extends AppCompatActivity {
                     }
                 });
         UserQueueController userQueueController = new UserQueueController();
-        userQueueController.assignQToUser(latestclinicq,clinicName,ClinicID);
         userQueueController.assignQToUser(latestclinicq,selectedClinic.getClinicName(),selectedClinic.getClinicID());
 
 
@@ -494,7 +493,8 @@ public class ClinicPage extends AppCompatActivity {
         godown = true;
         AlertDialog.Builder goClinicAlert = new AlertDialog.Builder(context);
         goClinicAlert.setMessage("Booking is confirmed. Check your email for your booking confirmation. \n \nThere are currently " + ((latestclinicq + 1) - currentlyservingQ) +
-                " person(s) ahead of you in the queue. You may make your way to " + clinicName);
+                " person(s) ahead of you in the queue. You may make your way to " + selectedClinic.getClinicName());
+        Log.d("currentCLinciEmail", selectedClinic.getClinicName());
         goClinicAlert.setCancelable(true);
 
         goClinicAlert.setPositiveButton(
