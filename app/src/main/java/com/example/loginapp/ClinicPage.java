@@ -10,6 +10,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationManagerCompat;
+
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -104,6 +106,7 @@ public class ClinicPage extends AppCompatActivity {
         mTextView_openingHoursClinic = (TextView) findViewById(R.id.textview_openingHoursClinic);
         mTextView_phoneClinic = (TextView) findViewById(R.id.textview_phoneClinic);
         mTextView_addressClinic = (TextView) findViewById(R.id.textview_addressClinic);
+
 
         clinicRef.document(clinicID).get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
