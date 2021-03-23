@@ -9,34 +9,35 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.LogInApp">
-        <activity android:name=".Clinic_admin_page"></activity>
+        <activity android:name=".Boundary.Clinic_admin_page"></activity>
         <activity
-            android:name=".ListofClinics"
-            android:parentActivityName=".MainActivity" />
+            android:name=".Boundary.ListofClinics"
+            android:parentActivityName=".Boundary.MainActivity" />
         <activity
-            android:name=".ChatbotActivity"
-            android:parentActivityName=".MainActivity" />
-        <activity android:name=".ClinicPage" />
-        <activity android:name=".AdminPage" />
-        <activity android:name=".GoogleMap" />
-        <activity android:name=".mainactivityAdmin" />
-        <activity android:name=".NearestClinic" />
+            android:name=".Control.ChatbotActivity"
+            android:parentActivityName=".Boundary.MainActivity" />
+        <activity android:name=".Control.ClinicPage" />
+        <activity android:name=".Boundary.AdminPage" />
+        <activity android:name=".Boundary.GoogleMap" />
+        <activity android:name=".Boundary.mainactivityAdmin" />
+        <activity android:name=".Boundary.NearestClinic" />
 
-        <activity android:name=".Login" />
-
-        <activity android:name=".Register">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        <activity
+            android:name=".Boundary.Login"
+            android:label="LABEL FOR ACTIVITY ">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
         </activity>
-        <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
+
+        <activity android:name=".Boundary.Register">
+        </activity>
+
+
+        <activity android:name=".Boundary.MainActivity">
         </activity>
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"

@@ -1,4 +1,4 @@
-package com.example.loginapp;
+package com.example.loginapp.Control;
 
 import android.app.Activity;
 import android.content.Context;
@@ -9,6 +9,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Filterable;
 import android.widget.TextView;
 import android.widget.Filter;
+
+import com.example.loginapp.Entity.User;
+import com.example.loginapp.R;
 
 import java.util.ArrayList;
 

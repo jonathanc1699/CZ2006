@@ -1,4 +1,4 @@
-package com.example.loginapp;
+package com.example.loginapp.Boundary;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
+
+import com.example.loginapp.R;
 
 public class Clinic_admin_page extends AppCompatActivity {
 

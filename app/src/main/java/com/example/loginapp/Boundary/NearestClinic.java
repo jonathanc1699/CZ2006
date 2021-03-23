@@ -1,10 +1,12 @@
-package com.example.loginapp;
+package com.example.loginapp.Boundary;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+
+import com.example.loginapp.R;
 
 public class NearestClinic extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package com.example.loginapp;
+package com.example.loginapp.Boundary;
 
 
 import android.app.AlertDialog;
@@ -15,6 +15,10 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
 
+import com.example.loginapp.Control.AdminController;
+import com.example.loginapp.Control.GMailSender;
+import com.example.loginapp.Entity.User;
+import com.example.loginapp.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -31,7 +35,7 @@ public class AdminPage extends AppCompatActivity {
 
 
 
-    ArrayList<User> User=new ArrayList<User>();
+    ArrayList<com.example.loginapp.Entity.User> User=new ArrayList<User>();
 
     AdminController mAdminController;
     ListView listView;
@@ -248,7 +252,8 @@ public class AdminPage extends AppCompatActivity {
         String recepientemail=useremail;// fetch user's email
         Thread sender = new Thread(new Runnable() {
             public void run() {
-                try {GMailSender sender = new GMailSender("cz2006sickgowhere@gmail.com", "123456sickgowhere");
+                try {
+                    GMailSender sender = new GMailSender("cz2006sickgowhere@gmail.com", "123456sickgowhere");
                     sender.sendMail("Account No: "+ " has been deleted",
                                 "Dear user,"+ username+",\n"+"Your Grab Driver account has been banned " +
                                         "due to violation of the Code of Conduct that have been set.\n" +

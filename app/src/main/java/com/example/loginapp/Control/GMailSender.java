@@ -1,4 +1,4 @@
-package com.example.loginapp;
+package com.example.loginapp.Control;
 
 import android.util.Log;
 
@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.Security;
-import java.security.acl.LastOwnerException;
 import java.util.Properties;
 
 /**

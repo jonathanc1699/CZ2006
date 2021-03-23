@@ -1,10 +1,6 @@
-package com.example.loginapp;
+package com.example.loginapp.Entity;
 
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.PropertyName;
-import com.google.firebase.firestore.QuerySnapshot;
 
 public class Clinic extends MedicalLocation {
 

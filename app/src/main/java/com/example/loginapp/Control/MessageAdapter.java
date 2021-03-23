@@ -1,4 +1,4 @@
-package com.example.loginapp;
+package com.example.loginapp.Control;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +7,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.loginapp.R;
 
 import java.util.List;
 
