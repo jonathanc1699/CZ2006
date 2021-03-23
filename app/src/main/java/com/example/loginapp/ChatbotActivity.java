@@ -216,11 +216,15 @@ public class ChatbotActivity extends AppCompatActivity {
                                     }
                                     else {
                                         matchcount = matchcount + 1;
-                                        if ((matchcount >= highestcount) && (matchcount == tempList.size())) {
+                                        if ((matchcount > highestcount) && (matchcount == tempList.size())) {
                                             highestcount = matchcount;
+                                            highestcountdiseasearray.clear();
                                             highestcountdiseasearray.add(diseasename1);
                                             Log.d("ChatbotActivityAAA", highestcountdiseasearray.get(highestcountdiseasearray.size() - 1));
                                             Log.d("ChatbotActivity", String.valueOf(highestcount));
+                                        }
+                                        else if ((matchcount == highestcount) && (matchcount == tempList.size())){
+                                            highestcountdiseasearray.add(diseasename1);
                                         }
                                         for (int a=0; a < highestcountdiseasearray.size(); a++) {
                                             Log.d("ChatbotActivity", highestcountdiseasearray.get(a));
