@@ -24,7 +24,7 @@
 
         <activity
             android:name=".Boundary.Login"
-            android:label="LABEL FOR ACTIVITY ">
+            android:label="Starting Screen">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
