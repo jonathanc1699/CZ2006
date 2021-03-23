@@ -6,20 +6,16 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,6 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
 
 public class AdminPage extends AppCompatActivity {
 
@@ -90,7 +87,7 @@ public class AdminPage extends AppCompatActivity {
                     }
 
                     if(isAdmin==false && isDisabled==false){
-                        User.add(new User(email,name,0, "nil",uid,false,false));
+                        User.add(new User(name,email,0, "nil",uid,false,false));
                     }
 
                     //TODO: Change user stuff
@@ -216,16 +213,21 @@ public class AdminPage extends AppCompatActivity {
                 DatabaseReference UserToUpdate =FirebaseDatabase.getInstance().getReference("Users").child((User.get(((int)position))).getUserId());
                 HashMap<String, Object> map = new HashMap<>();
                 map.put("disabled", true);
-                UserToUpdate.updateChildren(map);
                 //removeUser.removeValue();
+
+                String username =User.get(((int)position)).getFullName();
+                Log.d("username", username);
+                String useremail=User.get(((int)position)).getEmail();
+                Log.d("email", useremail);
+
+                sendDeleteEmail( useremail, username);
+                UserToUpdate.updateChildren(map);
                 mAdminController.remove(User.get((int) position));
                 mAdminController.getFilter().filter(newtext);
 
-
-
-
                 //TODO fAuth.deleteUser(User.get((int) position).uid);
                 //delete in authentication
+
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -240,5 +242,30 @@ public class AdminPage extends AppCompatActivity {
         alertDialog.show();
     }
 
+    public void sendDeleteEmail(String useremail,String username)
+    {
+        String senderemail = "cz2006sickgowhere@gmail.com";
+        String recepientemail=useremail;// fetch user's email
+        Thread sender = new Thread(new Runnable() {
+            public void run() {
+                try {GMailSender sender = new GMailSender("cz2006sickgowhere@gmail.com", "123456sickgowhere");
+                    sender.sendMail("Account No: "+ " has been deleted",
+                                "Dear user,"+ username+",\n"+"Your Grab Driver account has been banned " +
+                                        "due to violation of the Code of Conduct that have been set.\n" +
+                                        "\n" +
+                                        "If you require more clarification, " +
+                                        "send us an email at cz2006sickgowhere@gmail.com\n"+
+                                        "Sorry for any inconvenience caused. Thank you.\n" +
+                                        "\nBest Regards,\nSickGoWhere Team.",
+                            senderemail, recepientemail);
+
+                } catch (Exception e) {
+                    Log.e("mylog", "Error: " + e.getMessage());
+                }
+            }
+        });
+        sender.start();
+
+    }
 
 }
