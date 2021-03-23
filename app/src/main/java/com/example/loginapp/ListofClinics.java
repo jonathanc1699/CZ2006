@@ -36,6 +36,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class ListofClinics extends AppCompatActivity {
 
@@ -79,7 +81,10 @@ public class ListofClinics extends AppCompatActivity {
                                 String clinicID=ClinicList.getId();
                                 String clinicName = ClinicList.getString("Clinic Name");
                                 //Log.d("TAG", clinicID);
-                                Clinic.add(new Clinic(clinicID,clinicName));
+                                if(clinicName!=null){
+                                    Clinic.add(new Clinic(clinicID,clinicName));
+                                }
+
 
                             }
                             ClinicController=new ClinicController(ListofClinics.this,Clinic);
@@ -175,20 +180,35 @@ public class ListofClinics extends AppCompatActivity {
         return true;
 
     }
-
-
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
-        int id = item.getItemId();
+    public boolean onOptionsItemSelected(MenuItem item) {
 
 
-        if (id == R.id.searchView) {
+        switch (item.getItemId()) {
 
-            return true;
+            case R.id.searchView:
+
+                return true;
+            case R.id.arrangebyalphabetical:
+                Collections.sort(Clinic, (p1, p2) -> p1.getClinicName().compareTo(p2.getClinicName()));
+                ClinicController.clear();
+                ClinicController.addAll(Clinic);
+                ClinicController.notifyDataSetChanged();
+
+                return true;
+            case R.id.arrangedist:
+
+                return true;
+
+
+
         }
         return super.onOptionsItemSelected(item);
     }
+
+
+
+
 
 }
 
