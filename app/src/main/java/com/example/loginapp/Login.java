@@ -41,6 +41,8 @@ public class Login extends AppCompatActivity {
     String uid;
     Boolean isAdmin;
     Boolean isDisabled;
+    Boolean isadmin;
+    Boolean isdisabled;
 
 
     @Override
@@ -93,12 +95,14 @@ public class Login extends AppCompatActivity {
 
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    isDisabled = snapshot.child("disabled").getValue(Boolean.class);
-                                    isAdmin = snapshot.child("admin").getValue(Boolean.class);
-                                    if (isAdmin == true) {
+                                    isDisabled = snapshot.child("Disabled").getValue(Boolean.class);
+                                    isAdmin = snapshot.child("Admin").getValue(Boolean.class);
+                                    isdisabled = snapshot.child("disabled").getValue(Boolean.class);
+                                    isadmin = snapshot.child("admin").getValue(Boolean.class);
+                                    if (isAdmin == true||isadmin==true) {
                                         Toast.makeText(getApplicationContext(), "Welcome Admin", Toast.LENGTH_LONG).show();
                                         startActivity(new Intent(getApplicationContext(), mainactivityAdmin.class));
-                                    } else if (isDisabled == false) {
+                                    } else if (isDisabled == false||isdisabled==false) {
                                         Toast.makeText(Login.this, "Login Successful", Toast.LENGTH_SHORT).show();
 
 
