@@ -155,6 +155,12 @@ public class ListofClinics extends AppCompatActivity {
 
         MenuItem menuItem = menu.findItem(R.id.searchView);
 
+        MenuItem alph = menu.findItem(R.id.arrangebyalphabetical);
+        alph.setVisible(false);
+        MenuItem dist = menu.findItem(R.id.arrangedist);
+        dist.setVisible(false);
+
+
         SearchView searchView = (SearchView) menuItem.getActionView();
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
