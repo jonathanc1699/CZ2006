@@ -13,6 +13,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.loginapp.Control.GMailSender;
 import com.example.loginapp.Entity.User;
 import com.example.loginapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -87,11 +88,27 @@ public class Register extends AppCompatActivity {
                             //TODO: Add the rest of the attributes other than UserID
                             FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
+
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
-                                        Toast.makeText(Register.this, "User Successfully Created.", Toast.LENGTH_SHORT).show();
-                                        progressBar.setVisibility(View.VISIBLE);
-                                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                        fAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task task) {
+                                                        if (task.isSuccessful()) {
+                                                            fAuth.signOut();
+                                                            Toast.makeText(Register.this,
+                                                                    "Account has been created successfully.Verification email sent to " + email+"Please verify your account",
+                                                                    Toast.LENGTH_SHORT).show();
+                                                            progressBar.setVisibility(View.GONE);
+                                                            startActivity(new Intent(getApplicationContext(), Login.class));
+
+                                                        } else {
+                                                            Toast.makeText(Register.this,
+                                                                    "Failed to send verification email.",
+                                                                    Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }
+                                                });
 
                                     } else {
                                         Toast.makeText(Register.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
@@ -107,11 +124,11 @@ public class Register extends AppCompatActivity {
             }
         });
 
-        mLoginBtn.setOnClickListener(new View.OnClickListener() {
+        /*mLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(),Login.class));
             }
-        });
+        });*/
     }
 }
