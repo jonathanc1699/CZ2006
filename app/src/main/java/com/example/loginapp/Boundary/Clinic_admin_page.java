@@ -27,6 +27,7 @@ public class Clinic_admin_page extends AppCompatActivity {
         setContentView(R.layout.activity_clinic_admin_page);
 
         textView_clinicname= (TextView) findViewById(R.id.ClinicName);
+        //Todo get clinic name
         Clinic_name="THE CLINIC NAME";
         textView_clinicname.setText(Clinic_name);
 
@@ -35,6 +36,12 @@ public class Clinic_admin_page extends AppCompatActivity {
 
         textview_currentpatient = (TextView) findViewById(R.id.textView_numcurrentlyserving);
         textview_currentpatient.setText(String.valueOf(current_patient_count));
+
+        //TODO get clinic info
+
+        //current_patient_count == ClinicCurrentQ
+        //total_patient_count =latestQNo
+
 
 
     }
@@ -50,10 +57,16 @@ public class Clinic_admin_page extends AppCompatActivity {
                     "Yes",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            ClinicAdminQueueController clinicAdminQueueController ;
-                            //clinicAdminQueueController.incServeQ(String ClinicID, int currentlyservingQ)
 
+                            int thirduserQ = 0;
+
+                            //clinicAdminQueueController.incServeQ(String ClinicName, int currentlyservingQ)
+
+                            ClinicAdminQueueController clinicAdminQueueController = new ClinicAdminQueueController();
                             //TODO send reminder email to the third user
+                            if((total_patient_count-current_patient_count+1)>=3)
+                                clinicAdminQueueController.sendReminderEmail(Clinic_name,thirduserQ);
+
                             textview_currentpatient.setText(String.valueOf(current_patient_count));
                             dialog.cancel();
                         }
@@ -83,6 +96,7 @@ public class Clinic_admin_page extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
 
 
 }

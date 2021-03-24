@@ -43,9 +43,12 @@ public class ClinicAdminQueueController extends AppCompatActivity {
 
     }
 
-    /*public void sendReminderEmail(String useremail,String username)
+    public void sendReminderEmail(String ClinicName, int thirduserQ)
     {
         String senderemail = "cz2006sickgowhere@gmail.com";
+
+        //TODO access firebase to fetch user info with clinicname and Qno
+        /*
         String recepientemail=useremail;// fetch user's email
         Thread sender = new Thread(new Runnable() {
             public void run() {
@@ -64,8 +67,8 @@ public class ClinicAdminQueueController extends AppCompatActivity {
         });
         sender.start();
 
-    }
+         */
 
-     */
+    }
 
     }
