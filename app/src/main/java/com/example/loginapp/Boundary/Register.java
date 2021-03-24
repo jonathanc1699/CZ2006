@@ -97,7 +97,7 @@ public class Register extends AppCompatActivity {
                                                         if (task.isSuccessful()) {
                                                             fAuth.signOut();
                                                             Toast.makeText(Register.this,
-                                                                    "Account has been created successfully.Verification email sent to " + email+"Please verify your account",
+                                                                    "Account has been created successfully. Verification email sent to " + email+". Please verify your account",
                                                                     Toast.LENGTH_SHORT).show();
                                                             progressBar.setVisibility(View.GONE);
                                                             startActivity(new Intent(getApplicationContext(), Login.class));
@@ -124,11 +124,11 @@ public class Register extends AppCompatActivity {
             }
         });
 
-        /*mLoginBtn.setOnClickListener(new View.OnClickListener() {
+        mLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(),Login.class));
             }
-        });*/
+        });
     }
 }
