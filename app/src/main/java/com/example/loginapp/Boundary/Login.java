@@ -24,6 +24,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 public class Login extends AppCompatActivity {
@@ -61,6 +62,23 @@ public class Login extends AppCompatActivity {
                     mEmail.setError("Email field must not be empty.");
                     return;
                 }
+
+                DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+                DatabaseReference userNameRef = rootRef.child("Users");
+                Query queries=userNameRef.orderByChild("email").equalTo(email);
+                ValueEventListener eventListener = new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(!dataSnapshot.exists()) {
+                            mEmail.setError("email does not exist in database");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {}
+                };
+                queries.addListenerForSingleValueEvent(eventListener);
+
                 if (TextUtils.isEmpty(password)) {
                     mPassword.setError("Password field must not be empty.");
                     return;
