@@ -20,7 +20,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 
 public class Register extends AppCompatActivity {
@@ -67,6 +72,22 @@ public class Register extends AppCompatActivity {
                     mPassword.setError("Password field must not be empty.");
                     return;
                 }
+                DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+                DatabaseReference userNameRef = rootRef.child("Users");
+                Query queries=userNameRef.orderByChild("email").equalTo(email);
+                ValueEventListener eventListener = new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists()) {
+                            mEmail.setError("email already exists in database");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {}
+                };
+                queries.addListenerForSingleValueEvent(eventListener);
+
                 if (password.length() < 6){
                     mPassword.setError("Password must be >= 6 characters.");
                     return;
@@ -97,7 +118,7 @@ public class Register extends AppCompatActivity {
                                                         if (task.isSuccessful()) {
                                                             fAuth.signOut();
                                                             Toast.makeText(Register.this,
-                                                                    "Account has been created successfully. Verification email sent to " + email+". Please verify your account",
+                                                                    "Account has been created successfully. Please verify your email.",
                                                                     Toast.LENGTH_SHORT).show();
                                                             progressBar.setVisibility(View.GONE);
                                                             startActivity(new Intent(getApplicationContext(), Login.class));
