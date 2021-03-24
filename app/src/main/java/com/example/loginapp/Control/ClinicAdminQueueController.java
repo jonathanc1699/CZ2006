@@ -43,4 +43,29 @@ public class ClinicAdminQueueController extends AppCompatActivity {
 
     }
 
+    /*public void sendReminderEmail(String useremail,String username)
+    {
+        String senderemail = "cz2006sickgowhere@gmail.com";
+        String recepientemail=useremail;// fetch user's email
+        Thread sender = new Thread(new Runnable() {
+            public void run() {
+                try {
+                    GMailSender sender = new GMailSender("cz2006sickgowhere@gmail.com", "123456sickgowhere");
+                    sender.sendMail("Appointment Reminder:"+ ClinicName+ " , Queue number: "+ queueno,
+                            "Dear "+ username+",\n"+"There are currently "+"3 person(s) ahead of you in the queue. " +
+                                    "You may make your way to " + selectedClinic.getClinicName() +
+                                    "\nBest Regards,\nSickGoWhere Team.",
+                            senderemail, recepientemail);
+
+                } catch (Exception e) {
+                    Log.e("mylog", "Error: " + e.getMessage());
+                }
+            }
+        });
+        sender.start();
+
+    }
+
+     */
+
     }

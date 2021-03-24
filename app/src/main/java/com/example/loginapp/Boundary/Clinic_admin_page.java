@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 
+import com.example.loginapp.Control.ClinicAdminQueueController;
 import com.example.loginapp.R;
 
 public class Clinic_admin_page extends AppCompatActivity {
@@ -49,7 +50,10 @@ public class Clinic_admin_page extends AppCompatActivity {
                     "Yes",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            current_patient_count+=1;
+                            ClinicAdminQueueController clinicAdminQueueController ;
+                            //clinicAdminQueueController.incServeQ(String ClinicID, int currentlyservingQ)
+
+                            //TODO send reminder email to the third user
                             textview_currentpatient.setText(String.valueOf(current_patient_count));
                             dialog.cancel();
                         }
@@ -64,7 +68,7 @@ public class Clinic_admin_page extends AppCompatActivity {
 
         }
         else{
-            builder.setMessage("Finished all patients");
+            builder.setMessage("No more patients ahead");
 
             builder.setNegativeButton(
                     "OK",
@@ -74,7 +78,6 @@ public class Clinic_admin_page extends AppCompatActivity {
                         }
                     });
         }
-
 
         // create and show the alert dialog
         AlertDialog dialog = builder.create();

@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.SearchView;
 
 import com.example.loginapp.Control.AdminController;
+import com.example.loginapp.Control.DeletedUser;
 import com.example.loginapp.Control.GMailSender;
 import com.example.loginapp.Entity.User;
 import com.example.loginapp.R;
@@ -224,7 +225,8 @@ public class AdminPage extends AppCompatActivity {
                 String useremail=User.get(((int)position)).getEmail();
                 Log.d("email", useremail);
 
-                sendDeleteEmail( useremail, username);
+                DeletedUser deletedUser = new DeletedUser();
+                deletedUser.sendDeleteEmail( useremail, username);
                 UserToUpdate.updateChildren(map);
                 mAdminController.remove(User.get((int) position));
                 mAdminController.getFilter().filter(newtext);
@@ -246,31 +248,5 @@ public class AdminPage extends AppCompatActivity {
         alertDialog.show();
     }
 
-    public void sendDeleteEmail(String useremail,String username)
-    {
-        String senderemail = "cz2006sickgowhere@gmail.com";
-        String recepientemail=useremail;// fetch user's email
-        Thread sender = new Thread(new Runnable() {
-            public void run() {
-                try {
-                    GMailSender sender = new GMailSender("cz2006sickgowhere@gmail.com", "123456sickgowhere");
-                    sender.sendMail("Account No: "+ " has been deleted",
-                                "Dear user,"+ username+",\n"+"Your Grab Driver account has been banned " +
-                                        "due to violation of the Code of Conduct that have been set.\n" +
-                                        "\n" +
-                                        "If you require more clarification, " +
-                                        "send us an email at cz2006sickgowhere@gmail.com\n"+
-                                        "Sorry for any inconvenience caused. Thank you.\n" +
-                                        "\nBest Regards,\nSickGoWhere Team.",
-                            senderemail, recepientemail);
-
-                } catch (Exception e) {
-                    Log.e("mylog", "Error: " + e.getMessage());
-                }
-            }
-        });
-        sender.start();
-
-    }
 
 }
