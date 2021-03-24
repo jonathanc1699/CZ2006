@@ -1,12 +1,8 @@
 package com.example.loginapp.Boundary;
 
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,7 +13,6 @@ import android.widget.SearchView;
 
 import com.example.loginapp.Control.AdminController;
 import com.example.loginapp.Control.DeletedUser;
-import com.example.loginapp.Control.GMailSender;
 import com.example.loginapp.Entity.User;
 import com.example.loginapp.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,16 +22,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
-public class AdminPage extends AppCompatActivity {
-
-
-
-    ArrayList<com.example.loginapp.Entity.User> User=new ArrayList<User>();
+public class EnableAdminPage extends AppCompatActivity {
+    ArrayList<com.example.loginapp.Entity.User> User=new ArrayList<com.example.loginapp.Entity.User>();
 
     AdminController mAdminController;
     ListView listView;
@@ -91,20 +84,20 @@ public class AdminPage extends AppCompatActivity {
                         isAdmin = ds.child("Admin").getValue(Boolean.class);
                     }
 
-                    if(isAdmin==false && isDisabled==false){
-                        User.add(new User(name,email,0, "nil",uid,false,false));
+                    if(isAdmin==false && isDisabled==true){
+                        User.add(new User(name,email,0, "nil",uid,true,false));
                     }
 
                     //TODO: Change user stuff
                 }
 
-                mAdminController = new AdminController(AdminPage.this,User);
+                mAdminController = new AdminController(EnableAdminPage.this,User);
                 listView.setAdapter(mAdminController);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
-                        showdeleteDialog(mAdminController.getItemId(position));
+                        showEnableDialog(mAdminController.getItemId(position));
 
                     }
                 });
@@ -206,27 +199,19 @@ public class AdminPage extends AppCompatActivity {
 
 
 
-    private void showdeleteDialog(final long position) {
+    private void showEnableDialog(final long position) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Delete User?");
+        builder.setMessage("Enable User?");
 
-        builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Enable", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 //delete user and refresh page
-                DatabaseReference UserToUpdate =FirebaseDatabase.getInstance().getReference("Users").child((User.get(((int)position))).getUserId());
+                DatabaseReference UserToUpdate = FirebaseDatabase.getInstance().getReference("Users").child((User.get(((int)position))).getUserId());
                 HashMap<String, Object> map = new HashMap<>();
-                map.put("disabled", true);
+                map.put("disabled", false);
                 //removeUser.removeValue();
-
-                String username =User.get(((int)position)).getFullName();
-                Log.d("username", username);
-                String useremail=User.get(((int)position)).getEmail();
-                Log.d("email", useremail);
-
-                DeletedUser deletedUser = new DeletedUser();
-                deletedUser.sendDeleteEmail( useremail, username);
                 UserToUpdate.updateChildren(map);
                 mAdminController.remove(User.get((int) position));
                 mAdminController.getFilter().filter(newtext);

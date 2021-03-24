@@ -17,10 +17,11 @@
             android:name=".Control.ChatbotActivity"
             android:parentActivityName=".Boundary.MainActivity" />
         <activity android:name=".Control.ClinicPage" />
-        <activity android:name=".Boundary.AdminPage" />
+        <activity android:name=".Boundary.DisableAdminPage" />
         <activity android:name=".Boundary.GoogleMap" />
         <activity android:name=".Boundary.mainactivityAdmin" />
         <activity android:name=".Boundary.NearestClinic" />
+        <activity android:name=".Boundary.EnableAdminPage" />
 
         <activity
             android:name=".Boundary.Login"
