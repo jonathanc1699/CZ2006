@@ -1,24 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:myapp="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
-    <item android:id="@+id/searchView"
-        android:title="Search"
-        android:icon="@android:drawable/ic_menu_search"
-        app:showAsAction="always"
-        app:actionViewClass="android.widget.SearchView" />
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".EditorActivity">
 
     <item
         android:id="@+id/arrangebyalphabetical"
         android:title="arrange by alphabetical"
 
-        app:showAsAction="never" />
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/arrangedist"
         android:title="arrange by distance"
         app:showAsAction="never" />
-
 </menu>

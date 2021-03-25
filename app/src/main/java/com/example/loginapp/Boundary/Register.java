@@ -1,4 +1,4 @@
-package com.example.loginapp;
+package com.example.loginapp.Boundary;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,11 +13,19 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.loginapp.Control.GMailSender;
+import com.example.loginapp.Entity.User;
+import com.example.loginapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 
 public class Register extends AppCompatActivity {
@@ -64,6 +72,22 @@ public class Register extends AppCompatActivity {
                     mPassword.setError("Password field must not be empty.");
                     return;
                 }
+                DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+                DatabaseReference userNameRef = rootRef.child("Users");
+                Query queries=userNameRef.orderByChild("email").equalTo(email);
+                ValueEventListener eventListener = new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists()) {
+                            mEmail.setError("email already exists in database");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {}
+                };
+                queries.addListenerForSingleValueEvent(eventListener);
+
                 if (password.length() < 6){
                     mPassword.setError("Password must be >= 6 characters.");
                     return;
@@ -85,11 +109,27 @@ public class Register extends AppCompatActivity {
                             //TODO: Add the rest of the attributes other than UserID
                             FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
+
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
-                                        Toast.makeText(Register.this, "User Successfully Created.", Toast.LENGTH_SHORT).show();
-                                        progressBar.setVisibility(View.VISIBLE);
-                                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                        fAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task task) {
+                                                        if (task.isSuccessful()) {
+                                                            fAuth.signOut();
+                                                            Toast.makeText(Register.this,
+                                                                    "Account has been created successfully. Please verify your email.",
+                                                                    Toast.LENGTH_SHORT).show();
+                                                            progressBar.setVisibility(View.GONE);
+                                                            startActivity(new Intent(getApplicationContext(), Login.class));
+
+                                                        } else {
+                                                            Toast.makeText(Register.this,
+                                                                    "Failed to send verification email.",
+                                                                    Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }
+                                                });
 
                                     } else {
                                         Toast.makeText(Register.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();

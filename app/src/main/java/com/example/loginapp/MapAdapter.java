@@ -2,6 +2,7 @@ package com.example.loginapp;
 
 import android.util.Log;
 
+import com.example.loginapp.Entity.Clinic;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;

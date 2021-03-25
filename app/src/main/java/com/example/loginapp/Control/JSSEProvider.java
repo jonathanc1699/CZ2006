@@ -1,4 +1,4 @@
-package com.example.loginapp;
+package com.example.loginapp.Control;
 import java.security.AccessController;
 import java.security.Provider;
 //JSSEProvider is used to link the modified versions of SSLContext,

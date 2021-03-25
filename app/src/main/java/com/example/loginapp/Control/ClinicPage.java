@@ -1,4 +1,4 @@
-package com.example.loginapp;
+package com.example.loginapp.Control;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -10,6 +10,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,28 +19,16 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.loginapp.Entity.Clinic;
+import com.example.loginapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.Source;
-import com.google.firebase.firestore.Transaction;
-import com.google.firestore.v1.WriteResult;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -104,6 +93,7 @@ public class ClinicPage extends AppCompatActivity {
         mTextView_openingHoursClinic = (TextView) findViewById(R.id.textview_openingHoursClinic);
         mTextView_phoneClinic = (TextView) findViewById(R.id.textview_phoneClinic);
         mTextView_addressClinic = (TextView) findViewById(R.id.textview_addressClinic);
+
 
         clinicRef.document(clinicID).get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -416,10 +406,10 @@ public class ClinicPage extends AppCompatActivity {
                     if (godown=true)
                     {
                         //TODO add user queue number
-                        sender.sendMail("Booking Confirmation: "+ clinicName + ", Queue No:",
+                        sender.sendMail("Booking Confirmation: "+ selectedClinic.getClinicName() + ", Queue No:",
                                 "Hello,\nThis is your Confirmation email, you queue no is .....\n"+
                                         "There are currently " + ((latestclinicq + 1) - currentlyservingQ)
-                                + "person(s) ahead of you in the queue. You may make your way to "+ clinicName
+                                + "person(s) ahead of you in the queue. You may make your way to "+ selectedClinic.getClinicName()
                                         + "\n\nClinic Address:"  + block + " "+streetName + " #0" +
                                         floor + "-" + unit + " Block " + block + " Singapore" + postal+
                                         " \nThank you your using SickGoWhere.\n\nSickGoWhere",
@@ -460,7 +450,6 @@ public class ClinicPage extends AppCompatActivity {
                     }
                 });
         UserQueueController userQueueController = new UserQueueController();
-        userQueueController.assignQToUser(latestclinicq,clinicName,ClinicID);
         userQueueController.assignQToUser(latestclinicq,selectedClinic.getClinicName(),selectedClinic.getClinicID());
 
 
@@ -494,7 +483,8 @@ public class ClinicPage extends AppCompatActivity {
         godown = true;
         AlertDialog.Builder goClinicAlert = new AlertDialog.Builder(context);
         goClinicAlert.setMessage("Booking is confirmed. Check your email for your booking confirmation. \n \nThere are currently " + ((latestclinicq + 1) - currentlyservingQ) +
-                " person(s) ahead of you in the queue. You may make your way to " + clinicName);
+                " person(s) ahead of you in the queue. You may make your way to " + selectedClinic.getClinicName());
+        Log.d("currentCLinciEmail", selectedClinic.getClinicName());
         goClinicAlert.setCancelable(true);
 
         goClinicAlert.setPositiveButton(

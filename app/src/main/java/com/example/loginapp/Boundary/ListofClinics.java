@@ -1,34 +1,25 @@
-package com.example.loginapp;
+package com.example.loginapp.Boundary;
 
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.Toast;
 
+import com.example.loginapp.Control.ClinicController;
+import com.example.loginapp.Control.ClinicPage;
+import com.example.loginapp.Entity.Clinic;
+import com.example.loginapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -36,16 +27,17 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class ListofClinics extends AppCompatActivity {
 
 
     ListView listView;
     //EditText SearchFilter;
-    ClinicController ClinicController;
+    com.example.loginapp.Control.ClinicController ClinicController;
     String newtext;
     //private ArrayAdapter arrayAdapter;
-    ArrayList<Clinic> Clinic=new ArrayList<Clinic>();
+    ArrayList<com.example.loginapp.Entity.Clinic> Clinic=new ArrayList<Clinic>();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference clinicRef = db.collection("clinic");
 
@@ -79,8 +71,15 @@ public class ListofClinics extends AppCompatActivity {
                                 String clinicID=ClinicList.getId();
                                 String clinicName = ClinicList.getString("Clinic Name");
                                 //Log.d("TAG", clinicID);
+<<<<<<< HEAD:app/src/main/java/com/example/loginapp/ListofClinics.java
                                 Clinic.add(new Clinic(clinicID,clinicName));
                                 Log.d("tag","List of clinics" + Clinic);
+=======
+                                if(clinicName!=null){
+                                    Clinic.add(new Clinic(clinicID,clinicName));
+                                }
+
+>>>>>>> 1cd5f77926813b034d090b4aa0266bc6384efd10:app/src/main/java/com/example/loginapp/Boundary/ListofClinics.java
 
                             }
                             ClinicController=new ClinicController(ListofClinics.this,Clinic);
@@ -90,7 +89,7 @@ public class ListofClinics extends AppCompatActivity {
                                 public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
 
                                     //Toast.makeText(ListofClinics.this, "clicked item"+i+" "+arrayList.get(i).toString(),Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(ListofClinics.this,ClinicPage.class);
+                                    Intent intent = new Intent(ListofClinics.this, ClinicPage.class);
                                     intent.putExtra("Clinic Name",ClinicController.getItem(i).getClinicName());
                                     intent.putExtra("Clinic ID",ClinicController.getItem(i).getClinicID());
                                     Log.d("intent", String.valueOf(intent.getStringExtra("Clinic Name")));
@@ -151,6 +150,12 @@ public class ListofClinics extends AppCompatActivity {
 
         MenuItem menuItem = menu.findItem(R.id.searchView);
 
+        MenuItem alph = menu.findItem(R.id.arrangebyalphabetical);
+        alph.setVisible(false);
+        MenuItem dist = menu.findItem(R.id.arrangedist);
+        dist.setVisible(false);
+
+
         SearchView searchView = (SearchView) menuItem.getActionView();
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -176,20 +181,35 @@ public class ListofClinics extends AppCompatActivity {
         return true;
 
     }
-
-
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
-        int id = item.getItemId();
+    public boolean onOptionsItemSelected(MenuItem item) {
 
 
-        if (id == R.id.searchView) {
+        switch (item.getItemId()) {
 
-            return true;
+            case R.id.searchView:
+
+                return true;
+            case R.id.arrangebyalphabetical:
+                Collections.sort(Clinic, (p1, p2) -> p1.getClinicName().compareTo(p2.getClinicName()));
+                ClinicController.clear();
+                ClinicController.addAll(Clinic);
+                ClinicController.notifyDataSetChanged();
+
+                return true;
+            case R.id.arrangedist:
+
+                return true;
+
+
+
         }
         return super.onOptionsItemSelected(item);
     }
+
+
+
+
 
 }
 

@@ -1,14 +1,9 @@
-package com.example.loginapp;
+package com.example.loginapp.Control;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -45,6 +40,34 @@ public class ClinicAdminQueueController extends AppCompatActivity {
                 });
 
         Log.d("currentlyservingQ after", String.valueOf(currentlyservingQ));
+
+    }
+
+    public void sendReminderEmail(String ClinicName, int thirduserQ)
+    {
+        String senderemail = "cz2006sickgowhere@gmail.com";
+
+        //TODO access firebase to fetch user info with clinicname and Qno
+        /*
+        String recepientemail=useremail;// fetch user's email
+        Thread sender = new Thread(new Runnable() {
+            public void run() {
+                try {
+                    GMailSender sender = new GMailSender("cz2006sickgowhere@gmail.com", "123456sickgowhere");
+                    sender.sendMail("Appointment Reminder:"+ ClinicName+ " , Queue number: "+ queueno,
+                            "Dear "+ username+",\n"+"There are currently "+"3 person(s) ahead of you in the queue. " +
+                                    "You may make your way to " + selectedClinic.getClinicName() +
+                                    "\nBest Regards,\nSickGoWhere Team.",
+                            senderemail, recepientemail);
+
+                } catch (Exception e) {
+                    Log.e("mylog", "Error: " + e.getMessage());
+                }
+            }
+        });
+        sender.start();
+
+         */
 
     }
 

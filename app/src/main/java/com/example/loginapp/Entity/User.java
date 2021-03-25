@@ -1,4 +1,4 @@
-package com.example.loginapp;
+package com.example.loginapp.Entity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;

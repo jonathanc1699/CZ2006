@@ -1,7 +1,6 @@
-package com.example.loginapp;
+package com.example.loginapp.Boundary;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -9,28 +8,24 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.loginapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.ArrayList;
 
 public class Login extends AppCompatActivity {
     EditText mEmail, mPassword;
@@ -41,6 +36,7 @@ public class Login extends AppCompatActivity {
     String uid;
     Boolean isAdmin;
     Boolean isDisabled;
+
 
 
     @Override
@@ -66,6 +62,23 @@ public class Login extends AppCompatActivity {
                     mEmail.setError("Email field must not be empty.");
                     return;
                 }
+
+                DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+                DatabaseReference userNameRef = rootRef.child("Users");
+                Query queries=userNameRef.orderByChild("email").equalTo(email);
+                ValueEventListener eventListener = new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(!dataSnapshot.exists()) {
+                            mEmail.setError("email does not exist in database");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {}
+                };
+                queries.addListenerForSingleValueEvent(eventListener);
+
                 if (TextUtils.isEmpty(password)) {
                     mPassword.setError("Password field must not be empty.");
                     return;
@@ -93,22 +106,20 @@ public class Login extends AppCompatActivity {
 
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    isDisabled = snapshot.child("disabled").getValue(Boolean.class);
-                                    isAdmin = snapshot.child("admin").getValue(Boolean.class);
+                                    isDisabled = snapshot.child("Disabled").getValue(Boolean.class);
+                                    if(isDisabled==null){
+                                        isDisabled = snapshot.child("disabled").getValue(Boolean.class);
+                                    }
+                                    isAdmin = snapshot.child("Admin").getValue(Boolean.class);
+                                    if(isAdmin==null){
+                                        isAdmin = snapshot.child("admin").getValue(Boolean.class);
+                                    }
+
                                     if (isAdmin == true) {
                                         Toast.makeText(getApplicationContext(), "Welcome Admin", Toast.LENGTH_LONG).show();
                                         startActivity(new Intent(getApplicationContext(), mainactivityAdmin.class));
                                     } else if (isDisabled == false) {
                                         Toast.makeText(Login.this, "Login Successful", Toast.LENGTH_SHORT).show();
-
-
-
-
-
-
-
-
-
 
 
                                         startActivity(new Intent(getApplicationContext(), MainActivity.class));

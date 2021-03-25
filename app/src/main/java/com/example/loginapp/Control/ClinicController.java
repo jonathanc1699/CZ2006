@@ -1,4 +1,4 @@
-package com.example.loginapp;
+package com.example.loginapp.Control;
 
 
 
@@ -13,6 +13,7 @@ import android.widget.Filterable;
 import android.widget.TextView;
 import android.widget.Filter;
 
+<<<<<<< HEAD:app/src/main/java/com/example/loginapp/ClinicController.java
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -22,6 +23,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+=======
+import com.example.loginapp.Entity.Clinic;
+import com.example.loginapp.R;
+>>>>>>> 1cd5f77926813b034d090b4aa0266bc6384efd10:app/src/main/java/com/example/loginapp/Control/ClinicController.java
 
 import java.util.ArrayList;
 
