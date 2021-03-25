@@ -83,7 +83,6 @@ public class Clinic_admin_page extends AppCompatActivity {
         }
         else{
             builder.setMessage("No more patients ahead");
-
             builder.setNegativeButton(
                     "OK",
                     new DialogInterface.OnClickListener() {
@@ -97,6 +96,56 @@ public class Clinic_admin_page extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
+
+
+
+
+
+
+
+
+
+
+
+    public void button_wipe(View view) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        //builder.setTitle("My title");
+
+            builder.setMessage("Confirm Wipe Current and Total Queue?");
+
+            // add a button
+            builder.setPositiveButton(
+                    "Yes",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            current_patient_count=0;
+                            total_patient_count=0;
+                            textview_currentpatient.setText(String.valueOf(current_patient_count));
+                            textView_totalpatient.setText(String.valueOf(total_patient_count));
+                            //reflect in control
+                            dialog.cancel();
+                        }
+                    });
+            builder.setNegativeButton(
+                    "Cancel",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+        // create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+
+
+
+
+
+
     @Override
     public void onBackPressed() {
         Intent myIntent = new Intent(getApplicationContext(), mainactivityAdmin.class);
