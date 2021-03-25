@@ -9,10 +9,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.Filterable;
 import android.widget.TextView;
 import android.widget.Filter;
+
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
@@ -24,6 +33,9 @@ public class ClinicController extends ArrayAdapter<Clinic> implements Filterable
 
 
     ArrayList<Clinic> ClinicsTotal;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference clinicRef = db.collection("clinic");
+    public static ArrayList<Clinic> FIREBASEDATA;
     ArrayList<Clinic> Clinicsfiltered;
     Context context;
     LayoutInflater inflater;
@@ -152,7 +164,21 @@ public class ClinicController extends ArrayAdapter<Clinic> implements Filterable
         };
         return filter;
     }
-
+public static ArrayList<Clinic> passMeAllData(){ return FIREBASEDATA;}
+/*public  ArrayList<Clinic> getAllDocs(){
+        clinicRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                ArrayList<Clinic> CLINICDATA = null;
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        CLINICDATA = (ArrayList<Clinic>) document.get("clinic");
+                    }
+                }
+                return CLINICDATA;
+            }
+        });
+}*/
 
 }
 

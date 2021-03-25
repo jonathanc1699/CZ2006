@@ -55,6 +55,10 @@ public class Clinic extends MedicalLocation {
         this.ClinicName = clinicName;
     }
 
+    public Clinic(String clinicID,String clinicName, Long Latitude, Long Longitude) {
+        super(Latitude, Longitude);
+    }
+
 
     @PropertyName("Clinic Name")
     public String getClinicName() {

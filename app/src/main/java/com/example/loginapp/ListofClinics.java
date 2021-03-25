@@ -80,6 +80,7 @@ public class ListofClinics extends AppCompatActivity {
                                 String clinicName = ClinicList.getString("Clinic Name");
                                 //Log.d("TAG", clinicID);
                                 Clinic.add(new Clinic(clinicID,clinicName));
+                                Log.d("tag","List of clinics" + Clinic);
 
                             }
                             ClinicController=new ClinicController(ListofClinics.this,Clinic);

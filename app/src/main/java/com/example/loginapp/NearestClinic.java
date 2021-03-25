@@ -15,7 +15,7 @@ public class NearestClinic extends AppCompatActivity {
     }
 
     public void MapView (View view){
-        startActivity(new Intent(getApplicationContext(), GoogleMap.class));
+        startActivity(new Intent(getApplicationContext(), MapsActivity.class));
         // insert on button click, start queueActivity
         // startActivity(new Intent(getApplicationContexxt(), QueueController.class));
         finish();
