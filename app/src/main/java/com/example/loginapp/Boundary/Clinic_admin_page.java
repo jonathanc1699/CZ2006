@@ -3,6 +3,7 @@ package com.example.loginapp.Boundary;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -96,7 +97,12 @@ public class Clinic_admin_page extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
+    @Override
+    public void onBackPressed() {
+        Intent myIntent = new Intent(getApplicationContext(), mainactivityAdmin.class);
+        startActivityForResult(myIntent, 0);
+        super.onBackPressed();
+    }
 
 
 }

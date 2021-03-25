@@ -2,6 +2,7 @@ package com.example.loginapp.Boundary;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -235,6 +236,13 @@ public class EnableAdminPage extends AppCompatActivity {
         // Create and show the AlertDialog
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent myIntent = new Intent(getApplicationContext(), mainactivityAdmin.class);
+        startActivityForResult(myIntent, 0);
+        super.onBackPressed();
     }
 
 

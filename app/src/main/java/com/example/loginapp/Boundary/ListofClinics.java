@@ -201,7 +201,12 @@ public class ListofClinics extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
+    @Override
+    public void onBackPressed() {
+        Intent myIntent = new Intent(getApplicationContext(), NearestClinic.class);
+        startActivityForResult(myIntent, 0);
+        super.onBackPressed();
+    }
 
 
 

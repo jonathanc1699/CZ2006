@@ -28,5 +28,11 @@ public class NearestPharmacy extends AppCompatActivity {
         // insert on button click, start queueActivity
         finish();
     }
+    @Override
+    public void onBackPressed() {
+        Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivityForResult(myIntent, 0);
+        super.onBackPressed();
+    }
 }
 

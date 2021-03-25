@@ -203,6 +203,13 @@ public class ListofPharmacies extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent myIntent = new Intent(getApplicationContext(), NearestPharmacy.class);
+        startActivityForResult(myIntent, 0);
+        super.onBackPressed();
+    }
+
 
 
 

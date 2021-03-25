@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -19,6 +20,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.loginapp.Boundary.mainactivityAdmin;
 import com.example.loginapp.Entity.Clinic;
 import com.example.loginapp.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -671,48 +673,13 @@ public class ClinicPage extends AppCompatActivity {
 
 
     }
+
+
 }
 
 
 
 
 
-//    private void doimage(Intent data){
-//        try {
-//            Uri imageUri = data.getData();
-//            InputStream imageStream = getContentResolver().openInputStream(imageUri);
-//            Bitmap selectedImag = BitmapFactory.decodeStream(imageStream);
-//            //
-//            Bitmap scaledBitmap = scaleDown(selectedImag, 400, true);
-//            mimageview.setImageBitmap(scaledBitmap);
-//            //
-//            mimageview.setVisibility(View.VISIBLE);
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//
-//        }
-//    }
-//
-//
-//    // convert from byte array to bitmap
-//    public static Bitmap getImage(byte[] image) {
-//        return BitmapFactory.decodeByteArray(image, 0, image.length);
-//    }
-//
-//
-//    public static Bitmap scaleDown(Bitmap realImage, float maxImageSize,
-//                                   boolean filter) {
-//        float ratio = Math.min(
-//                (float) maxImageSize / realImage.getWidth(),
-//                (float) maxImageSize / realImage.getHeight());
-//        int width = Math.round((float) ratio * realImage.getWidth());
-//        int height = Math.round((float) ratio * realImage.getHeight());
-//
-//        Bitmap newBitmap = Bitmap.createScaledBitmap(realImage, width,
-//                height, filter);
-//        if (ratio >= 1.0){ return realImage;}
-//        else {
-//            return newBitmap;
-//        }
-//    }
+
 
