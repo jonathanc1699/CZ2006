@@ -12,7 +12,6 @@ import android.widget.ListView;
 import android.widget.SearchView;
 
 import com.example.loginapp.Control.AdminController;
-import com.example.loginapp.Control.DeletedUser;
 import com.example.loginapp.Entity.User;
 import com.example.loginapp.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -44,7 +43,7 @@ public class EnableAdminPage extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_admin_page);
+        setContentView(R.layout.activity_list_page);
 
 
 

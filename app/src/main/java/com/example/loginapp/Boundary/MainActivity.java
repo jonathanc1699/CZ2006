@@ -17,11 +17,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        View adminuserlist = findViewById(R.id.adminuserlist);
-        adminuserlist.setVisibility(View.GONE);
+        View deleteuserlist = findViewById(R.id.adminuserlist);
+        deleteuserlist.setVisibility(View.GONE);
+        View enableuserlist = findViewById(R.id.enableuserlist);
+        enableuserlist.setVisibility(View.GONE);
 
-//        View clinic = findViewById(R.id.ClinicAdminPage);
-//        clinic.setVisibility(View.GONE);
+
+        View clinic = findViewById(R.id.ClinicAdminPage);
+        clinic.setVisibility(View.GONE);
             }
 
     public void logout (View view){
@@ -39,11 +42,15 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(getApplicationContext(),NearestClinic.class));
         finish();
     }
-
-    public void ClinicAdminPage(View view) {
-        startActivity(new Intent(getApplicationContext(), Clinic_admin_page.class));
+    public void nearestPharmacy (View view) {
+        startActivity(new Intent(getApplicationContext(),NearestPharmacy.class));
         finish();
     }
+
+//    public void ClinicAdminPage(View view) {
+//        startActivity(new Intent(getApplicationContext(), Clinic_admin_page.class));
+//        finish();
+//    }
 
 
 

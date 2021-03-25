@@ -8,7 +8,7 @@
 
 
 
-    <include layout="@layout/content_admin_page" />
+    <include layout="@layout/content_list_page" />
 
 
 

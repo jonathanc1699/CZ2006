@@ -2,7 +2,6 @@ package com.example.loginapp.Control;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,7 +80,7 @@ public class AdminController extends ArrayAdapter<User> implements Filterable {
                          ViewGroup parent) {
 
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.userlist_admin_page,parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_layout_in_list,parent, false);
         }
 
         ((TextView) convertView.findViewById(R.id.textView_userEmail)).setText(getItem(position).getEmail());

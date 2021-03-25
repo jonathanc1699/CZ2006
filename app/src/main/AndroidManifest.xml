@@ -9,10 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.LogInApp">
-        <activity android:name=".Boundary.Clinic_admin_page"></activity>
-        <activity
-            android:name=".Boundary.ListofClinics"
-            android:parentActivityName=".Boundary.MainActivity" />
+        <activity android:name=".Control.PharmacyPage"></activity>
+        <activity android:name=".Boundary.Clinic_admin_page" />
+        <activity android:name=".Boundary.ListofClinics" />
+        <activity android:name=".Boundary.ListofPharmacies" />
+        <activity android:name=".Boundary.NearestPharmacy" />
+
         <activity
             android:name=".Control.ChatbotActivity"
             android:parentActivityName=".Boundary.MainActivity" />
@@ -22,28 +24,21 @@
         <activity android:name=".Boundary.mainactivityAdmin" />
         <activity android:name=".Boundary.NearestClinic" />
         <activity android:name=".Boundary.EnableAdminPage" />
-
         <activity
             android:name=".Boundary.Login"
             android:label="Starting Screen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Boundary.Register"></activity>
+        <activity android:name=".Boundary.MainActivity"></activity>
 
-
-
-        <activity android:name=".Boundary.Register">
-        </activity>
-
-
-        <activity android:name=".Boundary.MainActivity">
-        </activity>
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyCQZB7Tr_xDM_9yDAvg5PNfYnhbJjtsnDc" />
-
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -51,8 +46,8 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
     </application>
-    <uses-permission android:name="android.permission.INTERNET" />
-
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

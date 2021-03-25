@@ -16,7 +16,7 @@ import android.widget.Filter;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.example.loginapp.Entity.Clinic;
+import com.example.loginapp.Entity.Pharmacy;
 import com.example.loginapp.R;
 
 
@@ -26,31 +26,31 @@ import java.util.ArrayList;
 //load data: arraylist<admin>
 //save data(adminlist)
 
-public class ClinicController extends ArrayAdapter<Clinic> implements Filterable {
+public class PharmacyController extends ArrayAdapter<Pharmacy> implements Filterable {
 
 
-    ArrayList<Clinic> ClinicsTotal;
+    ArrayList<Pharmacy> PharmaciesTotal;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference clinicRef = db.collection("clinic");
-    public static ArrayList<Clinic> FIREBASEDATA;
-    ArrayList<Clinic> Clinicsfiltered;
+    private CollectionReference PharmacyRef = db.collection("pharmacy");
+    public static ArrayList<Pharmacy> FIREBASEDATA;
+    ArrayList<Pharmacy> Pharmaciesfiltered;
     Context context;
     LayoutInflater inflater;
 
 
 
-    public ClinicController(Activity context, ArrayList<Clinic> Clinics) {
+    public PharmacyController(Activity context, ArrayList<Pharmacy> Pharmacies) {
         // Here, we initialize the ArrayAdapter's internal storage for the context and the list.
         // the second argument is used when the ArrayAdapter is populating a single TextView.
         // Because this is a custom adapter for two TextViews and an ImageView, the adapter is not
         // going to use this second argument, so it can be any value. Here, we used 0.
-        super(context, 0, Clinics);
+        super(context, 0, Pharmacies);
 
 
-        Clinicsfiltered = Clinics;
-        Log.d("Clinicfiltered", String.valueOf((Clinicsfiltered.size())));
-        ClinicsTotal = Clinics;
-        Log.d("ClinicTotal", String.valueOf((Clinicsfiltered.size())));
+        Pharmaciesfiltered = Pharmacies;
+        Log.d("Pharmacyfiltered", String.valueOf((Pharmaciesfiltered.size())));
+        PharmaciesTotal = Pharmacies;
+        Log.d("PharmacyTotal", String.valueOf((Pharmaciesfiltered.size())));
         inflater = LayoutInflater.from(context);
 
 
@@ -66,12 +66,12 @@ public class ClinicController extends ArrayAdapter<Clinic> implements Filterable
 
     @Override
     public int getCount() {
-        return Clinicsfiltered.size();
+        return Pharmaciesfiltered.size();
     }
 
     @Override
-    public Clinic getItem(int position) {
-        return Clinicsfiltered.get(position);
+    public Pharmacy getItem(int position) {
+        return Pharmaciesfiltered.get(position);
     }
 
     @Override
@@ -80,13 +80,13 @@ public class ClinicController extends ArrayAdapter<Clinic> implements Filterable
         int itemID;
 
         // orig will be null only if we haven't filtered yet:
-        if (ClinicsTotal == null)
+        if (PharmaciesTotal == null)
         {
             itemID = position;
         }
         else
         {
-            itemID = ClinicsTotal.indexOf(Clinicsfiltered.get(position));
+            itemID = PharmaciesTotal.indexOf(Pharmaciesfiltered.get(position));
         }
         return itemID;
     }
@@ -102,7 +102,7 @@ public class ClinicController extends ArrayAdapter<Clinic> implements Filterable
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_layout_in_list,parent, false);
         }
 
-        ((TextView) convertView.findViewById(R.id.textView_userName)).setText(getItem(position).getClinicName());
+        ((TextView) convertView.findViewById(R.id.textView_userName)).setText(getItem(position).getPharmacy_name());
 
         return convertView;
 
@@ -124,21 +124,21 @@ public class ClinicController extends ArrayAdapter<Clinic> implements Filterable
             protected FilterResults performFiltering(CharSequence constraint) {
 
                 FilterResults filterResults = new FilterResults();
-                ArrayList<Clinic> results = new ArrayList<Clinic>();
-                if (ClinicsTotal == null) {
-                    ClinicsTotal = new ArrayList<Clinic>(Clinicsfiltered); // saves the original data in mOriginalValues
+                ArrayList<Pharmacy> results = new ArrayList<Pharmacy>();
+                if (PharmaciesTotal == null) {
+                    PharmaciesTotal = new ArrayList<Pharmacy>(Pharmaciesfiltered); // saves the original data in mOriginalValues
                 }
                 if(constraint == null || constraint.length() == 0){
-                    filterResults.count = ClinicsTotal.size();
-                    filterResults.values = ClinicsTotal;
+                    filterResults.count = PharmaciesTotal.size();
+                    filterResults.values = PharmaciesTotal;
 
                 }else{
 
                     String searchStr = constraint.toString().toLowerCase();
 
-                    for(Clinic Clinic:ClinicsTotal){
-                        if(Clinic.getClinicName()!=null && Clinic.getClinicName().toLowerCase().contains(searchStr)){
-                            results.add(Clinic);
+                    for(Pharmacy Pharmacy:PharmaciesTotal){
+                        if(Pharmacy.getPharmacy_name()!=null && Pharmacy.getPharmacy_name().toLowerCase().contains(searchStr)){
+                            results.add(Pharmacy);
 
                         }
                     }
@@ -153,7 +153,7 @@ public class ClinicController extends ArrayAdapter<Clinic> implements Filterable
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
 
-                Clinicsfiltered = (ArrayList<Clinic>) results.values;
+                Pharmaciesfiltered = (ArrayList<Pharmacy>) results.values;
 
                 notifyDataSetChanged();
 
@@ -161,22 +161,23 @@ public class ClinicController extends ArrayAdapter<Clinic> implements Filterable
         };
         return filter;
     }
-public static ArrayList<Clinic> passMeAllData(){ return FIREBASEDATA;}
-/*public  ArrayList<Clinic> getAllDocs(){
-        clinicRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+    public static ArrayList<Pharmacy> passMeAllData(){ return FIREBASEDATA;}
+/*public  ArrayList<Pharmacy> getAllDocs(){
+        PharmacyRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                ArrayList<Clinic> CLINICDATA = null;
+                ArrayList<Pharmacy> PharmacyDATA = null;
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
-                        CLINICDATA = (ArrayList<Clinic>) document.get("clinic");
+                        PharmacyDATA = (ArrayList<Pharmacy>) document.get("Pharmacy");
                     }
                 }
-                return CLINICDATA;
+                return PharmacyDATA;
             }
         });
 }*/
 
 }
+
 
 
