@@ -1,15 +1,10 @@
-package com.example.loginapp;
+package com.example.loginapp.Boundary;
 import androidx.annotation.RequiresApi;
-import androidx.annotation.RequiresApi;
-import android.support.v4.app.*;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
-import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -24,7 +19,8 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.example.loginapp.Boundary.ListofClinics;
+import com.example.loginapp.Control.ClinicPage;
+import com.example.loginapp.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -40,7 +36,7 @@ import org.json.JSONObject;
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    private MapAdapter mController;
+    private ClinicPage.MapAdapter mController;
     private PersistentSearchView persistentSearchView;
     private Button nearbyBtn;
     private boolean result;
@@ -50,7 +46,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
-        mController = new MapAdapter();
+        mController = new ClinicPage.MapAdapter();
 
         persistentSearchView = (PersistentSearchView) findViewById(R.id.persistentSearchView);
         nearbyBtn = (Button) findViewById(R.id.nearbyBtn);

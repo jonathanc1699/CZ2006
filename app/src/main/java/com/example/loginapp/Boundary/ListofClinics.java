@@ -71,15 +71,13 @@ public class ListofClinics extends AppCompatActivity {
                                 String clinicID=ClinicList.getId();
                                 String clinicName = ClinicList.getString("Clinic Name");
                                 //Log.d("TAG", clinicID);
-<<<<<<< HEAD:app/src/main/java/com/example/loginapp/ListofClinics.java
+
                                 Clinic.add(new Clinic(clinicID,clinicName));
                                 Log.d("tag","List of clinics" + Clinic);
-=======
+
                                 if(clinicName!=null){
                                     Clinic.add(new Clinic(clinicID,clinicName));
                                 }
-
->>>>>>> 1cd5f77926813b034d090b4aa0266bc6384efd10:app/src/main/java/com/example/loginapp/Boundary/ListofClinics.java
 
                             }
                             ClinicController=new ClinicController(ListofClinics.this,Clinic);
