@@ -72,8 +72,7 @@ public class ListofClinics extends AppCompatActivity {
                                 String clinicName = ClinicList.getString("Clinic Name");
                                 //Log.d("TAG", clinicID);
 
-                                Clinic.add(new Clinic(clinicID,clinicName));
-                                Log.d("tag","List of clinics" + Clinic);
+
 
                                 if(clinicName!=null){
                                     Clinic.add(new Clinic(clinicID,clinicName));
@@ -187,7 +186,7 @@ public class ListofClinics extends AppCompatActivity {
                 return true;
             case R.id.arrangebyalphabetical:
                 Collections.sort(Clinic, (p1, p2) -> p1.getClinicName().compareTo(p2.getClinicName()));
-                ClinicController.clear();
+                //ClinicController.clear();
                 ClinicController.addAll(Clinic);
                 ClinicController.notifyDataSetChanged();
 
