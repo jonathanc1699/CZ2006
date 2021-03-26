@@ -29,7 +29,7 @@ public class MapAdapter {
     private static List<Marker> markers = new ArrayList<>();
     //private final ArrayList<Clinic> CLINICDATA = new ArrayList<>();
     //private ClinicAdapter clinicAdapter = new ClinicAdapter();
-
+    final ArrayList<Clinic> CLINICDATA = new ArrayList<>();
     public MapAdapter(){
         this.gmap=null;
        // this.clinicAdapter.setClinicData();
@@ -45,7 +45,7 @@ public class MapAdapter {
         setGmap(mMap);
         LatLng SGLatLng = new LatLng(1.3521,103.8198);
         float zoom = 10;
-        final ArrayList<Clinic> CLINICDATA = new ArrayList<>();
+
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
         final CollectionReference clinicRef = db.collection("clinic");
         clinicRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -85,7 +85,7 @@ public class MapAdapter {
                                 Object DATA = new Gson().toJson(CLINICDATA.get(position));
                                 m.setTag(DATA + "|" + position);
                                 gmap.moveCamera(CameraUpdateFactory.newLatLng(Clinic));
-                                gmap.moveCamera(CameraUpdateFactory.newLatLngZoom(SGLatLng, zoom));
+                            gmap.moveCamera(CameraUpdateFactory.newLatLngZoom(SGLatLng, zoom));
                                 markers.add(m);
                                 Log.d("tag", "Adding Marker" + m.getTitle());
                         }
@@ -133,7 +133,7 @@ public class MapAdapter {
      * this method will be called instead of the default getMap
      * @param mMap
      */
-    /*public GoogleMap getGmapWithGPS(GoogleMap mMap){
+    public GoogleMap getGmapWithGPS(GoogleMap mMap){
         setGmap(mMap);
         try{
             MarkerOptions markerOptions = new MarkerOptions();
@@ -142,6 +142,7 @@ public class MapAdapter {
                 LatLng locationClinic = new LatLng(fb.getLatitude(),fb.getLongitude());
                 markerOptions.position(locationClinic);
                 markerOptions.title(fb.getClinicName());
+                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN));
                 Marker m = gmap.addMarker(markerOptions.visible(false));
                 int position = CLINICDATA.indexOf(fb);
                 Object DATA = new Gson().toJson(CLINICDATA.get(position));
@@ -154,11 +155,12 @@ public class MapAdapter {
         }
 
         return gmap;
-    }*/
+    }
 
     public void revealMarkers(GoogleMap mMap , LatLng LL){
+        Log.d("tag", "Markers"+ markers);
         for(int i=0;i<markers.size();i++){
-            if(SphericalUtil.computeDistanceBetween(LL,markers.get(i).getPosition())<10000){
+            if(SphericalUtil.computeDistanceBetween(LL,markers.get(i).getPosition())<5000){
                 markers.get(i).setVisible(true);
             }
         }

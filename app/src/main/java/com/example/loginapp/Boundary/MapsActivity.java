@@ -67,9 +67,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         mController = new MapAdapter();
-        //System.out.println(ClinicData);
 
-        persistentSearchView = (PersistentSearchView) findViewById(R.id.persistentSearchView);
+        //persistentSearchView = (PersistentSearchView) findViewById(R.id.persistentSearchView);
         nearbyBtn = (Button) findViewById(R.id.nearbyBtn);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -94,7 +93,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     Toast.makeText(getApplicationContext(), "No Results Found", Toast.LENGTH_SHORT).show();
                 }
             }
-        });
+        });*/
 
         nearbyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,15 +115,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
-        AppCompatImageButton viewClinicBtn = (AppCompatImageButton) findViewById(R.id.viewClinicsBtn);
-        viewClinicBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View r) {
-                Log.d("TAG", "Clicked View Clinics Button");
-                Intent i = new Intent(MapsActivity.this, ListofClinics.class);
-                MapsActivity.this.startActivity(i);
-            }
-        });*/
+//        AppCompatImageButton viewClinicBtn = (AppCompatImageButton) findViewById(R.id.viewClinicsBtn);
+//        viewClinicBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View r) {
+//                Log.d("TAG", "Clicked View Clinics Button");
+//                Intent i = new Intent(MapsActivity.this, ListofClinics.class);
+//                MapsActivity.this.startActivity(i);
+//            }
+//        });
 
 
     }
