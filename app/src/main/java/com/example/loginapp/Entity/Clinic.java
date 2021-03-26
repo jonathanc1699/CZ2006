@@ -53,6 +53,8 @@ public class Clinic extends MedicalLocation {
 
     public Clinic(String clinicID,String clinicName, double Latitude, double Longitude) {
         super(Latitude, Longitude);
+        this.ClinicID=clinicID;
+        this.ClinicName=clinicName;
     }
 
 

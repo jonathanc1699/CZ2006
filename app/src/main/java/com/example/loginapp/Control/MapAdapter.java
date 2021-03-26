@@ -27,7 +27,7 @@ import java.util.Map;
 public class MapAdapter {
     private static GoogleMap gmap;
     private static List<Marker> markers = new ArrayList<>();
-    //private final ArrayList<Clinic> CLINICDATA;
+    //private final ArrayList<Clinic> CLINICDATA = new ArrayList<>();
     //private ClinicAdapter clinicAdapter = new ClinicAdapter();
 
     public MapAdapter(){
@@ -56,15 +56,14 @@ public class MapAdapter {
                     for(QueryDocumentSnapshot document : task.getResult()){
                         Log.d("fb", document.getId() + " => "+document.getData());
                         try{
-                            Map data = document.getData();
                             String clinicName = document.getString("Clinic Name");
                             String clinicID = document.getId();
                            Double Latitude = document.getDouble("Latitude");
                             Double Longitude = document.getDouble("Longitude");
-                            System.out.println(Latitude);
 
-                            Log.d("fb","Clinic being added: "+ Latitude);
-                            CLINICDATA.add(new Clinic(clinicID,clinicName,Latitude,Longitude));
+                            Log.d("fb","Clinic being added: "+ clinicName);
+                            if (clinicName!= null){
+                            CLINICDATA.add(new Clinic(clinicID,clinicName,Latitude,Longitude));}
                         }catch (Exception e){
                             e.printStackTrace();
                         }
@@ -76,19 +75,19 @@ public class MapAdapter {
                         Log.d("fb","first element in list: "+ CLINICDATA.get(0).toString());
 
                         for(Clinic fb: CLINICDATA){
-                            LatLng Clinic = new LatLng(fb.getLatitude(), fb.getLongitude());
-                            Log.d("tag","Current clinic's location is "+ Clinic);
-                            markerOptions.position(Clinic);
-                            markerOptions.title(fb.getClinicName());
-                            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN));
-                            Marker m = gmap.addMarker(markerOptions);
-                            int position = CLINICDATA.indexOf(fb);
-                            Object DATA = new Gson().toJson(CLINICDATA.get(position));
-                            m.setTag(DATA + "|"+position);
-                            gmap.moveCamera(CameraUpdateFactory.newLatLng(Clinic));
-                            gmap.moveCamera(CameraUpdateFactory.newLatLngZoom(SGLatLng,zoom));
-                            markers.add(m);
-                            Log.d("tag","Adding Marker");
+                                LatLng Clinic = new LatLng(fb.getLatitude(), fb.getLongitude());
+                                Log.d("tag", "Current clinic's location is " + Clinic);
+                                markerOptions.position(Clinic);
+                                markerOptions.title(fb.getClinicName());
+                                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN));
+                                Marker m = gmap.addMarker(markerOptions);
+                                int position = CLINICDATA.indexOf(fb);
+                                Object DATA = new Gson().toJson(CLINICDATA.get(position));
+                                m.setTag(DATA + "|" + position);
+                                gmap.moveCamera(CameraUpdateFactory.newLatLng(Clinic));
+                                gmap.moveCamera(CameraUpdateFactory.newLatLngZoom(SGLatLng, zoom));
+                                markers.add(m);
+                                Log.d("tag", "Adding Marker" + m.getTitle());
                         }
                     }catch(Exception e){
                         Log.d("tag", "Error in Data \n" + e);
