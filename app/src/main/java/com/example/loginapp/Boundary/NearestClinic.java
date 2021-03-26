@@ -8,9 +8,11 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.example.loginapp.Control.ClinicAdapter;
 import com.example.loginapp.R;
 
 public class NearestClinic extends AppCompatActivity {
+
 
 
     @Override

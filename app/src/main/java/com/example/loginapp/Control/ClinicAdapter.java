@@ -15,7 +15,40 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
 public class ClinicAdapter {
-    public static ArrayList<Clinic> getFirebasedata(){
+    public ArrayList<Clinic> ClinicData = new ArrayList<>();
+
+    public void setClinicData(){
+        final ArrayList<Clinic> ClinicDataFB = new ArrayList<>();
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+        final CollectionReference clinicRef = db.collection("clinic");
+        clinicRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()){
+                    Log.d("fb","Successfully retreived documents from firestore");
+                    for(QueryDocumentSnapshot document : task.getResult()){
+                        Log.d("fb", document.getId() + " => "+document.getData());
+                        try{
+                            String clinicName = document.getString("Clinic Name");
+                            String clinicID = document.getId();
+                            Long Latitude = document.getLong("Latitude");
+                            Long Longitude = document.getLong("Longitude");
+                            Log.d("fb","Clinic being added: "+ clinicName);
+                            ClinicDataFB.add(new Clinic(clinicID,clinicName,Latitude,Longitude));
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }Log.d("fb","Final Clinic List" + ClinicDataFB);
+                }else{
+                    Log.d("fb","Error getting documents: ", task.getException());
+                }
+            }
+        });
+        this.ClinicData = ClinicDataFB;
+
+    }
+
+   /* public static ArrayList<Clinic> getFirebasedata(){
         final ArrayList<Clinic> ClinicData = new ArrayList<>();
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
         final CollectionReference clinicRef = db.collection("clinic");
@@ -43,5 +76,9 @@ public class ClinicAdapter {
             }
         });
         return ClinicData;
+    }*/
+    public ArrayList<Clinic> getClinicData(){
+        return ClinicData;
     }
+
 }

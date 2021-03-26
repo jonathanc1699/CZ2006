@@ -1,10 +1,10 @@
 package com.example.loginapp.Entity;
 
 public class MedicalLocation {
-    private long Latitude;
-    private long Longitude;
+    private double Latitude;
+    private double Longitude;
 
-    public MedicalLocation(long Latitude, long Longitude)
+    public MedicalLocation(double Latitude, double Longitude)
     {
         this.Latitude=Latitude;
         this.Longitude = Longitude;
@@ -14,15 +14,15 @@ public class MedicalLocation {
 
     }
 
-    public long getLongitude() {
-        return Longitude;
+    public double getLongitude() {
+        return this.Longitude;
     }
 
     public void setLongitude(long Longitude) {
         this.Latitude = Longitude;
     }
 
-    public long getLatitude() {
+    public double getLatitude() {
         return Latitude;
     }
 

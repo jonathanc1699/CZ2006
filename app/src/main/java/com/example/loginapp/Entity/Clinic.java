@@ -30,7 +30,7 @@ public class Clinic extends MedicalLocation {
     public Clinic(String clinicName, long block, Object floor,
                   long postal, String streetname, Object unitnumber, long telephone, int clinicCurrentQ,
                   String startTime,
-                  String closingTime, String clinicID, long Longitude, long Latitude, int latestqno) {
+                  String closingTime, String clinicID, double Longitude, double Latitude, int latestqno) {
 
         super(Latitude, Longitude);
         this.ClinicName = clinicName;
@@ -51,7 +51,7 @@ public class Clinic extends MedicalLocation {
         this.ClinicName = clinicName;
     }
 
-    public Clinic(String clinicID,String clinicName, Long Latitude, Long Longitude) {
+    public Clinic(String clinicID,String clinicName, double Latitude, double Longitude) {
         super(Latitude, Longitude);
     }
 
@@ -153,6 +153,15 @@ public class Clinic extends MedicalLocation {
     @PropertyName("latestQNo")
     public void setLatestQNo(int latestQNo) {
         this.latestQNo = latestQNo;
+    }
+
+    public String toString(){
+        String toReturn = "";
+        toReturn += getClinicName();
+        toReturn += ", ";
+        toReturn += getLatitude();
+        toReturn += getLatitude();
+        return toReturn;
     }
 
 

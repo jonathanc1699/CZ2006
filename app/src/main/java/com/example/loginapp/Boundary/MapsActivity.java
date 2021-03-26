@@ -1,4 +1,5 @@
 package com.example.loginapp.Boundary;
+
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageButton;
@@ -17,36 +18,56 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.loginapp.Control.ClinicAdapter;
 import com.example.loginapp.Control.ClinicPage;
+import com.example.loginapp.Control.MapAdapter;
+import com.example.loginapp.Entity.Clinic;
 import com.example.loginapp.R;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.Gson;
 import com.paulrybitskyi.persistentsearchview.PersistentSearchView;
 import com.paulrybitskyi.persistentsearchview.listeners.OnSearchConfirmedListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    private ClinicPage.MapAdapter mController;
+    private MapAdapter mController;
+    private ClinicAdapter mClinicAdapter = new ClinicAdapter();
     private PersistentSearchView persistentSearchView;
     private Button nearbyBtn;
     private boolean result;
+    private FusedLocationProviderClient mFusedLocationClient;
+    //private final ArrayList<Clinic> CLINICDATA = ClinicAdapter.getFirebasedata();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("DEBUG", "Creating map activity");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
-        mController = new ClinicPage.MapAdapter();
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+        mController = new MapAdapter();
+        //System.out.println(ClinicData);
 
         persistentSearchView = (PersistentSearchView) findViewById(R.id.persistentSearchView);
         nearbyBtn = (Button) findViewById(R.id.nearbyBtn);
@@ -54,7 +75,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        View locationButton = ((View) mapFragment.getView().findViewById(Integer.parseInt("1")).getParent()).findViewById(Integer.parseInt("2"));
+        /*View locationButton = ((View) mapFragment.getView().findViewById(Integer.parseInt("1")).getParent()).findViewById(Integer.parseInt("2"));
         RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
         rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
         rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
@@ -83,8 +104,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     mMap = mController.getGmapWithGPS(mMap);
                     Location myLocation = mMap.getMyLocation();
                     LatLng myLatLng = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
+                    mMap.addMarker(new MarkerOptions().position(myLatLng).title("You are here"));
                     mController.revealMarkers(mMap, myLatLng);
-                    Log.d("tag","markers placed");
+                    Log.d("tag", "markers placed");
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLatLng, 15));
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -102,7 +124,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 Intent i = new Intent(MapsActivity.this, ListofClinics.class);
                 MapsActivity.this.startActivity(i);
             }
-        });
+        });*/
 
 
     }
@@ -114,9 +136,31 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap = googleMap;
         getGPSPermission();
         mMap.getUiSettings().setMapToolbarEnabled(false);
-        mMap = mController.getGmap(mMap);
+       mMap = mController.getGmap(mMap);
+        //Location myLocation = mMap.getMyLocation();
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }else{
+        mFusedLocationClient.getLastLocation().addOnSuccessListener(this, location -> {
+            if (location != null) {
+                LatLng myLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+                Log.d("tag", "My location is " + location);
+                mMap.addMarker(new MarkerOptions().position(myLatLng).title("You are here"));
 
-        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            }
+        });}
+        //LatLng myLatLng = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
+
+        //mController.revealMarkers(mMap, myLatLng);
+
+        /*mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
                 String markerInfo = (String) marker.getTag();
@@ -135,7 +179,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 Intent i = new Intent(MapsActivity.this, ListofClinics.class);
                 MapsActivity.this.startActivity(i);
             }
-        });
+        });*/
 
     }
 
