@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.loginapp.Boundary.NearestClinic;
+import com.example.loginapp.Boundary.NearestPharmacy;
 import com.example.loginapp.Control.MessageAdapter;
 import com.example.loginapp.Control.ResponseMessage;
 import com.example.loginapp.R;
@@ -18,6 +20,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -30,7 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ChatbotActivity extends AppCompatActivity {
+public class ChatbotActivity extends AppCompatActivity implements MessageAdapter.OnNoteListener {
 
     EditText userInput;
     RecyclerView recyclerView;
@@ -41,7 +44,7 @@ public class ChatbotActivity extends AppCompatActivity {
     private static HashMap<String, ArrayList<String>> myMap = new HashMap<String, ArrayList<String>>(); // hashmap created.
     private static ArrayList<String> allsymptoms = new ArrayList<String>(); // contains all 15 symptoms possible.
     private static ArrayList<String> alldisease=new ArrayList<String>(); // contains all possible diseases
-
+    private String clinic = "null";
 
     private FirebaseFirestore fstore = FirebaseFirestore.getInstance();
     private CollectionReference diseaseRef = fstore.collection("infectdisease");
@@ -119,7 +122,7 @@ public class ChatbotActivity extends AppCompatActivity {
         userInput = findViewById(R.id.userInput);
         recyclerView = findViewById(R.id.conversation);
         responseMessageList = new ArrayList<>();
-        messageAdapter = new MessageAdapter(responseMessageList);
+        messageAdapter = new MessageAdapter(responseMessageList, this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(messageAdapter);
 
@@ -311,11 +314,17 @@ public class ChatbotActivity extends AppCompatActivity {
                             if (possiblediseases.size() <=3 || (float) highestcount/idk <0.5) {
                                 chatbotMessage = new ResponseMessage("Your risk level is estimated to be low, we recommend that you visit a pharmacy to purchase medication and self-medicate.", false);
                                 responseMessageList.add(chatbotMessage);
+                                chatbotMessage = new ResponseMessage("Click here to be redirected to the pharmacy page.", false);
+                                responseMessageList.add(chatbotMessage);
+                                clinic = "false";
                                 //Log.d("ChatbotActivity", toString((float) possiblediseases.size()/alldisease.size()));
                             }
                             else {
                                 chatbotMessage = new ResponseMessage("Your risk level is estimated to be high, we recommend that you visit a clinic to consult a doctor immediately.", false);
                                 responseMessageList.add(chatbotMessage);
+                                chatbotMessage = new ResponseMessage("Click here to be redirected to the clinic page.", false);
+                                responseMessageList.add(chatbotMessage);
+                                clinic = "true";
                             }
 
 
@@ -368,5 +377,21 @@ public class ChatbotActivity extends AppCompatActivity {
         int positionOfLastVisibleItem = linearLayoutManager.findLastCompletelyVisibleItemPosition();
         int itemCount = recyclerView.getAdapter().getItemCount();
         return (positionOfLastVisibleItem>=itemCount);
+    }
+
+    @Override
+    public void onNoteClick(int position) {
+        Log.d("fml", String.valueOf(position));
+        Log.d("fml", String.valueOf(responseMessageList.size()-1));
+
+        if (responseMessageList.size() - position - 1 == 0) {
+            if (clinic.equals("false")) {
+                startActivity(new Intent(getApplicationContext(), NearestPharmacy.class));
+                finish();
+            } else if (clinic.equals("true")) {
+                startActivity(new Intent(getApplicationContext(), NearestClinic.class));
+                finish();
+            }
+        }
     }
 }
