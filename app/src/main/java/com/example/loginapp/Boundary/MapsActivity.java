@@ -7,6 +7,7 @@ import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -59,6 +60,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Button nearbyBtn;
     private ProgressBar progressBar;
     private boolean result;
+    ProgressDialog progressDialog;
     private FusedLocationProviderClient mFusedLocationClient;
     //private final ArrayList<Clinic> CLINICDATA = ClinicAdapter.getFirebasedata();
 
@@ -75,9 +77,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         //persistentSearchView = (PersistentSearchView) findViewById(R.id.persistentSearchView);
         nearbyBtn = (Button) findViewById(R.id.nearbyBtn);
-        progressBar = findViewById(R.id.progressBar3);
-        progressBar.setVisibility(View.VISIBLE);
-        Toast.makeText(getApplicationContext(), "Map is being loaded...",Toast.LENGTH_SHORT).show();
+//        progressBar = findViewById(R.id.progressBar3);
+//        progressBar.setVisibility(View.VISIBLE);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
@@ -139,11 +140,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onMapReady(GoogleMap googleMap) {
+//        progressDialog = new ProgressDialog(MapsActivity.this);
+//        progressDialog.setMessage("Map is loading...");
+//        progressDialog.setTitle("Map View");
+//        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+//        progressDialog.show();
         mMap = googleMap;
         getGPSPermission();
         mMap.getUiSettings().setMapToolbarEnabled(false);
        mMap = mController.getGmap(mMap);
-
+        Toast.makeText(getApplicationContext(),"Map is being loaded...",Toast.LENGTH_LONG).show();
         //Location myLocation = mMap.getMyLocation();
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -163,7 +169,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             }
         });}
-        progressBar.setVisibility(View.INVISIBLE);
 
 
 
@@ -180,6 +185,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 return false;
             }
         });
+
         //LatLng myLatLng = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
 
         //mController.revealMarkers(mMap, myLatLng);
@@ -206,6 +212,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         });*/
 
     }
+
 
     @Override
     public void onBackPressed() {

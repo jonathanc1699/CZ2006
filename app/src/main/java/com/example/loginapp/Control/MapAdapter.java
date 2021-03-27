@@ -4,6 +4,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.loginapp.Boundary.MapsActivity;
 import com.example.loginapp.Entity.Clinic;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -123,7 +124,6 @@ public class MapAdapter {
         }catch(Exception e){
             Log.d("tag", "Error in Data \n" + e);
         }*/
-
         gmap.moveCamera(CameraUpdateFactory.newLatLngZoom(SGLatLng,zoom));
         return gmap;
     }
