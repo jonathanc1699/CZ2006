@@ -17,11 +17,13 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.loginapp.Control.ClinicAdapter;
+import com.example.loginapp.Control.ClinicController;
 import com.example.loginapp.Control.ClinicPage;
 import com.example.loginapp.Control.MapAdapter;
 import com.example.loginapp.Entity.Clinic;
@@ -45,14 +47,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private MapAdapter mController;
-    private ClinicAdapter mClinicAdapter = new ClinicAdapter();
+    private ClinicController clinicController;
     private PersistentSearchView persistentSearchView;
     private Button nearbyBtn;
+    private ProgressBar progressBar;
     private boolean result;
     private FusedLocationProviderClient mFusedLocationClient;
     //private final ArrayList<Clinic> CLINICDATA = ClinicAdapter.getFirebasedata();
@@ -70,7 +75,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         //persistentSearchView = (PersistentSearchView) findViewById(R.id.persistentSearchView);
         nearbyBtn = (Button) findViewById(R.id.nearbyBtn);
-
+        progressBar = findViewById(R.id.progressBar3);
+        progressBar.setVisibility(View.VISIBLE);
+        Toast.makeText(getApplicationContext(), "Map is being loaded...",Toast.LENGTH_SHORT).show();
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
@@ -136,6 +143,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         getGPSPermission();
         mMap.getUiSettings().setMapToolbarEnabled(false);
        mMap = mController.getGmap(mMap);
+
         //Location myLocation = mMap.getMyLocation();
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -155,6 +163,23 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             }
         });}
+        progressBar.setVisibility(View.INVISIBLE);
+
+
+
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                if (marker.getTitle() != "You are here"){
+                Intent intent = new Intent(getApplicationContext(),ClinicPage.class);
+                intent.putExtra("Clinic Name", marker.getTitle());
+                intent.putExtra("Clinic ID", marker.getSnippet());
+                Log.d("intent", String.valueOf(intent.getStringExtra("Clinic Name")));
+                Log.d("intent", String.valueOf(intent.getStringExtra("Clinic ID")));
+                startActivity(intent);}
+                return false;
+            }
+        });
         //LatLng myLatLng = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
 
         //mController.revealMarkers(mMap, myLatLng);
