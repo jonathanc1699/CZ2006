@@ -3,7 +3,10 @@ package com.example.loginapp.Control;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -33,7 +36,21 @@ public class PharmacyPage extends AppCompatActivity {
         mTextView_addressPharmacy.setText("Address of Pharmacy:   " + PharmacyAddress);
         mTextView_openingHoursPharmacy.setText("Opening Hours of Pharmacy:  8AM - 8PM ");
 
-        
+//        mbutton_direction.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //TODO need to link to googlemap
+//                // Create a Uri from an intent string. Use the result to create an Intent.
+//                Log.d("directions","trying to open gmaps for directions to "+ selectedPharmacy.getStreetname());
+//                Uri gmmIntentUri = Uri.parse("google.navigation:q= "+ selectedPharmacy.getLatitude() + ","+ selectedPharmacy.getLongitude());
+//                // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
+//                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+//                // Make the Intent explicit by setting the Google Maps package
+//                mapIntent.setPackage("com.google.android.apps.maps");
+//                startActivity(mapIntent);
+//                Log.d("directions","opening gmaps for direction to "+ selectedPharmacy.getStreetname());
+//            }
+//        });
         
     }
     @Override
@@ -41,4 +58,6 @@ public class PharmacyPage extends AppCompatActivity {
         super.onBackPressed();
         this.finish();
     }
+
+
 }

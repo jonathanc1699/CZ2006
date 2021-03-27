@@ -21,6 +21,7 @@
         <activity android:name=".Control.ClinicPage" />
         <activity android:name=".Boundary.DisableAdminPage" />
         <activity android:name=".Boundary.MapsActivity" />
+        <activity android:name=".Boundary.MapsActivityPharmacy" />
         <activity android:name=".Boundary.mainactivityAdmin" />
         <activity android:name=".Boundary.NearestClinic" />
         <activity android:name=".Boundary.EnableAdminPage" />

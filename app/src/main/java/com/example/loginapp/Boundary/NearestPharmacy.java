@@ -17,7 +17,7 @@ public class NearestPharmacy extends AppCompatActivity {
     }
 
     public void MapView (View view){
-        startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+        startActivity(new Intent(getApplicationContext(), MapsActivityPharmacy.class));
         // insert on button click, start queueActivity
         // startActivity(new Intent(getApplicationContexxt(), QueueController.class));
         finish();
