@@ -209,18 +209,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onBackPressed() {
-
-//            Intent myIntent = new Intent(getApplicationContext(), NearestClinic.class);
-//            startActivityForResult(myIntent, 0);
-//            super.onBackPressed();
-
-        Toast.makeText(getApplicationContext(), "Long press on back button to exit app!", Toast.LENGTH_SHORT).show();
+            Intent myIntent = new Intent(getApplicationContext(), NearestClinic.class);
+            startActivityForResult(myIntent, 0);
+            super.onBackPressed();
     }
 
     @Override
     public boolean onKeyLongPress(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            new AlertDialog.Builder(this).setMessage("Are you sure tou want to exit?").setCancelable(false)
+            new AlertDialog.Builder(this).setMessage("Are you sure you want to exit?").setCancelable(false)
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
