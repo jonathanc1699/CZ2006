@@ -85,7 +85,7 @@ public class EnableAdminPage extends AppCompatActivity {
                     }
 
                     if(isAdmin==false && isDisabled==true){
-                        User.add(new User(name,email,0, "nil",uid,true,false));
+                        User.add(new User(name,email,0, "nil",uid,true,false,false));
                     }
 
                     //TODO: Change user stuff

@@ -5,7 +5,7 @@ import com.google.firebase.firestore.PropertyName;
 public class Clinic extends MedicalLocation {
 
     private String ClinicName;
-    private long Block;
+    private Object Block;
     private Object Floor;
     private long Postal;
     private String Streetname;
@@ -67,7 +67,7 @@ public class Clinic extends MedicalLocation {
         ClinicName = clinicName;
     }
 
-    public long getBlock() {
+    public Object getBlock() {
         return Block;
     }
 
