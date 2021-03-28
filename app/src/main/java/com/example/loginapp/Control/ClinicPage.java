@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.loginapp.Boundary.Clinic_admin_page;
 import com.example.loginapp.Boundary.mainactivityAdmin;
 import com.example.loginapp.Entity.Clinic;
 import com.example.loginapp.Entity.User;
@@ -94,6 +95,9 @@ public class ClinicPage extends AppCompatActivity {
     //so that the patients can make their way down when they receive their email
     int buffertime = 15;
     boolean godown = false;
+    String userCurrentClinic;
+    int userCurrentQueue;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -229,7 +233,8 @@ public class ClinicPage extends AppCompatActivity {
 
         java.util.Date date = new java.util.Date();
         Timestamp local = new Timestamp(date.getTime());
-        String strTime = sdf.format(date);
+        //String strTime = sdf.format(date);
+        String strTime = "10:00:00";
 
         System.out.println("Local in String format " + strTime);
 
@@ -391,9 +396,67 @@ public class ClinicPage extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 user[0] = dataSnapshot.getValue(User.class);
                 String userID = user[0].getUserId();
-                String userCurrentClinic =user[0].getCurrentClinic();
-                int userCurrentQueue =user[0].getCurrentQueue();
-                checkcurrentappt(waitingTime,userID,userCurrentClinic,userCurrentQueue);
+                userCurrentClinic =user[0].getCurrentClinic();
+                userCurrentQueue =user[0].getCurrentQueue();
+                UserQueueController userQueueController = new UserQueueController();
+
+                if(userCurrentClinic !="nil" && userCurrentQueue!=0) {
+                    AlertDialog.Builder havePendingAppt = new AlertDialog.Builder(context);
+                    havePendingAppt.setMessage("You have a pending appointment with " + userCurrentClinic +
+                            "\nQueue No: " + userCurrentQueue +"\n\nDo you want to cancel your appointment with "
+                            +userCurrentClinic +" and book an appointment with " +selectedClinic.getClinicName()+"?");
+                    havePendingAppt.setCancelable(true);
+
+                    havePendingAppt.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            userQueueController.cancelQUser(selectedClinic.getClinicID());
+                            //TODO
+                            Clinic_admin_page clinic_admin_page = new Clinic_admin_page();
+                            clinic_admin_page.clinicadminnoti(userCurrentClinic,userCurrentQueue);
+
+                            Log.d("cancel queue alr", "cancelled");
+
+                            userQueueController.assignQToUser(latestclinicq,selectedClinic.getClinicName(),selectedClinic.getClinicID());
+
+
+                            Log.e("updated", "updated user");
+                            if (waitingTime > 40) {
+                                sendConfirmationEmail();
+                                Log.e("Email sent", "Email sent to user");
+                            }
+                            //less than 3 ppl, make way down now
+                            else{
+                                makeYourWayDown();
+                                Log.e("Email sent", "Email sent to user");
+                            }
+                        }});
+
+                    havePendingAppt.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            if (dialog != null) {
+                                latestclinicq--;
+                                dialog.dismiss();
+                            }
+                        }
+                    });
+                    AlertDialog cancelandbook = havePendingAppt.create();
+                    cancelandbook.show();
+                }
+                else
+                {
+                    userQueueController.assignQToUser(latestclinicq,selectedClinic.getClinicName(),selectedClinic.getClinicID());
+
+                    //more than 3 ppl
+                    if (waitingTime > 40) {
+                        sendConfirmationEmail();
+                        Log.e("Email sent", "Email sent to user");
+                    }
+                    //less than 3 ppl, make way down now
+                    else{makeYourWayDown();
+                        Log.e("Email sent", "Email sent to user");
+                    }
+
+                }
             }
 
             @Override
@@ -496,6 +559,12 @@ public class ClinicPage extends AppCompatActivity {
             havePendingAppt.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             userQueueController.cancelQUser(selectedClinic.getClinicID());
+
+                            //System.out.println("userCurrentClinic "+userCurrentClinic);
+
+                            //System.out.println("userCurrentQueue "+userCurrentQueue);
+
+                            //userQueueController.DecQClinic(userCurrentClinic,userCurrentQueue);
                             Log.d("cancel queue alr", "cancelled");
 
                             userQueueController.assignQToUser(latestclinicq,selectedClinic.getClinicName(),selectedClinic.getClinicID());

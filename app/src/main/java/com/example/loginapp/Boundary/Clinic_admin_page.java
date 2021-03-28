@@ -5,18 +5,28 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 
 import com.example.loginapp.Control.ClinicAdminQueueController;
+import com.example.loginapp.Entity.Clinic;
 import com.example.loginapp.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Clinic_admin_page extends AppCompatActivity {
 
+
+    final Clinic_admin_page context = this;
     private int current_patient_count=0;
     private int total_patient_count=5;
     private String Clinic_name;
+    private List<Integer> list=new ArrayList<Integer>();
+
+    private boolean increment2 = false;
 
     TextView textview_currentpatient;
     TextView textView_clinicname;
@@ -59,19 +69,28 @@ public class Clinic_admin_page extends AppCompatActivity {
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
 
-                            int thirduserQ = 0;
+                            if (list.contains(current_patient_count + 1)) {
+                                list.remove(current_patient_count);
+                                current_patient_count=current_patient_count+2 ;
+                                //TODO update clinic class
+                            } else {
+                                //TODO check loggedin user
+                                int thirduserQ = 0;
 
-                            //clinicAdminQueueController.incServeQ(String ClinicName, int currentlyservingQ)
+                                //clinicAdminQueueController.incServeQ(String ClinicName, int currentlyservingQ)
 
-                            ClinicAdminQueueController clinicAdminQueueController = new ClinicAdminQueueController();
-                            //TODO send reminder email to the third user
-                            if((total_patient_count-current_patient_count+1)>=3)
+                                ClinicAdminQueueController clinicAdminQueueController = new ClinicAdminQueueController();
+                                //TODO send reminder email to the third user
+                            /*if((total_patient_count-current_patient_count+1)>=3)
                                 clinicAdminQueueController.sendReminderEmail(Clinic_name,thirduserQ);
 
                             textview_currentpatient.setText(String.valueOf(current_patient_count));
                             dialog.cancel();
+
+                             */
+                            }
                         }
-                    });
+                        });
             builder.setNegativeButton(
                     "Cancel",
                     new DialogInterface.OnClickListener() {
@@ -98,14 +117,12 @@ public class Clinic_admin_page extends AppCompatActivity {
     }
 
 
+    public void clinicadminnoti(String userCurrentClinic, int userCurrentQueue) {
+        if(userCurrentClinic == Clinic_name) {
+            list.add(userCurrentQueue);
+        }
 
-
-
-
-
-
-
-
+    }
 
 
     public void button_wipe(View view) {
@@ -139,12 +156,6 @@ public class Clinic_admin_page extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
-
-
-
-
-
 
     @Override
     public void onBackPressed() {

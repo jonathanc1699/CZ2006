@@ -43,6 +43,7 @@ public class ClinicAdminQueueController extends AppCompatActivity {
 
     }
 
+
     public void sendReminderEmail(String ClinicName, int thirduserQ)
     {
         String senderemail = "cz2006sickgowhere@gmail.com";
