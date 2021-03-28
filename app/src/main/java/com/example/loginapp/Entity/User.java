@@ -36,9 +36,15 @@ public class User {
     private boolean Admin;
     private String userId;
     private boolean Disabled;
+    private boolean clinicAdmin;
+    private String clinicID;
+    private String clinicName;
+    private int clinicCurrentQ;
+    private int latestQNo;
 
 
-    public User(String fullName, String email, int currentQueue, String currentClinic,String userId, boolean Disabled, boolean Admin) {
+
+    public User(String fullName, String email, int currentQueue, String currentClinic,String userId, boolean Disabled, boolean Admin, boolean clinicAdmin) {
         this.fullName = fullName;
         this.email = email;
         this.currentQueue = currentQueue;
@@ -46,8 +52,25 @@ public class User {
         this.userId=userId;
         this.Admin = Admin;
         this.Disabled = Disabled;
+        this.clinicAdmin = clinicAdmin;
 
     }
+
+
+    public User(String fullName, String email,String userId, boolean Disabled, boolean Admin, boolean clinicAdmin, String clinicID, String clinicName ,int clinicCurrentQ, int latestQNo)
+    {
+        this.fullName = fullName;
+        this.email = email;
+        this.userId=userId;
+        this.Admin = Admin;
+        this.Disabled = Disabled;
+        this.clinicAdmin = clinicAdmin;
+        this.clinicID = clinicID;
+        this.clinicName = clinicName;
+        this.clinicCurrentQ = clinicCurrentQ;
+        this.latestQNo = latestQNo;
+    }
+
 
     public User() {
     }
@@ -56,6 +79,7 @@ public class User {
     public boolean getAdmin() {
         return Admin;
     }
+
 
     public void setAdmin(boolean Admin) {
         Admin = Admin;
@@ -106,6 +130,50 @@ public class User {
         this.fullName = fullName;
     }
 
+    public boolean getClinicAdmin() {
+        return clinicAdmin;
+    }
+
+    public void setClinicAdmin(boolean clinicAdmin) {
+        clinicAdmin = clinicAdmin;
+    }
+
+    public boolean isClinicAdmin() {
+        return clinicAdmin;
+    }
+
+    public String getClinicID() {
+        return clinicID;
+    }
+
+    public void setClinicID(String clinicID) {
+        this.clinicID = clinicID;
+    }
+
+    public String getClinicName() {
+        return clinicName;
+    }
+
+    public void setClinicName(String clinicName) {
+        this.clinicName = clinicName;
+    }
+
+    public int getClinicCurrentQ() {
+        return clinicCurrentQ;
+    }
+
+    public void setClinicCurrentQ(int clinicCurrentQ) {
+        this.clinicCurrentQ = clinicCurrentQ;
+    }
+
+    public int getLatestQNo() {
+        return latestQNo;
+    }
+
+    public void setLatestQNo(int latestQNo) {
+        this.latestQNo = latestQNo;
+    }
+
     @Exclude
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
@@ -116,6 +184,7 @@ public class User {
         result.put("email", email);
         result.put("Admin", Admin);
         result.put("Disabled", Disabled);
+        result.put("ClinicAdmin", clinicAdmin);
 
         return result;
 

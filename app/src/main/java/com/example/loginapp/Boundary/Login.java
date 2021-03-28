@@ -36,6 +36,7 @@ public class Login extends AppCompatActivity {
     String uid;
     Boolean isAdmin;
     Boolean isDisabled;
+    Boolean isClinicAdmin;
 
 
 
@@ -114,11 +115,21 @@ public class Login extends AppCompatActivity {
                                     if(isAdmin==null){
                                         isAdmin = snapshot.child("admin").getValue(Boolean.class);
                                     }
+                                    isClinicAdmin = snapshot.child("ClinicAdmin").getValue(Boolean.class);
+                                    if(isClinicAdmin==null){
+                                        isClinicAdmin = snapshot.child("clinicAdmin").getValue(Boolean.class);
+                                    }
 
-                                    if (isAdmin == true) {
+                                    if (isAdmin) {
                                         Toast.makeText(getApplicationContext(), "Welcome Admin", Toast.LENGTH_LONG).show();
                                         startActivity(new Intent(getApplicationContext(), mainactivityAdmin.class));
-                                    } else if (isDisabled == false) {
+                                    }
+                                    if (isClinicAdmin) {
+                                        Toast.makeText(getApplicationContext(), "Welcome Admin", Toast.LENGTH_LONG).show();
+                                        startActivity(new Intent(getApplicationContext(), Clinic_admin_page.class));
+                                    }
+
+                                    else if (!isDisabled) {
                                         Toast.makeText(Login.this, "Login Successful", Toast.LENGTH_SHORT).show();
 
 
