@@ -61,6 +61,8 @@ public class User {
         this.Admin = Admin;
         this.Disabled = Disabled;
         this.clinicAdmin = clinicAdmin;
+        this.clinicID = clinicID;
+        this.clinicName = clinicName;
     }
     public User() {
     }
@@ -154,6 +156,21 @@ public class User {
         result.put("Admin", Admin);
         result.put("Disabled", Disabled);
         result.put("clinicAdmin", clinicAdmin);
+
+        return result;
+
+
+    }
+    public Map<String, Object> altMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("userId", userId);
+        result.put("fullName", fullName);
+        result.put("email", email);
+        result.put("Admin", Admin);
+        result.put("Disabled", Disabled);
+        result.put("clinicAdmin", clinicAdmin);
+        result.put("clinicID", clinicID);
+        result.put("clinicName", clinicName);
 
         return result;
 

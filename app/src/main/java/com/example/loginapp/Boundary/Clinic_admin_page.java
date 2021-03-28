@@ -21,6 +21,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Map;
+
 public class Clinic_admin_page extends AppCompatActivity {
 
     private int current_patient_count=0;
@@ -45,27 +47,9 @@ public class Clinic_admin_page extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_clinic_admin_page);
 
-        ValueEventListener userListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.getValue(User.class);
-                clinicID = user.getClinicID();
-                Clinic_name = user.getClinicName();
-                Log.d("clinicAdmin", user.getClinicID());
-                textView_clinicname= (TextView) findViewById(R.id.ClinicName);
-                textView_clinicname.setText(String.valueOf(Clinic_name));
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w("error", "loadPost:onCancelled", databaseError.toException());
-            }
-
-        };
-        currentUser.addValueEventListener(userListener);
-
-
-
+        textView_clinicname= (TextView) findViewById(R.id.ClinicName);
+        textView_clinicname.setText(String.valueOf(Clinic_name));
 
         textView_totalpatient = (TextView) findViewById(R.id.textView_numtotalpatient);
         textView_totalpatient.setText(String.valueOf(total_patient_count));
@@ -74,7 +58,32 @@ public class Clinic_admin_page extends AppCompatActivity {
         textview_currentpatient.setText(String.valueOf(current_patient_count));
 
         //TODO get clinic info
-
+        // TODO need to load everything together under 1 valuelistener
+//        public String loadClinicAdminData() {
+//            ValueEventListener userListener = new ValueEventListener() {
+//                @Override
+//                public void onDataChange(DataSnapshot dataSnapshot) {
+//                    User user = dataSnapshot.getValue(User.class);
+//
+//
+//                    Map<String, Object> userValues = user.altMap();
+//                    clinicID = (String) userValues.get("clinicID");
+//                    Clinic_name = (String) userValues.get("clinicName");
+//                    Log.d("Clinic name", Clinic_name);
+//                    Log.d("ClinicID", clinicID);
+//
+//
+//                }
+//
+//                @Override
+//                public void onCancelled(DatabaseError databaseError) {
+//                    Log.w("TakeQNUM error", "Failed to load data properly", databaseError.toException());
+//                }
+//
+//            };
+//            currentUser.addListenerForSingleValueEvent(userListener);
+//            return clinicID;
+//        }
 
 
 
@@ -191,6 +200,7 @@ public class Clinic_admin_page extends AppCompatActivity {
         startActivityForResult(myIntent, 0);
         super.onBackPressed();
     }
+
 
 
 }
