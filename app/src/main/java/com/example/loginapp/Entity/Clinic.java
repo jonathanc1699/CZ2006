@@ -13,7 +13,7 @@ public class Clinic extends MedicalLocation {
     private long Telephone;
     private int ClinicCurrentQ;
     private static String startTime = "08:00:00";
-    private static String closingTime = "22:00:00";
+    private static String closingTime = "20:00:00";
     private String ClinicID;
 
     private int latestQNo;

@@ -41,7 +41,7 @@ public class UserQueueController {
                 fullName = user.getFullName();
 
                 user.setCurrentClinic(clinicName);
-                user.setCurrentQueue(latestclinicq+1);
+                user.setCurrentQueue(latestclinicq);
                 currentClinic=user.getCurrentClinic();
                 currentQNo = user.getCurrentQueue();
                 Map<String, Object> userValues = user.toMap();
@@ -50,7 +50,6 @@ public class UserQueueController {
                 databaseReference.updateChildren(childUpdates);
                 Log.d("currentClinic", fullName + "> "+currentClinic);
                 Log.d("currentQNo", fullName + "> "+ currentQNo);
-
 
             }
 
@@ -64,8 +63,6 @@ public class UserQueueController {
     }
 
     //TODO add this to code
-    //userQueueController.cancelQUser(ClinicID)
-    // latestclinicq--;
     // update current user clinic and queue to firebase when user cancel booking
     public void cancelQUser(String clinicName) {
         ValueEventListener userListener = new ValueEventListener() {
