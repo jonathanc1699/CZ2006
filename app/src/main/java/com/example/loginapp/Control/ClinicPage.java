@@ -127,54 +127,54 @@ public class ClinicPage extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             DocumentSnapshot ClinicDetailList = task.getResult();
 
-                                Map<String, Object> map = ClinicDetailList.getData();
-                                selectedClinic = ClinicDetailList.toObject(Clinic.class);
+                            Map<String, Object> map = ClinicDetailList.getData();
+                            selectedClinic = ClinicDetailList.toObject(Clinic.class);
 
-                                Log.d("Clinic Info", String.valueOf(ClinicDetailList.getData()));
+                            Log.d("Clinic Info", String.valueOf(ClinicDetailList.getData()));
 
-                                selectedClinic.setClinicID(clinicID);
-                                streetName = selectedClinic.getStreetname();
-                                telephone = selectedClinic.getTelephone();
-                                postal = selectedClinic.getPostal();
-                                block = selectedClinic.getBlock();
-                                floor = selectedClinic.getFloor();
+                            selectedClinic.setClinicID(clinicID);
+                            streetName = selectedClinic.getStreetname();
+                            telephone = selectedClinic.getTelephone();
+                            postal = selectedClinic.getPostal();
+                            block = selectedClinic.getBlock();
+                            floor = selectedClinic.getFloor();
 
-                                //Get clinic current and last Q number
-                                currentlyservingQ = selectedClinic.getClinicCurrentQ();
-                                latestclinicq = selectedClinic.getLatestQNo();
+                            //Get clinic current and last Q number
+                            currentlyservingQ = selectedClinic.getClinicCurrentQ();
+                            latestclinicq = selectedClinic.getLatestQNo();
 
-                                if (ClinicDetailList.contains("Unit number")&&ClinicDetailList.contains("Floor")&&ClinicDetailList.contains("Block")) {
-                                    if (ClinicDetailList.get("Unit number") instanceof String && ClinicDetailList.get("Floor") instanceof String && ClinicDetailList.get("Block") instanceof String) {
-                                        unitNumber = (String) ClinicDetailList.get("Unit number");
-                                        floor = String.valueOf(ClinicDetailList.get("Floor"));
-                                        block = String.valueOf(ClinicDetailList.get("Block"));
-                                        address = "Clinic Address: " + block + " " +
-                                                streetName + " #0" + floor + "-" + unitNumber + " Block " +
-                                                block + " Singapore" + postal;
-                                        mTextView_addressClinic.setText(address);
-                                    } else {
-                                        unit = (long) ClinicDetailList.get("Unit number");
-                                        floor = (long) ClinicDetailList.get("Floor");
-                                        block = (long) ClinicDetailList.get("Block");
-
-                                        address="Clinic Address: " + block + " " +
-                                                streetName + " #0" + floor + "-" + unit + " Block " +
-                                                block + " Singapore" + postal;
-                                        mTextView_addressClinic.setText(address);
-                                    }
+                            if (ClinicDetailList.contains("Unit number")&&ClinicDetailList.contains("Floor")&&ClinicDetailList.contains("Block")) {
+                                if (ClinicDetailList.get("Unit number") instanceof String && ClinicDetailList.get("Floor") instanceof String && ClinicDetailList.get("Block") instanceof String) {
+                                    unitNumber = (String) ClinicDetailList.get("Unit number");
+                                    floor = String.valueOf(ClinicDetailList.get("Floor"));
+                                    block = String.valueOf(ClinicDetailList.get("Block"));
+                                    address = "Clinic Address: " + block + " " +
+                                            streetName + " #0" + floor + "-" + unitNumber + " Block " +
+                                            block + " Singapore" + postal;
+                                    mTextView_addressClinic.setText(address);
                                 } else {
+                                    unit = (long) ClinicDetailList.get("Unit number");
+                                    floor = (long) ClinicDetailList.get("Floor");
+                                    block = (long) ClinicDetailList.get("Block");
+
                                     address="Clinic Address: " + block + " " +
-                                            streetName + ", Level: " + floor + " Block " +
-                                            block + " s" + postal;
+                                            streetName + " #0" + floor + "-" + unit + " Block " +
+                                            block + " Singapore" + postal;
                                     mTextView_addressClinic.setText(address);
                                 }
-
-
-                                mTextView_nameClinic.setText("Name of Clinic:   " + clinicName);
-                                mTextView_openingHoursClinic.setText("Opening Hours:   " + "8am - 8pm");
-                                mTextView_phoneClinic.setText("Telephone:   " + telephone);
+                            } else {
+                                address="Clinic Address: " + block + " " +
+                                        streetName + ", Level: " + floor + " Block " +
+                                        block + " s" + postal;
+                                mTextView_addressClinic.setText(address);
                             }
-                         else {
+
+
+                            mTextView_nameClinic.setText("Name of Clinic:   " + clinicName);
+                            mTextView_openingHoursClinic.setText("Opening Hours:   " + "8am - 8pm");
+                            mTextView_phoneClinic.setText("Telephone:   " + telephone);
+                        }
+                        else {
                             Log.d("fetch clinic error", "Error getting documents: ", task.getException());
                         }
                     }
@@ -411,17 +411,9 @@ public class ClinicPage extends AppCompatActivity {
 
                     havePendingAppt.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            userQueueController.cancelQUser(selectedClinic.getClinicID());
-                            //TODO
-                            Clinic_admin_page clinic_admin_page = new Clinic_admin_page();
-                            clinic_admin_page.clinicadminnoti(userCurrentClinic,userCurrentQueue);
-
-                            Log.d("cancel queue alr", "cancelled");
-
+                            Log.d("userID", userID);
+                            userQueueController.cancelQUser(userID);
                             userQueueController.assignQToUser(latestclinicq,selectedClinic.getClinicName(),selectedClinic.getClinicID());
-
-
-                            Log.e("updated", "updated user");
                             if (waitingTime > 40) {
                                 sendConfirmationEmail();
                                 Log.e("Email sent", "Email sent to user");
@@ -496,12 +488,11 @@ public class ClinicPage extends AppCompatActivity {
                         sender.sendMail("Booking Confirmation: "+ selectedClinic.getClinicName() + ", Queue No:",
                                 "Hello,\nThis is your Confirmation email, you queue no is .....\n"+
                                         "There are currently " + ((latestclinicq + 1) - currentlyservingQ)
-                                + "person(s) ahead of you in the queue. You may make your way to "+ selectedClinic.getClinicName()
+                                        + "person(s) ahead of you in the queue. You may make your way to "+ selectedClinic.getClinicName()
                                         + "\n\nClinic Address:"  + block + " "+streetName + " #0" +
                                         floor + "-" + unit + " Block " + block + " Singapore" + postal+
                                         " \nThank you your using SickGoWhere.\n\nSickGoWhere",
                                 senderemail, recipientemail);
-                        dialog.dismiss();
                     }
                     else
                     {
@@ -545,72 +536,6 @@ public class ClinicPage extends AppCompatActivity {
         latestclinicq++;
         System.out.println("updatedclinic info");
 
-    }
-
-    private void checkcurrentappt(int waitingTime, String userID, String userCurrentClinic, int userCurrentQueue)
-    {
-        //check if user have current appointment
-        UserQueueController userQueueController = new UserQueueController();
-
-        if(userCurrentClinic !="nil" && userCurrentQueue!=0) {
-            AlertDialog.Builder havePendingAppt = new AlertDialog.Builder(context);
-            havePendingAppt.setMessage("You have a pending appointment with " + userCurrentClinic +
-                    "\nQueue No: " + userCurrentQueue +"\n\nDo you want to cancel your appointment with "
-                    +userCurrentClinic +" and book an appointment with " +selectedClinic.getClinicName()+"?");
-            havePendingAppt.setCancelable(true);
-
-            havePendingAppt.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            userQueueController.cancelQUser(selectedClinic.getClinicID());
-
-                            //System.out.println("userCurrentClinic "+userCurrentClinic);
-
-                            //System.out.println("userCurrentQueue "+userCurrentQueue);
-
-                            //userQueueController.DecQClinic(userCurrentClinic,userCurrentQueue);
-                            Log.d("cancel queue alr", "cancelled");
-
-                            userQueueController.assignQToUser(latestclinicq,selectedClinic.getClinicName(),selectedClinic.getClinicID());
-
-
-                            Log.e("updated", "updated user");
-                            if (waitingTime > 40) {
-                                sendConfirmationEmail();
-                                Log.e("Email sent", "Email sent to user");
-                            }
-                            //less than 3 ppl, make way down now
-                            else{
-                                makeYourWayDown();
-                                Log.e("Email sent", "Email sent to user");
-                            }
-                        }});
-
-            havePendingAppt.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    if (dialog != null) {
-                        latestclinicq--;
-                        dialog.dismiss();
-                    }
-                }
-            });
-            AlertDialog cancelandbook = havePendingAppt.create();
-            cancelandbook.show();
-        }
-        else
-        {
-            userQueueController.assignQToUser(latestclinicq,selectedClinic.getClinicName(),selectedClinic.getClinicID());
-
-            //more than 3 ppl
-            if (waitingTime > 40) {
-                sendConfirmationEmail();
-                Log.e("Email sent", "Email sent to user");
-            }
-            //less than 3 ppl, make way down now
-            else{makeYourWayDown();
-                Log.e("Email sent", "Email sent to user");
-            }
-
-        }
     }
 
     private void makeYourWayDown() {

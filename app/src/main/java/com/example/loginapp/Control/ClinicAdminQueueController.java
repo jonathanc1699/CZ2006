@@ -19,7 +19,7 @@ public class ClinicAdminQueueController extends AppCompatActivity {
     private CollectionReference clinicRef = db.collection("clinic");
 
     //TODO alert button
-    //TODO remove q and current clinic from user
+
     public void incServeQ(String ClinicID, int currentlyservingQ) {
 
         currentlyservingQ++;

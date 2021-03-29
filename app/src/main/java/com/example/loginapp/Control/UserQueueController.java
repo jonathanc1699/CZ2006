@@ -3,11 +3,7 @@ package com.example.loginapp.Control;
 
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-
 import com.example.loginapp.Entity.User;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
         import com.google.firebase.auth.FirebaseUser;
         import com.google.firebase.database.DataSnapshot;
@@ -76,12 +72,12 @@ public class UserQueueController {
 
     //TODO add this to code
     // update current user clinic and queue to firebase when user cancel booking
-    public void cancelQUser(String clinicName) {
+    public void cancelQUser(String userID) {
         ValueEventListener userListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 user = dataSnapshot.getValue(User.class);
-                userID = user.getUserId();
+                UserQueueController.this.userID = user.getUserId();
                 fullName = user.getFullName();
                 user.setCurrentClinic("nil");
                 user.setCurrentQueue(0);
