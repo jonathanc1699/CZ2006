@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.example.loginapp.Entity.Clinic;
+import com.example.loginapp.Entity.DistanceClinicToMe;
 import com.example.loginapp.Entity.Pharmacy;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -22,6 +23,8 @@ import com.google.gson.Gson;
 import com.google.maps.android.SphericalUtil;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class MapAdapterPharmacy {
@@ -29,6 +32,7 @@ public class MapAdapterPharmacy {
     private static List<Marker> markers = new ArrayList<>();
     //private final ArrayList<Clinic> CLINICDATA = new ArrayList<>();
     //private ClinicAdapter clinicAdapter = new ClinicAdapter();
+    private ArrayList<DistanceClinicToMe> DistToMe = new ArrayList<>();
     final ArrayList<Pharmacy> PHARMACYDATA = new ArrayList<>();
     public MapAdapterPharmacy(){
         this.gmap=null;
@@ -167,6 +171,26 @@ public class MapAdapterPharmacy {
         }
     }
 
+    public void findnearestclinic(GoogleMap mMap, LatLng LL){
+        Log.d("tag","Finding nearest pharmacy..");
+        for(int i=0;i<markers.size();i++){
+            DistToMe.add(new DistanceClinicToMe(markers.get(i).getTitle(),SphericalUtil.computeDistanceBetween(LL,markers.get(i).getPosition())));
+        } Collections.sort(DistToMe, new Comparator<DistanceClinicToMe>() {
+            @Override
+            public int compare(DistanceClinicToMe o1, DistanceClinicToMe o2) {
+                if(o1.Distance == o2.Distance)
+                    return 0;
+                return o1.Distance < o2.Distance ? -1:1;
+            }
+        });
+        Log.d("tag","Nearest pharmacy is "+DistToMe.get(0).getClinicName().toString());
+        for(int i=0;i<markers.size();i++){
+            if(markers.get(i).getTitle().equals(DistToMe.get(0).getClinicName())){
+                markers.get(i).setVisible(true);
+                Log.d("tag","nearest pharmacy marker set to visible");
+            }
+        }
+    }
 
     /*public boolean plotSearchMarkers (String Query){
             if(Query.isEmpty()){

@@ -9,6 +9,8 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -21,11 +23,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.example.loginapp.Control.ClinicController;
-import com.example.loginapp.Control.ClinicPage;
-import com.example.loginapp.Control.MapAdapter;
 import com.example.loginapp.Control.MapAdapterPharmacy;
 import com.example.loginapp.Control.PharmacyPage;
-import com.example.loginapp.Entity.Pharmacy;
 import com.example.loginapp.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -45,7 +44,9 @@ public class MapsActivityPharmacy extends AppCompatActivity implements OnMapRead
     private ClinicController clinicController;
     private PersistentSearchView persistentSearchView;
     private Button nearbyBtn;
+    private Button nearestBtn;
     private ProgressBar progressBar;
+    private static int TIME_OUT = 1000*5;
     private boolean result;
     ProgressDialog progressDialog;
     private FusedLocationProviderClient mFusedLocationClient;
@@ -64,6 +65,7 @@ public class MapsActivityPharmacy extends AppCompatActivity implements OnMapRead
 
         //persistentSearchView = (PersistentSearchView) findViewById(R.id.persistentSearchView);
         nearbyBtn = (Button) findViewById(R.id.nearbyBtn);
+        nearestBtn = (Button) findViewById(R.id.nearestbutton1);
 //        progressBar = findViewById(R.id.progressBar3);
 //        progressBar.setVisibility(View.VISIBLE);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -89,6 +91,24 @@ public class MapsActivityPharmacy extends AppCompatActivity implements OnMapRead
                 }
             }
         });*/
+        nearestBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    mMap.clear();
+                    mMap = mController.getGmapWithGPS(mMap);
+                    Location myLocation = mMap.getMyLocation();
+                    LatLng myLatLng = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
+                    mMap.addMarker(new MarkerOptions().position(myLatLng).title("You are here"));
+                    mController.findnearestclinic(mMap, myLatLng);
+                    Log.d("tag", "marker placed");
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLatLng, 12));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "Please enable GPS location", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         nearbyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,11 +147,11 @@ public class MapsActivityPharmacy extends AppCompatActivity implements OnMapRead
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onMapReady(GoogleMap googleMap) {
-//        progressDialog = new ProgressDialog(MapsActivity.this);
-//        progressDialog.setMessage("Map is loading...");
-//        progressDialog.setTitle("Map View");
-//        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-//        progressDialog.show();
+        progressDialog = new ProgressDialog(MapsActivityPharmacy.this);
+        progressDialog.setMessage("Map is loading...");
+        progressDialog.setTitle("Map View");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.show();
         mMap = googleMap;
         getGPSPermission();
         mMap.getUiSettings().setMapToolbarEnabled(false);
@@ -156,7 +176,13 @@ public class MapsActivityPharmacy extends AppCompatActivity implements OnMapRead
 
             }
         });}
-
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable(){
+            @Override
+            public void run()
+            {
+                progressDialog.dismiss();
+            }
+        }, TIME_OUT);
 
 
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
