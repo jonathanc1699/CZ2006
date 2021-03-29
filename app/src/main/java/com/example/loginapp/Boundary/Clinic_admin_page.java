@@ -1,5 +1,6 @@
 package com.example.loginapp.Boundary;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 
 import com.example.loginapp.Control.ClinicAdminQueueController;
+import com.example.loginapp.Control.FirebaseCallback;
 import com.example.loginapp.Control.UserQueueController;
 import com.example.loginapp.Entity.User;
 import com.example.loginapp.R;
@@ -27,7 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Clinic_admin_page extends AppCompatActivity {
+public class Clinic_admin_page extends AppCompatActivity implements FirebaseCallback{
 
     // upon registration, default for queue and current clinic are 0 and null respectively
     // queueController is used to modify the values in firebase
@@ -55,6 +57,36 @@ public class Clinic_admin_page extends AppCompatActivity {
     int clinicQ;
     String fullName;
 
+    // used to store the clinicID retrieved from firebase synchronously
+    @Override
+    public void onCallback(String value){}
+    // loads clinic ID and stores it for use locally in order to pass through and query firestore for clinic details
+    public void loadClinic(FirebaseCallback Callback) {
+
+        ValueEventListener userlistener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                User user = snapshot.getValue(User.class);
+                //Map<String, Object> userValues = user.altMap();
+                String clinicID = user.getClinicID();
+                Log.d("firebase", clinicID);
+                String Clinic_name = user.getClinicName();
+                Log.d("Clinic name", Clinic_name);
+                Log.d("ClinicID", clinicID);
+                Callback.onCallback(clinicID);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.d("load", "Error");
+
+            }
+        };
+        currentUser.addListenerForSingleValueEvent(userlistener);
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,8 +94,6 @@ public class Clinic_admin_page extends AppCompatActivity {
 
         textView_clinicname= (TextView) findViewById(R.id.ClinicName);
         //Todo get clinic name
-        //Load clinic info
-        Clinic_name="THE CLINIC NAME";
         textView_clinicname.setText(Clinic_name);
 
         textView_totalpatient = (TextView) findViewById(R.id.textView_numtotalpatient);
@@ -74,6 +104,12 @@ public class Clinic_admin_page extends AppCompatActivity {
 
         //current_patient_count == ClinicCurrentQ
         //total_patient_count =latestQNo
+        loadClinic(new FirebaseCallback() {
+            @Override
+            public void onCallback(String value) {
+                Log.d("testtest", value);
+            }
+        });
 
     }
 
@@ -202,5 +238,7 @@ public class Clinic_admin_page extends AppCompatActivity {
     currentUser.addListenerForSingleValueEvent(userListener);
 
 }
+
+
 
 }
