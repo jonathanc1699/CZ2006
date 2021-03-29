@@ -14,8 +14,11 @@ import androidx.appcompat.app.AlertDialog;
 import com.example.loginapp.Control.ClinicAdminQueueController;
 import com.example.loginapp.Control.FirebaseCallback;
 import com.example.loginapp.Control.UserQueueController;
+import com.example.loginapp.Entity.Clinic;
 import com.example.loginapp.Entity.User;
 import com.example.loginapp.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -23,6 +26,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,10 +58,12 @@ public class Clinic_admin_page extends AppCompatActivity implements FirebaseCall
     TextView textView_totalpatient;
 
     User user;
-
+    String clinicID;
     String userID;
     int clinicQ;
     String fullName;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference clinicRef = db.collection("clinic");
 
     // used to store the clinicID retrieved from firebase synchronously
     @Override
@@ -92,24 +100,54 @@ public class Clinic_admin_page extends AppCompatActivity implements FirebaseCall
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_clinic_admin_page);
 
-        textView_clinicname= (TextView) findViewById(R.id.ClinicName);
+
+
+
         //Todo get clinic name
-        textView_clinicname.setText(Clinic_name);
 
-        textView_totalpatient = (TextView) findViewById(R.id.textView_numtotalpatient);
-        textView_totalpatient.setText(String.valueOf(total_patient_count));
+        // loadClinic contains clinicID
+        loadClinic(new FirebaseCallback() {
+            @Override
+            public void onCallback(String ID) {
+                clinicID =ID;
+                clinicRef.document(clinicID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot adminClinicDoc = task.getResult();
+                            if (adminClinicDoc.exists()) {
+                                Log.d("adminClinicDoc", "DocumentSnapshot data: " + adminClinicDoc.getData());
+                                Clinic adminClinic = adminClinicDoc.toObject(Clinic.class);
+                                Clinic_name = adminClinic.getClinicName();
+                                current_patient_count = adminClinic.getClinicCurrentQ();
+                                total_patient_count = adminClinic.getLatestQNo();
+                                textView_clinicname= (TextView) findViewById(R.id.ClinicName);
+                                textView_clinicname.setText(Clinic_name);
+                                textView_totalpatient = (TextView) findViewById(R.id.textView_numtotalpatient);
+                                textView_totalpatient.setText(String.valueOf(total_patient_count));
+                                textview_currentpatient = (TextView) findViewById(R.id.textView_numcurrentlyserving);
+                                textview_currentpatient.setText(String.valueOf(current_patient_count));
 
-        textview_currentpatient = (TextView) findViewById(R.id.textView_numcurrentlyserving);
-        textview_currentpatient.setText(String.valueOf(current_patient_count));
+
+
+                            } else {
+                                Log.d("adminClinicDoc", "No such document");
+                            }
+                        } else {
+                            Log.d("adminClinicDoc", "get failed with ", task.getException());
+                    }
+                } });
+
+            }
+                        });
+
+
 
         //current_patient_count == ClinicCurrentQ
         //total_patient_count =latestQNo
-        loadClinic(new FirebaseCallback() {
-            @Override
-            public void onCallback(String value) {
-                Log.d("testtest", value);
-            }
-        });
+
+
+
 
     }
 
@@ -242,3 +280,5 @@ public class Clinic_admin_page extends AppCompatActivity implements FirebaseCall
 
 
 }
+
+
