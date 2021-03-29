@@ -36,9 +36,13 @@ public class User {
     private boolean Admin;
     private String userId;
     private boolean Disabled;
+    private boolean clinicAdmin;
+    private String clinicID;
+    private String clinicName;
 
 
-    public User(String fullName, String email, int currentQueue, String currentClinic,String userId, boolean Disabled, boolean Admin) {
+
+    public User(String fullName, String email, int currentQueue, String currentClinic,String userId, boolean Disabled, boolean Admin, boolean clinicAdmin) {
         this.fullName = fullName;
         this.email = email;
         this.currentQueue = currentQueue;
@@ -46,9 +50,20 @@ public class User {
         this.userId=userId;
         this.Admin = Admin;
         this.Disabled = Disabled;
+        this.clinicAdmin = clinicAdmin;
 
     }
 
+    public User(String fullName, String email,String userId, boolean Disabled, boolean Admin, boolean clinicAdmin, String clinicID, String clinicName){
+        this.fullName = fullName;
+        this.email = email;
+        this.userId=userId;
+        this.Admin = Admin;
+        this.Disabled = Disabled;
+        this.clinicAdmin = clinicAdmin;
+        this.clinicID = clinicID;
+        this.clinicName = clinicName;
+    }
     public User() {
     }
 
@@ -106,6 +121,30 @@ public class User {
         this.fullName = fullName;
     }
 
+    public boolean isClinicAdmin() {
+        return clinicAdmin;
+    }
+
+    public void setClinicAdmin(boolean clinicAdmin) {
+        this.clinicAdmin = clinicAdmin;
+    }
+
+    public String getClinicID() {
+        return clinicID;
+    }
+
+    public void setClinicID(String clinicID) {
+        this.clinicID = clinicID;
+    }
+
+    public String getClinicName() {
+        return clinicName;
+    }
+
+    public void setClinicName(String clinicName) {
+        this.clinicName = clinicName;
+    }
+
     @Exclude
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
@@ -116,6 +155,22 @@ public class User {
         result.put("email", email);
         result.put("Admin", Admin);
         result.put("Disabled", Disabled);
+        result.put("clinicAdmin", clinicAdmin);
+
+        return result;
+
+
+    }
+    public Map<String, Object> altMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("userId", userId);
+        result.put("fullName", fullName);
+        result.put("email", email);
+        result.put("Admin", Admin);
+        result.put("Disabled", Disabled);
+        result.put("clinicAdmin", clinicAdmin);
+        result.put("clinicID", clinicID);
+        result.put("clinicName", clinicName);
 
         return result;
 

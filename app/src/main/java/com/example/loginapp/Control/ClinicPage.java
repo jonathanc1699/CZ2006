@@ -80,7 +80,7 @@ public class ClinicPage extends AppCompatActivity {
     String streetName;
     String clinicName;
     long postal;
-    long block;
+    Object block;
     Object floor;
     String unitNumber;
     long unit;
@@ -143,10 +143,11 @@ public class ClinicPage extends AppCompatActivity {
                                 currentlyservingQ = selectedClinic.getClinicCurrentQ();
                                 latestclinicq = selectedClinic.getLatestQNo();
 
-                                if (ClinicDetailList.contains("Unit number")&&ClinicDetailList.contains("Floor")) {
-                                    if (ClinicDetailList.get("Unit number") instanceof String && ClinicDetailList.get("Floor") instanceof String) {
+                                if (ClinicDetailList.contains("Unit number")&&ClinicDetailList.contains("Floor")&&ClinicDetailList.contains("Block")) {
+                                    if (ClinicDetailList.get("Unit number") instanceof String && ClinicDetailList.get("Floor") instanceof String && ClinicDetailList.get("Block") instanceof String) {
                                         unitNumber = (String) ClinicDetailList.get("Unit number");
                                         floor = String.valueOf(ClinicDetailList.get("Floor"));
+                                        block = String.valueOf(ClinicDetailList.get("Block"));
                                         address = "Clinic Address: " + block + " " +
                                                 streetName + " #0" + floor + "-" + unitNumber + " Block " +
                                                 block + " Singapore" + postal;
@@ -154,6 +155,7 @@ public class ClinicPage extends AppCompatActivity {
                                     } else {
                                         unit = (long) ClinicDetailList.get("Unit number");
                                         floor = (long) ClinicDetailList.get("Floor");
+                                        block = (long) ClinicDetailList.get("Block");
 
                                         address="Clinic Address: " + block + " " +
                                                 streetName + " #0" + floor + "-" + unit + " Block " +
@@ -499,6 +501,7 @@ public class ClinicPage extends AppCompatActivity {
                                         floor + "-" + unit + " Block " + block + " Singapore" + postal+
                                         " \nThank you your using SickGoWhere.\n\nSickGoWhere",
                                 senderemail, recipientemail);
+                        dialog.dismiss();
                     }
                     else
                     {
