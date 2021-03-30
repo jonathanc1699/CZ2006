@@ -203,21 +203,33 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
 
-
-
-        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
-            public boolean onMarkerClick(Marker marker) {
+            public void onInfoWindowClick(Marker marker) {
+                marker.hideInfoWindow();
                 if (marker.getTitle() != "You are here"){
-                Intent intent = new Intent(getApplicationContext(),ClinicPage.class);
-                intent.putExtra("Clinic Name", marker.getTitle());
-                intent.putExtra("Clinic ID", marker.getSnippet());
-                Log.d("intent", String.valueOf(intent.getStringExtra("Clinic Name")));
-                Log.d("intent", String.valueOf(intent.getStringExtra("Clinic ID")));
-                startActivity(intent);}
-                return false;
+                    Intent intent = new Intent(getApplicationContext(),ClinicPage.class);
+                    intent.putExtra("Clinic Name", marker.getTitle());
+                    intent.putExtra("Clinic ID", (String) marker.getTag());
+                    Log.d("intent", String.valueOf(intent.getStringExtra("Clinic Name")));
+                    Log.d("intent", String.valueOf(intent.getStringExtra("Clinic ID")));
+                    startActivity(intent);}
             }
         });
+
+//        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+//            @Override
+//            public boolean onMarkerClick(Marker marker) {
+//                if (marker.getTitle() != "You are here"){
+//                Intent intent = new Intent(getApplicationContext(),ClinicPage.class);
+//                intent.putExtra("Clinic Name", marker.getTitle());
+//                intent.putExtra("Clinic ID", marker.getSnippet());
+//                Log.d("intent", String.valueOf(intent.getStringExtra("Clinic Name")));
+//                Log.d("intent", String.valueOf(intent.getStringExtra("Clinic ID")));
+//                startActivity(intent);}
+//                return false;
+//            }
+//        });
 
         //LatLng myLatLng = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
 

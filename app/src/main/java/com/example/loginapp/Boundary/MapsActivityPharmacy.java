@@ -23,6 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.example.loginapp.Control.ClinicController;
+import com.example.loginapp.Control.ClinicPage;
 import com.example.loginapp.Control.MapAdapterPharmacy;
 import com.example.loginapp.Control.PharmacyPage;
 import com.example.loginapp.R;
@@ -185,19 +186,20 @@ public class MapsActivityPharmacy extends AppCompatActivity implements OnMapRead
         }, TIME_OUT);
 
 
-        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
-            public boolean onMarkerClick(Marker marker) {
+            public void onInfoWindowClick(Marker marker) {
+                marker.hideInfoWindow();
                 if (marker.getTitle() != "You are here"){
-                Intent intent = new Intent(getApplicationContext(), PharmacyPage.class);
-                intent.putExtra("Pharmacy Name", marker.getTitle());
-                intent.putExtra("Pharmacy ID", marker.getSnippet());
-                Log.d("intent", String.valueOf(intent.getStringExtra("Pharmacy Name")));
-                Log.d("intent", String.valueOf(intent.getStringExtra("Pharmacy ID")));
-                startActivity(intent);}
-                return false;
+                    Intent intent = new Intent(getApplicationContext(), PharmacyPage.class);
+                    intent.putExtra("Pharmacy Name", marker.getTitle());
+                    intent.putExtra("Pharmacy ID", (String) marker.getTag());
+                    Log.d("intent", String.valueOf(intent.getStringExtra("Pharmacy Name")));
+                    Log.d("intent", String.valueOf(intent.getStringExtra("Pharmacy ID")));
+                    startActivity(intent);}
             }
         });
+
 
         //LatLng myLatLng = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
 

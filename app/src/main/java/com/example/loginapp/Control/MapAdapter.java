@@ -82,13 +82,13 @@ public class MapAdapter {
                                 LatLng Clinic = new LatLng(fb.getLatitude(), fb.getLongitude());
                                 Log.d("tag", "Current clinic's location is " + Clinic);
                                 markerOptions.position(Clinic);
-                                markerOptions.snippet(fb.getClinicID());
+                                //markerOptions.snippet(fb.getClinicID());
                                 markerOptions.title(fb.getClinicName());
                                 markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN));
                                 Marker m = gmap.addMarker(markerOptions);
-                                int position = CLINICDATA.indexOf(fb);
-                                Object DATA = new Gson().toJson(CLINICDATA.get(position));
-                                m.setTag(DATA + "|" + position);
+                                //int position = CLINICDATA.indexOf(fb);
+                                //Object DATA = new Gson().toJson(CLINICDATA.get(position));
+                                m.setTag(fb.getClinicID());
                                 gmap.moveCamera(CameraUpdateFactory.newLatLng(Clinic));
                             gmap.moveCamera(CameraUpdateFactory.newLatLngZoom(SGLatLng, zoom));
                                 markers.add(m);
@@ -144,15 +144,17 @@ public class MapAdapter {
             MarkerOptions markerOptions = new MarkerOptions();
 
             for (Clinic fb : CLINICDATA) {
-                LatLng locationClinic = new LatLng(fb.getLatitude(),fb.getLongitude());
-                markerOptions.position(locationClinic);
-                markerOptions.snippet(fb.getClinicID());
+                LatLng Clinic = new LatLng(fb.getLatitude(), fb.getLongitude());
+                Log.d("tag", "Current clinic's location is " + Clinic);
+                markerOptions.position(Clinic);
+                //markerOptions.snippet(fb.getClinicID());
                 markerOptions.title(fb.getClinicName());
                 markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN));
-                Marker m = gmap.addMarker(markerOptions.visible(false));
-                int position = CLINICDATA.indexOf(fb);
-                Object DATA = new Gson().toJson(CLINICDATA.get(position));
-                m.setTag(DATA +"|"+ position);
+                Marker m = gmap.addMarker(markerOptions);
+                m.setVisible(false);
+                //int position = CLINICDATA.indexOf(fb);
+                //Object DATA = new Gson().toJson(CLINICDATA.get(position));
+                m.setTag(fb.getClinicID());
                 markers.add(m);
             }
 
