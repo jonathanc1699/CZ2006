@@ -155,22 +155,31 @@ public class Clinic_admin_page extends AppCompatActivity implements FirebaseCall
                         public void onClick(DialogInterface dialog, int id) {
 
 
+                            loadClinic(new FirebaseCallback() {
+                                @Override
+                                public void onCallback(String ID) {
+                                    clinicID = ID;
                             //TODO check loggedin user reset user q
-
+                            clinicAdminQueueController.clearUserClinicandQueue(clinicID, current_patient_count);
                             current_patient_count++;
                             clinicAdminQueueController.incServeQ( clinicID,  current_patient_count);
 
                             //TODO send reminder email to the third user
-                            int thirduserQ = 0;
-                            /*if((total_patient_count-current_patient_count+1)>=3)
+
+                            if((total_patient_count-current_patient_count)>=3)
+                            {
+                                int thirduserQ = (current_patient_count+3);
                                 clinicAdminQueueController.sendReminderEmail(Clinic_name,thirduserQ);
 
-                            textview_currentpatient.setText(String.valueOf(current_patient_count));
-                            dialog.cancel();
+                            }
 
-                             */
+                            //textview_currentpatient.setText(String.valueOf(current_patient_count));
+
+
                         }
-                    });
+                    });}
+                    }
+                    );
             builder.setNegativeButton(
                     "Cancel",
                     new DialogInterface.OnClickListener() {

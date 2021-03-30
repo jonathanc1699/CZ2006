@@ -37,6 +37,7 @@ public class UserQueueController {
     String currentClinic;
     int currentQNo;
     String fullName;
+    String bookedClinic;
 
 
     // update current user clinic and queue to firebase
@@ -48,8 +49,11 @@ public class UserQueueController {
                 userID = user.getUserId();
                 fullName = user.getFullName();
 
+
                 user.setCurrentClinic(clinicName);
                 user.setCurrentQueue(latestclinicq);
+                user.setClinicID(clinicID);
+                bookedClinic = user.getClinicID();
                 currentClinic=user.getCurrentClinic();
                 currentQNo = user.getCurrentQueue();
                 Map<String, Object> userValues = user.toMap();
@@ -58,6 +62,7 @@ public class UserQueueController {
                 databaseReference.updateChildren(childUpdates);
                 Log.d("currentClinic", fullName + "> "+currentClinic);
                 Log.d("currentQNo", fullName + "> "+ currentQNo);
+                Log.d("currentQNo", fullName + "> "+ bookedClinic);
 
             }
 
@@ -81,9 +86,11 @@ public class UserQueueController {
                 fullName = user.getFullName();
                 user.setCurrentClinic("nil");
                 user.setCurrentQueue(0);
+                user.setClinicID("nil");
 
                 currentClinic=user.getCurrentClinic();
                 currentQNo = user.getCurrentQueue();
+                bookedClinic = user.getClinicID();
 
                 Map<String, Object> userValues = user.toMap();
                 Map<String, Object> childUpdates = new HashMap<>();
@@ -92,6 +99,7 @@ public class UserQueueController {
 
                 Log.d("currentClinic", fullName + "> "+currentClinic);
                 Log.d("currentQNo", fullName + "> "+ currentQNo);
+                Log.d("currentQNo", fullName + "> "+ bookedClinic);
             }
 
             @Override

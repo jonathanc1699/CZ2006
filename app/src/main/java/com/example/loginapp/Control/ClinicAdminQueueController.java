@@ -5,19 +5,36 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.util.Log;
 
+import com.example.loginapp.Entity.Clinic;
+import com.example.loginapp.Entity.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ClinicAdminQueueController extends AppCompatActivity {
 
     final ClinicAdminQueueController context = this;
+    ArrayList<User> userArrayList =new ArrayList<User>();
 
     //To read clinic database
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference clinicRef = db.collection("clinic");
 
+    //should be another way to ensure its the same current user thats logged in
+    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Users");
     //TODO alert button
 
     public void incServeQ(String clinicID, int current_patient_count) {
@@ -42,14 +59,76 @@ public class ClinicAdminQueueController extends AppCompatActivity {
 
     }
 
-    public void clearUserClinicandQueue(String ClinicID, int currentQueue)
+    public void clearUserClinicandQueue(String clinicID, int current_patient_count)
     {
+
+        Query FindMatchClinic = databaseReference.orderByChild("clinicID").equalTo(clinicID);
+        FindMatchClinic.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot userSnapshot: dataSnapshot.getChildren()) {
+                    User user = userSnapshot.getValue(User.class);
+                    userArrayList.add(user);
+                    Log.d("it ran", String.valueOf(userArrayList));
+                }
+
+                for (int i = 0; i < userArrayList.size(); i++) {
+                    if(userArrayList.get(i).getCurrentQueue() == current_patient_count)
+                    {
+                        userArrayList.get(i).setCurrentQueue(0);
+                        userArrayList.get(i).setCurrentClinic("nil");
+                        Map<String, Object> userValues = userArrayList.get(i).toMap();
+                        Map<String, Object> childUpdates = new HashMap<>();
+                        childUpdates.put(userArrayList.get(i).getUserId(), userValues);
+                        databaseReference.updateChildren(childUpdates);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+                Log.w("query", "loadPost:onCancelled", databaseError.toException());
+                // ...
+            }
+        });
 
     }
 
-    public void sendReminderEmail(String ClinicID, int thirduserQ)
+    public void sendReminderEmail(String Clinic_name, int thirduserQ)
     {
         String senderemail = "cz2006sickgowhere@gmail.com";
+
+        Query FindMatchClinic = databaseReference.orderByChild("clinicID").equalTo(Clinic_name);
+        FindMatchClinic.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot userSnapshot: dataSnapshot.getChildren()) {
+                    User user = userSnapshot.getValue(User.class);
+                    userArrayList.add(user);
+                    Log.d("it ran", String.valueOf(userArrayList));
+                }
+
+                for (int i = 0; i < userArrayList.size(); i++) {
+                    if(userArrayList.get(i).getCurrentQueue() == thirduserQ)
+                    {
+                        userArrayList.get(i).setCurrentQueue(0);
+                        userArrayList.get(i).setCurrentClinic("nil");
+                        Map<String, Object> userValues = userArrayList.get(i).toMap();
+                        Map<String, Object> childUpdates = new HashMap<>();
+                        childUpdates.put(userArrayList.get(i).getUserId(), userValues);
+                        databaseReference.updateChildren(childUpdates);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+                Log.w("query", "loadPost:onCancelled", databaseError.toException());
+                // ...
+            }
+        });
 
         //TODO access firebase to fetch user info with clinicname and Qno
         /*
