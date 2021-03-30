@@ -125,7 +125,7 @@ public class Login extends AppCompatActivity {
                                         startActivity(new Intent(getApplicationContext(), mainactivityAdmin.class));
                                     }
 
-                                    else if (isClinicAdmin == true) {
+                                    else if (isClinicAdmin != null && isClinicAdmin == true) {
                                         Toast.makeText(Login.this, "Login Successful", Toast.LENGTH_SHORT).show();
 
 

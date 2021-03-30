@@ -104,8 +104,13 @@ public class ClinicPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_clinic_page);
 
-        String clinicID= getIntent().getStringExtra("Clinic ID");
-        String clinicName= getIntent().getStringExtra("Clinic Name");
+        ClinicID = getIntent().getStringExtra("Clinic ID");
+        clinicName= getIntent().getStringExtra("Clinic Name");
+
+        if(ClinicID==null || clinicName==null){
+            ClinicID = getIntent().getStringExtra("main Clinic ID");
+            clinicName= getIntent().getStringExtra("main Clinic Name");
+        }
 
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -120,7 +125,7 @@ public class ClinicPage extends AppCompatActivity {
         mTextView_addressClinic = (TextView) findViewById(R.id.textview_addressClinic);
 
 
-        clinicRef.document(clinicID).get()
+        clinicRef.document(ClinicID).get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -132,7 +137,7 @@ public class ClinicPage extends AppCompatActivity {
 
                             Log.d("Clinic Info", String.valueOf(ClinicDetailList.getData()));
 
-                            selectedClinic.setClinicID(clinicID);
+                            selectedClinic.setClinicID(ClinicID);
                             streetName = selectedClinic.getStreetname();
                             telephone = selectedClinic.getTelephone();
                             postal = selectedClinic.getPostal();
