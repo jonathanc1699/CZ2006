@@ -20,12 +20,11 @@ public class ClinicAdminQueueController extends AppCompatActivity {
 
     //TODO alert button
 
-    public void incServeQ(String ClinicID, int currentlyservingQ) {
+    public void incServeQ(String clinicID, int current_patient_count) {
 
-        currentlyservingQ++;
 
-        clinicRef.document(ClinicID).
-                update("ClinicCurrentQ", currentlyservingQ)
+        clinicRef.document(clinicID).
+                update("ClinicCurrentQ", current_patient_count)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -39,12 +38,16 @@ public class ClinicAdminQueueController extends AppCompatActivity {
                     }
                 });
 
-        Log.d("currentlyservingQ after", String.valueOf(currentlyservingQ));
+        Log.d("currentlyservingQ after", String.valueOf(current_patient_count));
 
     }
 
+    public void clearUserClinicandQueue(String ClinicID, int currentQueue)
+    {
 
-    public void sendReminderEmail(String ClinicName, int thirduserQ)
+    }
+
+    public void sendReminderEmail(String ClinicID, int thirduserQ)
     {
         String senderemail = "cz2006sickgowhere@gmail.com";
 
@@ -69,6 +72,41 @@ public class ClinicAdminQueueController extends AppCompatActivity {
         sender.start();
 
          */
+
+    }
+
+    public void wipeAll(String clinicID)
+    {
+        //wipe current_patient_count
+        clinicRef.document(clinicID).
+                update("ClinicCurrentQ", 0)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("ClinicCurrentQ", "Update ClinicCurrentQ successfully updated!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("ClinicCurrentQ", "Error updating document", e);
+                    }
+                });
+
+        clinicRef.document(clinicID).
+                update("latestQNo", 0)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("ClinicCurrentQ", "Update ClinicCurrentQ successfully updated!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("ClinicCurrentQ", "Error updating document", e);
+                    }
+                });
 
     }
 

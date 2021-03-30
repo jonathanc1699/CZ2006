@@ -26,9 +26,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.annotations.Nullable;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,9 +53,6 @@ public class Clinic_admin_page extends AppCompatActivity implements FirebaseCall
     private int current_patient_count;
     private int total_patient_count;
     private String Clinic_name;
-    private List<Integer> list=new ArrayList<Integer>();
-
-    private boolean increment2 = false;
 
     TextView textview_currentpatient;
     TextView textView_clinicname;
@@ -64,6 +65,9 @@ public class Clinic_admin_page extends AppCompatActivity implements FirebaseCall
     String fullName;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference clinicRef = db.collection("clinic");
+
+    ClinicAdminQueueController clinicAdminQueueController = new ClinicAdminQueueController();
+
 
     // used to store the clinicID retrieved from firebase synchronously
     @Override
@@ -100,57 +104,44 @@ public class Clinic_admin_page extends AppCompatActivity implements FirebaseCall
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_clinic_admin_page);
 
-
-
-
-        //Todo get clinic name
-
         // loadClinic contains clinicID
         loadClinic(new FirebaseCallback() {
             @Override
             public void onCallback(String ID) {
-                clinicID =ID;
-                clinicRef.document(clinicID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                clinicID = ID;
+                //TODO change to onSnapshot instead of onComplete
+                final DocumentReference AdminRef = clinicRef.document(clinicID);
+                AdminRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
                     @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot adminClinicDoc = task.getResult();
-                            if (adminClinicDoc.exists()) {
-                                Log.d("adminClinicDoc", "DocumentSnapshot data: " + adminClinicDoc.getData());
-                                Clinic adminClinic = adminClinicDoc.toObject(Clinic.class);
-                                Clinic_name = adminClinic.getClinicName();
-                                current_patient_count = adminClinic.getClinicCurrentQ();
-                                total_patient_count = adminClinic.getLatestQNo();
-                                textView_clinicname= (TextView) findViewById(R.id.ClinicName);
-                                textView_clinicname.setText(Clinic_name);
-                                textView_totalpatient = (TextView) findViewById(R.id.textView_numtotalpatient);
-                                textView_totalpatient.setText(String.valueOf(total_patient_count));
-                                textview_currentpatient = (TextView) findViewById(R.id.textView_numcurrentlyserving);
-                                textview_currentpatient.setText(String.valueOf(current_patient_count));
+                    public void onEvent(@Nullable DocumentSnapshot snapshot,
+                                        @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.w("snapshotListener", "Listen failed.", e);
+                            return;
+                        }
 
+                        if (snapshot != null && snapshot.exists()) {
+                            Log.d("snapshotListener", "Current data: " + snapshot.getData());
+                            Clinic adminClinic = snapshot.toObject(Clinic.class);
+                            Clinic_name = adminClinic.getClinicName();
+                            Clinic_name = adminClinic.getClinicName();
+                            current_patient_count = adminClinic.getClinicCurrentQ();
+                            total_patient_count = adminClinic.getLatestQNo();
+                            textView_clinicname = (TextView) findViewById(R.id.ClinicName);
+                            textView_clinicname.setText(Clinic_name);
+                            textView_totalpatient = (TextView) findViewById(R.id.textView_numtotalpatient);
+                            textView_totalpatient.setText(String.valueOf(total_patient_count));
+                            textview_currentpatient = (TextView) findViewById(R.id.textView_numcurrentlyserving);
+                            textview_currentpatient.setText(String.valueOf(current_patient_count));
 
-
-                            } else {
-                                Log.d("adminClinicDoc", "No such document");
-                            }
                         } else {
-                            Log.d("adminClinicDoc", "get failed with ", task.getException());
+                            Log.d("snapshotListener", "Current data:  null");
+                        }
                     }
-                } });
-
+                });
             }
-                        });
-
-
-
-        //current_patient_count == ClinicCurrentQ
-        //total_patient_count =latestQNo
-
-
-
-
-    }
-
+        });
+        }
     public void button_increment(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         //builder.setTitle("My title");
@@ -163,19 +154,14 @@ public class Clinic_admin_page extends AppCompatActivity implements FirebaseCall
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
 
+
+                            //TODO check loggedin user reset user q
+
                             current_patient_count++;
-                            //TODO check loggedin user
-                            updateClinicAdminQ(current_patient_count);
-                            UserQueueController userQueueController = new UserQueueController();
-                            userQueueController.cancelQUser(userID);
+                            clinicAdminQueueController.incServeQ( clinicID,  current_patient_count);
 
-                            int thirduserQ = 0;
-
-
-                            //clinicAdminQueueController.incServeQ(String ClinicName, int currentlyservingQ)
-
-                            ClinicAdminQueueController clinicAdminQueueController = new ClinicAdminQueueController();
                             //TODO send reminder email to the third user
+                            int thirduserQ = 0;
                             /*if((total_patient_count-current_patient_count+1)>=3)
                                 clinicAdminQueueController.sendReminderEmail(Clinic_name,thirduserQ);
 
@@ -227,6 +213,7 @@ public class Clinic_admin_page extends AppCompatActivity implements FirebaseCall
                             total_patient_count=0;
                             textview_currentpatient.setText(String.valueOf(current_patient_count));
                             textView_totalpatient.setText(String.valueOf(total_patient_count));
+                            clinicAdminQueueController.wipeAll(clinicID);
                             //reflect in control
                             dialog.cancel();
                         }
@@ -249,34 +236,6 @@ public class Clinic_admin_page extends AppCompatActivity implements FirebaseCall
         startActivityForResult(myIntent, 0);
         super.onBackPressed();
     }
-
-    public void updateClinicAdminQ(int current_patient_count){
-        ValueEventListener userListener = new ValueEventListener() {
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                user = dataSnapshot.getValue(User.class);
-                userID = user.getUserId();
-                fullName = user.getFullName();
-                user.setCurrentQueue(clinicQ);
-                clinicQ = user.getCurrentQueue();
-
-
-                Map<String, Object> userValues = user.toMap();
-                Map<String, Object> childUpdates = new HashMap<>();
-                childUpdates.put(user.getUserId(), userValues);
-                databaseReference.updateChildren(childUpdates);
-
-                Log.d("currentQNo", fullName + "> "+ clinicQ);
-        }
-
-        @Override
-        public void onCancelled(DatabaseError databaseError) {
-            Log.w("cancelQ error", "Failed to load data properly", databaseError.toException());
-        }
-    };
-    currentUser.addListenerForSingleValueEvent(userListener);
-
-}
-
 
 
 }
