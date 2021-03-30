@@ -62,6 +62,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Button nearbyBtn;
     private ProgressBar progressBar;
     private Button nearestBtn;
+    private  Button listviewBtn;
     private boolean result;
     private static int TIME_OUT = 1000*10;
     ProgressDialog progressDialog;
@@ -82,6 +83,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         //persistentSearchView = (PersistentSearchView) findViewById(R.id.persistentSearchView);
         nearbyBtn = (Button) findViewById(R.id.nearbyBtn);
         nearestBtn = (Button) findViewById(R.id.nearestbutton);
+        listviewBtn = (Button) findViewById(R.id.listviewbutton);
 //        progressBar = findViewById(R.id.progressBar3);
 //        progressBar.setVisibility(View.VISIBLE);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -107,6 +109,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
             }
         });*/
+        listviewBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), ListofClinics.class));
+                // insert on button click, start queueActivity
+                finish();
+            }
+        });
         nearestBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -203,21 +213,33 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
 
-
-
-        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
-            public boolean onMarkerClick(Marker marker) {
+            public void onInfoWindowClick(Marker marker) {
+                marker.hideInfoWindow();
                 if (marker.getTitle() != "You are here"){
-                Intent intent = new Intent(getApplicationContext(),ClinicPage.class);
-                intent.putExtra("Clinic Name", marker.getTitle());
-                intent.putExtra("Clinic ID", marker.getSnippet());
-                Log.d("intent", String.valueOf(intent.getStringExtra("Clinic Name")));
-                Log.d("intent", String.valueOf(intent.getStringExtra("Clinic ID")));
-                startActivity(intent);}
-                return false;
+                    Intent intent = new Intent(getApplicationContext(),ClinicPage.class);
+                    intent.putExtra("Clinic Name", marker.getTitle());
+                    intent.putExtra("Clinic ID", (String) marker.getTag());
+                    Log.d("intent", String.valueOf(intent.getStringExtra("Clinic Name")));
+                    Log.d("intent", String.valueOf(intent.getStringExtra("Clinic ID")));
+                    startActivity(intent);}
             }
         });
+
+//        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+//            @Override
+//            public boolean onMarkerClick(Marker marker) {
+//                if (marker.getTitle() != "You are here"){
+//                Intent intent = new Intent(getApplicationContext(),ClinicPage.class);
+//                intent.putExtra("Clinic Name", marker.getTitle());
+//                intent.putExtra("Clinic ID", marker.getSnippet());
+//                Log.d("intent", String.valueOf(intent.getStringExtra("Clinic Name")));
+//                Log.d("intent", String.valueOf(intent.getStringExtra("Clinic ID")));
+//                startActivity(intent);}
+//                return false;
+//            }
+//        });
 
         //LatLng myLatLng = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
 

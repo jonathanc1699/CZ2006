@@ -205,7 +205,7 @@ public class ListofPharmacies extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent myIntent = new Intent(getApplicationContext(), NearestPharmacy.class);
+        Intent myIntent = new Intent(getApplicationContext(), MapsActivityPharmacy.class);
         startActivityForResult(myIntent, 0);
         super.onBackPressed();
     }

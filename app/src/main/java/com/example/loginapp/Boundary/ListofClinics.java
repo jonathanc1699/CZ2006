@@ -203,7 +203,7 @@ public class ListofClinics extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent myIntent = new Intent(getApplicationContext(), NearestClinic.class);
+        Intent myIntent = new Intent(getApplicationContext(), MapsActivity.class);
         startActivityForResult(myIntent, 0);
         super.onBackPressed();
     }

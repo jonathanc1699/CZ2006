@@ -94,7 +94,6 @@ public class ClinicPage extends AppCompatActivity {
     int serveTime = 10;
     //so that the patients can make their way down when they receive their email
     int buffertime = 15;
-    boolean godown = false;
     String userCurrentClinic;
     int userCurrentQueue;
 
@@ -426,7 +425,7 @@ public class ClinicPage extends AppCompatActivity {
                             }
                             //less than 3 ppl, make way down now
                             else{
-                                makeYourWayDown();
+                                sendConfirmationEmail();
                                 Log.e("Email sent", "Email sent to user");
                             }
                         }});
@@ -452,7 +451,8 @@ public class ClinicPage extends AppCompatActivity {
                         Log.e("Email sent", "Email sent to user");
                     }
                     //less than 3 ppl, make way down now
-                    else{makeYourWayDown();
+                    else{
+                        sendConfirmationEmail();
                         Log.e("Email sent", "Email sent to user");
                     }
 
@@ -480,7 +480,7 @@ public class ClinicPage extends AppCompatActivity {
 
         final ProgressDialog dialog = new ProgressDialog(ClinicPage.this);
         dialog.setTitle("Confirming your Booking");
-        dialog.setMessage("Please wait");
+        dialog.setMessage("Please wait, Redirecting beck to home page");
         dialog.show();
 
         Thread sender = new Thread(new Runnable() {
@@ -488,29 +488,15 @@ public class ClinicPage extends AppCompatActivity {
                 try {
                     //ToDO GET the booking details for the confirmation email.
                     GMailSender sender = new GMailSender("cz2006sickgowhere@gmail.com", "123456sickgowhere");
-                    if (godown=true)
-                    {
-                        //TODO add user queue number
-                        sender.sendMail("Booking Confirmation: "+ selectedClinic.getClinicName() + ", Queue No:",
-                                "Hello,\nThis is your Confirmation email, you queue no is .....\n"+
-                                        "There are currently " + ((latestclinicq + 1) - currentlyservingQ)
-                                        + "person(s) ahead of you in the queue. You may make your way to "+ selectedClinic.getClinicName()
-                                        + "\n\nClinic Address:"  + block + " "+streetName + " #0" +
-                                        floor + "-" + unit + " Block " + block + " Singapore" + postal+
-                                        " \nThank you your using SickGoWhere.\n\nSickGoWhere",
-                                senderemail, recipientemail);
-                    }
-                    else
-                    {
-                        sender.sendMail("Booking Confirmation: "+ selectedClinic.getClinicName() + ", Queue No:",
-                                "Hello,\nThis is your Confirmation email, you queue no is .....\n"+
-                                        "There are currently " + ((latestclinicq + 1) - currentlyservingQ)
+                    sender.sendMail("Booking Confirmation: "+ selectedClinic.getClinicName() + ", Queue No:",
+                                "Hello,\nThis is your Confirmation email, your queue no is "+(latestclinicq-1)+".\n"+
+                                        "There are currently " + ((latestclinicq-1) - currentlyservingQ)
                                         + "person(s) ahead of you in the queue."
-                                        + "\n\nClinic Address:"  + block + " "+streetName + " #0" +
+                                        + "\n\nClinic Address: "  + block + " "+streetName + " #0" +
                                         floor + "-" + unit + " Block " + block + " Singapore" + postal+
-                                        " \nThank you your using SickGoWhere.\n\nSickGoWhere",
+                                        " \n\nThank you for using SickGoWhere.\n\nSickGoWhere",
                                 senderemail, recipientemail);
-                    }
+
                     dialog.dismiss();
 
                 } catch (Exception e) {
@@ -544,21 +530,6 @@ public class ClinicPage extends AppCompatActivity {
 
     }
 
-    private void makeYourWayDown() {
-        godown = true;
-        AlertDialog.Builder goClinicAlert = new AlertDialog.Builder(context);
-        goClinicAlert.setMessage("Booking is confirmed. Check your email for your booking confirmation. \n \nThere are currently " + ((latestclinicq) - currentlyservingQ) +
-                " person(s) ahead of you in the queue. You may make your way to " + selectedClinic.getClinicName());
-        goClinicAlert.setCancelable(true);
-
-        goClinicAlert.setPositiveButton(
-                "Got it!",
-                (dialog, id) -> dialog.cancel());
-        AlertDialog alertPatient = goClinicAlert.create();
-        alertPatient.show();
-
-        sendConfirmationEmail();
-    }
 }
 
 

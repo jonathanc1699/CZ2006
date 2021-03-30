@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/nearbyBtn"
+        android:id="@+id/nearbyBtn1"
         android:layout_width="159dp"
         android:layout_height="65dp"
         android:alpha="0.8"
@@ -52,15 +52,22 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.772" />
 
-    <ProgressBar
-        android:id="@+id/progressBar3"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="invisible"
+    <Button
+        android:id="@+id/listviewbutton1"
+        android:layout_width="162dp"
+        android:layout_height="69dp"
+        android:alpha="0.8"
+        android:background="@color/white"
+        android:fontFamily="@font/aclonica"
+        android:padding="10dp"
+        android:text="List Of Pharmacies"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.891"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.634" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

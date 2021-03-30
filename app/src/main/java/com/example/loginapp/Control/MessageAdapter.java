@@ -14,18 +14,36 @@ import java.util.List;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.CustomViewHolder> {
 
-    class CustomViewHolder extends RecyclerView.ViewHolder{
+    private OnNoteListener onNoteListener;
+
+    class CustomViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView textView;
-        public CustomViewHolder(View itemView) {
+        OnNoteListener onNoteListener;
+
+        public CustomViewHolder(View itemView, OnNoteListener onNoteListener) {
             super(itemView);
             textView = itemView.findViewById(R.id.textMessage);
+            this.onNoteListener = onNoteListener;
+
+            itemView.setOnClickListener(this);
         }
+
+
+        @Override
+        public void onClick(View v) {
+            onNoteListener.onNoteClick(getAdapterPosition());
+        }
+    }
+    public interface OnNoteListener{
+        void onNoteClick(int position);
+
     }
 
     List<ResponseMessage> responseMessageList;
 
-    public MessageAdapter(List<ResponseMessage> responseMessageList) {
+    public MessageAdapter(List<ResponseMessage> responseMessageList, OnNoteListener onNoteListener) {
         this.responseMessageList = responseMessageList;
+        this.onNoteListener = onNoteListener;
     }
 
     @Override
@@ -38,7 +56,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.CustomVi
     @NonNull
     @Override
     public CustomViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new CustomViewHolder(LayoutInflater.from(parent.getContext()).inflate(viewType, parent, false));
+        return new CustomViewHolder(LayoutInflater.from(parent.getContext()).inflate(viewType, parent, false), onNoteListener);
+
     }
 
     @Override
