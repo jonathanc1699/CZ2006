@@ -159,14 +159,13 @@ public class Clinic_admin_page extends AppCompatActivity implements FirebaseCall
                                 @Override
                                 public void onCallback(String ID) {
                                     clinicID = ID;
+
                             //check loggedin user - to reset their Queue and CurrentClinic
                             clinicAdminQueueController.clearUserClinicandQueue(clinicID, current_patient_count);
                             current_patient_count++;
                             clinicAdminQueueController.incServeQ( clinicID,  current_patient_count);
-                            //TODO What about the last guy
 
-                            //TODO send reminder email to the third user
-
+                            //send reminder email to the third user in Queue
                             if((total_patient_count-current_patient_count)>=3)
                             {
                                 int thirduserQ = (current_patient_count+3);
@@ -192,6 +191,8 @@ public class Clinic_admin_page extends AppCompatActivity implements FirebaseCall
         }
         else{
             builder.setMessage("No more patients ahead");
+            //Reset last guy in queue: Q number and Currentclinic
+            clinicAdminQueueController.clearUserClinicandQueue(clinicID, current_patient_count);
             builder.setNegativeButton(
                     "OK",
                     new DialogInterface.OnClickListener() {

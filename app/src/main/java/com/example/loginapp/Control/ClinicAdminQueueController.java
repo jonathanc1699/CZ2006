@@ -35,7 +35,6 @@ public class ClinicAdminQueueController extends AppCompatActivity {
 
     //should be another way to ensure its the same current user thats logged in
     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Users");
-    //TODO alert button
 
     public void incServeQ(String clinicID, int current_patient_count) {
 
@@ -144,28 +143,6 @@ public class ClinicAdminQueueController extends AppCompatActivity {
                 // ...
             }
         });
-
-        //TODO access firebase to fetch user info with clinicname and Qno
-        /*
-        String recepientemail=useremail;// fetch user's email
-        Thread sender = new Thread(new Runnable() {
-            public void run() {
-                try {
-                    GMailSender sender = new GMailSender("cz2006sickgowhere@gmail.com", "123456sickgowhere");
-                    sender.sendMail("Appointment Reminder:"+ ClinicName+ " , Queue number: "+ queueno,
-                            "Dear "+ username+",\n"+"There are currently "+"3 person(s) ahead of you in the queue. " +
-                                    "You may make your way to " + selectedClinic.getClinicName() +
-                                    "\nBest Regards,\nSickGoWhere Team.",
-                            senderemail, recepientemail);
-
-                } catch (Exception e) {
-                    Log.e("mylog", "Error: " + e.getMessage());
-                }
-            }
-        });
-        sender.start();
-
-         */
 
     }
 
