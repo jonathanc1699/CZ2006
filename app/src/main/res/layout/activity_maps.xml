@@ -20,8 +20,8 @@
 
     <Button
         android:id="@+id/nearbyBtn"
-        android:layout_width="164dp"
-        android:layout_height="50dp"
+        android:layout_width="174dp"
+        android:layout_height="52dp"
         android:alpha="0.8"
         android:background="@color/white"
         android:fontFamily="@font/aclonica"
@@ -47,12 +47,12 @@
 
     <Button
         android:id="@+id/nearestbutton"
-        android:layout_width="164dp"
-        android:layout_height="53dp"
-        android:padding="10dp"
+        android:layout_width="172dp"
+        android:layout_height="50dp"
         android:alpha="0.8"
         android:background="@color/white"
         android:fontFamily="@font/aclonica"
+        android:padding="10dp"
         android:text="Nearest Clinic"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -60,5 +60,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.773" />
+
+    <Button
+        android:id="@+id/listviewbutton"
+        android:layout_width="173dp"
+        android:layout_height="51dp"
+        android:alpha="0.8"
+        android:background="@color/white"
+        android:fontFamily="@font/aclonica"
+        android:padding="10dp"
+        android:text="List of Clinics"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.894"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.669" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

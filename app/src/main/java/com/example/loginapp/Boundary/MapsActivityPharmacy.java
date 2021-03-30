@@ -46,6 +46,7 @@ public class MapsActivityPharmacy extends AppCompatActivity implements OnMapRead
     private PersistentSearchView persistentSearchView;
     private Button nearbyBtn;
     private Button nearestBtn;
+    private Button listviewBtn;
     private ProgressBar progressBar;
     private static int TIME_OUT = 1000*5;
     private boolean result;
@@ -65,8 +66,9 @@ public class MapsActivityPharmacy extends AppCompatActivity implements OnMapRead
         mController = new MapAdapterPharmacy();
 
         //persistentSearchView = (PersistentSearchView) findViewById(R.id.persistentSearchView);
-        nearbyBtn = (Button) findViewById(R.id.nearbyBtn);
+        nearbyBtn = (Button) findViewById(R.id.nearbyBtn1);
         nearestBtn = (Button) findViewById(R.id.nearestbutton1);
+        listviewBtn = (Button) findViewById(R.id.listviewbutton1);
 //        progressBar = findViewById(R.id.progressBar3);
 //        progressBar.setVisibility(View.VISIBLE);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -92,6 +94,14 @@ public class MapsActivityPharmacy extends AppCompatActivity implements OnMapRead
                 }
             }
         });*/
+        listviewBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), ListofPharmacies.class));
+                // insert on button click, start queueActivity
+                finish();
+            }
+        });
         nearestBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -122,7 +132,7 @@ public class MapsActivityPharmacy extends AppCompatActivity implements OnMapRead
                     mMap.addMarker(new MarkerOptions().position(myLatLng).title("You are here"));
                     mController.revealMarkers(mMap, myLatLng);
                     Log.d("tag", "markers placed");
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLatLng, 15));
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLatLng, 12));
                 } catch (Exception e) {
                     e.printStackTrace();
                     Toast.makeText(getApplicationContext(), "Please enable GPS location", Toast.LENGTH_SHORT).show();
