@@ -23,11 +23,12 @@
 
         <ImageView
             android:id="@+id/image_Clinic"
-            android:visibility="visible"
             android:layout_width="match_parent"
             android:layout_height="41dp"
             android:layout_margin="16dp"
             android:layout_weight="4"
+            android:background="@drawable/fullerton"
+            android:visibility="visible"
             tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
         <TextView
@@ -67,7 +68,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:layout_weight="3"
+            android:layout_weight="0.2"
             android:orientation="horizontal">
 
             <Button
@@ -80,6 +81,30 @@
 
             <Button
                 android:id="@+id/button_direction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:layout_weight="1"
+                android:text="Directions" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/button_direction1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:layout_weight="1"
+                android:text="Take Queue Number" />
+
+            <Button
+                android:id="@+id/button_direction2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
