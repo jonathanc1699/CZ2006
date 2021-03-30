@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 
 import com.example.loginapp.Boundary.MapsActivity;
 import com.example.loginapp.Entity.Clinic;
+import com.example.loginapp.Entity.DistanceClinicToMe;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -22,6 +23,9 @@ import com.google.gson.Gson;
 import com.google.maps.android.SphericalUtil;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -31,6 +35,7 @@ public class MapAdapter {
     //private final ArrayList<Clinic> CLINICDATA = new ArrayList<>();
     //private ClinicAdapter clinicAdapter = new ClinicAdapter();
     final ArrayList<Clinic> CLINICDATA = new ArrayList<>();
+    private ArrayList<DistanceClinicToMe> DistToMe = new ArrayList<>();
     public MapAdapter(){
         this.gmap=null;
        // this.clinicAdapter.setClinicData();
@@ -163,6 +168,27 @@ public class MapAdapter {
         for(int i=0;i<markers.size();i++){
             if(SphericalUtil.computeDistanceBetween(LL,markers.get(i).getPosition())<5000){
                 markers.get(i).setVisible(true);
+            }
+        }
+    }
+
+    public void findnearestclinic(GoogleMap mMap, LatLng LL){
+        Log.d("tag","Finding nearest clinic..");
+        for(int i=0;i<markers.size();i++){
+            DistToMe.add(new DistanceClinicToMe(markers.get(i).getTitle(),SphericalUtil.computeDistanceBetween(LL,markers.get(i).getPosition())));
+        } Collections.sort(DistToMe, new Comparator<DistanceClinicToMe>() {
+            @Override
+            public int compare(DistanceClinicToMe o1, DistanceClinicToMe o2) {
+                if(o1.Distance == o2.Distance)
+                return 0;
+                return o1.Distance < o2.Distance ? -1:1;
+            }
+        });
+        Log.d("tag","Nearest clinic is "+DistToMe.get(0).getClinicName().toString());
+        for(int i=0;i<markers.size();i++){
+            if(markers.get(i).getTitle().equals(DistToMe.get(0).getClinicName())){
+                markers.get(i).setVisible(true);
+                Log.d("tag","nearest clnic marker set to visible");
             }
         }
     }

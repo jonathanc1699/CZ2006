@@ -14,6 +14,8 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -59,7 +61,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private PersistentSearchView persistentSearchView;
     private Button nearbyBtn;
     private ProgressBar progressBar;
+    private Button nearestBtn;
     private boolean result;
+    private static int TIME_OUT = 1000*10;
     ProgressDialog progressDialog;
     private FusedLocationProviderClient mFusedLocationClient;
     //private final ArrayList<Clinic> CLINICDATA = ClinicAdapter.getFirebasedata();
@@ -77,6 +81,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         //persistentSearchView = (PersistentSearchView) findViewById(R.id.persistentSearchView);
         nearbyBtn = (Button) findViewById(R.id.nearbyBtn);
+        nearestBtn = (Button) findViewById(R.id.nearestbutton);
 //        progressBar = findViewById(R.id.progressBar3);
 //        progressBar.setVisibility(View.VISIBLE);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -102,6 +107,25 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
             }
         });*/
+        nearestBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    mMap.clear();
+                    mMap = mController.getGmapWithGPS(mMap);
+                    Location myLocation = mMap.getMyLocation();
+                    LatLng myLatLng = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
+                    mMap.addMarker(new MarkerOptions().position(myLatLng).title("You are here"));
+                    mController.findnearestclinic(mMap, myLatLng);
+                    Log.d("tag", "marker placed");
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLatLng, 15));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "Please enable GPS location", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
 
         nearbyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,11 +164,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onMapReady(GoogleMap googleMap) {
-//        progressDialog = new ProgressDialog(MapsActivity.this);
-//        progressDialog.setMessage("Map is loading...");
-//        progressDialog.setTitle("Map View");
-//        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-//        progressDialog.show();
+        progressDialog = new ProgressDialog(MapsActivity.this);
+        progressDialog.setMessage("Map is loading...");
+        progressDialog.setTitle("Map View");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.show();
         mMap = googleMap;
         getGPSPermission();
         mMap.getUiSettings().setMapToolbarEnabled(false);
@@ -169,6 +193,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             }
         });}
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable(){
+            @Override
+            public void run()
+            {
+                progressDialog.dismiss();
+            }
+        }, TIME_OUT);
+
+
 
 
 

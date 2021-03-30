@@ -45,4 +45,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/nearestbutton"
+        android:layout_width="164dp"
+        android:layout_height="53dp"
+        android:padding="10dp"
+        android:alpha="0.8"
+        android:background="@color/white"
+        android:fontFamily="@font/aclonica"
+        android:text="Nearest Clinic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.894"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.773" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

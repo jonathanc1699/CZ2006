@@ -5,27 +5,42 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.util.Log;
 
+import com.example.loginapp.Entity.Clinic;
+import com.example.loginapp.Entity.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ClinicAdminQueueController extends AppCompatActivity {
 
     final ClinicAdminQueueController context = this;
+    ArrayList<User> userArrayList =new ArrayList<User>();
 
     //To read clinic database
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference clinicRef = db.collection("clinic");
 
-    //TODO alert button
-    //TODO remove q and current clinic from user
-    public void incServeQ(String ClinicID, int currentlyservingQ) {
+    //should be another way to ensure its the same current user thats logged in
+    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Users");
 
-        currentlyservingQ++;
+    public void incServeQ(String clinicID, int current_patient_count) {
 
-        clinicRef.document(ClinicID).
-                update("ClinicCurrentQ", currentlyservingQ)
+
+        clinicRef.document(clinicID).
+                update("ClinicCurrentQ", current_patient_count)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -39,35 +54,130 @@ public class ClinicAdminQueueController extends AppCompatActivity {
                     }
                 });
 
-        Log.d("currentlyservingQ after", String.valueOf(currentlyservingQ));
+        Log.d("currentlyservingQ after", String.valueOf(current_patient_count));
 
     }
 
-    public void sendReminderEmail(String ClinicName, int thirduserQ)
+    public void clearUserClinicandQueue(String clinicID, int current_patient_count)
+    {
+
+        Query FindMatchClinic = databaseReference.orderByChild("clinicID").equalTo(clinicID);
+        FindMatchClinic.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot userSnapshot: dataSnapshot.getChildren()) {
+                    User user = userSnapshot.getValue(User.class);
+                    userArrayList.add(user);
+                    Log.d("it ran", String.valueOf(userArrayList));
+                }
+
+                for (int i = 0; i < userArrayList.size(); i++) {
+                    if(userArrayList.get(i).getCurrentQueue() == current_patient_count)
+                    {
+                        userArrayList.get(i).setCurrentQueue(0);
+                        userArrayList.get(i).setCurrentClinic("nil");
+                        userArrayList.get(i).setClinicID("nil");
+                        Map<String, Object> userValues = userArrayList.get(i).toMap();
+                        Map<String, Object> childUpdates = new HashMap<>();
+                        childUpdates.put(userArrayList.get(i).getUserId(), userValues);
+                        databaseReference.updateChildren(childUpdates);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+                Log.w("query", "loadPost:onCancelled", databaseError.toException());
+                // ...
+            }
+        });
+
+    }
+
+    //Send email reminder to the 3rd person in queue
+    //So that the user can make their way down
+    public void sendReminderEmail(String Clinic_name, String clinicID, int thirduserQ)
     {
         String senderemail = "cz2006sickgowhere@gmail.com";
 
-        //TODO access firebase to fetch user info with clinicname and Qno
-        /*
-        String recepientemail=useremail;// fetch user's email
-        Thread sender = new Thread(new Runnable() {
-            public void run() {
-                try {
-                    GMailSender sender = new GMailSender("cz2006sickgowhere@gmail.com", "123456sickgowhere");
-                    sender.sendMail("Appointment Reminder:"+ ClinicName+ " , Queue number: "+ queueno,
-                            "Dear "+ username+",\n"+"There are currently "+"3 person(s) ahead of you in the queue. " +
-                                    "You may make your way to " + selectedClinic.getClinicName() +
-                                    "\nBest Regards,\nSickGoWhere Team.",
-                            senderemail, recepientemail);
+        Query FindMatchClinic = databaseReference.orderByChild("clinicID").equalTo(clinicID);
+        FindMatchClinic.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot userSnapshot: dataSnapshot.getChildren()) {
+                    User user = userSnapshot.getValue(User.class);
+                    userArrayList.add(user);
+                }
 
-                } catch (Exception e) {
-                    Log.e("mylog", "Error: " + e.getMessage());
+                for (int i = 0; i < userArrayList.size(); i++) {
+                    if(userArrayList.get(i).getCurrentQueue() == thirduserQ)
+                    {
+                        String email = userArrayList.get(i).getEmail();
+                        String username = userArrayList.get(i).getFullName();
+                        String recepientemail=email;// fetch user's email
+                        Thread sender = new Thread(new Runnable() {
+                            public void run() {
+                                try {
+                                    GMailSender sender = new GMailSender("cz2006sickgowhere@gmail.com", "123456sickgowhere");
+                                    sender.sendMail("Appointment Reminder:"+ Clinic_name+ " , Queue number: "+ thirduserQ,
+                                            "Dear "+ username+",\n"+"There are currently "+"3 person(s) ahead of you in the queue. " +
+                                                    "You may make your way to " + Clinic_name +
+                                                    "\nBest Regards,\nSickGoWhere Team.",
+                                            senderemail, recepientemail);
+
+                                } catch (Exception e) {
+                                    Log.e("mylog", "Error: " + e.getMessage());
+                                }
+                            }
+                        });
+                        sender.start();
+                    }
                 }
             }
-        });
-        sender.start();
 
-         */
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+                Log.w("query", "loadPost:onCancelled", databaseError.toException());
+                // ...
+            }
+        });
+
+    }
+
+    public void wipeAll(String clinicID)
+    {
+        //wipe current_patient_count
+        clinicRef.document(clinicID).
+                update("ClinicCurrentQ", 0)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("ClinicCurrentQ", "Update ClinicCurrentQ successfully updated!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("ClinicCurrentQ", "Error updating document", e);
+                    }
+                });
+
+        clinicRef.document(clinicID).
+                update("latestQNo", 0)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("ClinicCurrentQ", "Update ClinicCurrentQ successfully updated!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("ClinicCurrentQ", "Error updating document", e);
+                    }
+                });
 
     }
 

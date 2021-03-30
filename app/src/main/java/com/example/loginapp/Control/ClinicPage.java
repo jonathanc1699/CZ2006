@@ -21,8 +21,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.loginapp.Boundary.Clinic_admin_page;
 import com.example.loginapp.Boundary.mainactivityAdmin;
 import com.example.loginapp.Entity.Clinic;
+import com.example.loginapp.Entity.User;
 import com.example.loginapp.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -35,6 +37,12 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -46,6 +54,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -71,7 +80,7 @@ public class ClinicPage extends AppCompatActivity {
     String streetName;
     String clinicName;
     long postal;
-    long block;
+    Object block;
     Object floor;
     String unitNumber;
     long unit;
@@ -86,6 +95,9 @@ public class ClinicPage extends AppCompatActivity {
     //so that the patients can make their way down when they receive their email
     int buffertime = 15;
     boolean godown = false;
+    String userCurrentClinic;
+    int userCurrentQueue;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,52 +127,54 @@ public class ClinicPage extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             DocumentSnapshot ClinicDetailList = task.getResult();
 
-                                Map<String, Object> map = ClinicDetailList.getData();
-                                selectedClinic = ClinicDetailList.toObject(Clinic.class);
+                            Map<String, Object> map = ClinicDetailList.getData();
+                            selectedClinic = ClinicDetailList.toObject(Clinic.class);
 
-                                Log.d("Clinic Info", String.valueOf(ClinicDetailList.getData()));
+                            Log.d("Clinic Info", String.valueOf(ClinicDetailList.getData()));
 
-                                selectedClinic.setClinicID(clinicID);
-                                streetName = selectedClinic.getStreetname();
-                                telephone = selectedClinic.getTelephone();
-                                postal = selectedClinic.getPostal();
-                                block = selectedClinic.getBlock();
-                                floor = selectedClinic.getFloor();
+                            selectedClinic.setClinicID(clinicID);
+                            streetName = selectedClinic.getStreetname();
+                            telephone = selectedClinic.getTelephone();
+                            postal = selectedClinic.getPostal();
+                            block = selectedClinic.getBlock();
+                            floor = selectedClinic.getFloor();
 
-                                //Get clinic current and last Q number
-                                currentlyservingQ = selectedClinic.getClinicCurrentQ();
-                                latestclinicq = selectedClinic.getLatestQNo();
+                            //Get clinic current and last Q number
+                            currentlyservingQ = selectedClinic.getClinicCurrentQ();
+                            latestclinicq = selectedClinic.getLatestQNo();
 
-                                if (ClinicDetailList.contains("Unit number")&&ClinicDetailList.contains("Floor")) {
-                                    if (ClinicDetailList.get("Unit number") instanceof String && ClinicDetailList.get("Floor") instanceof String) {
-                                        unitNumber = (String) ClinicDetailList.get("Unit number");
-                                        floor = String.valueOf(ClinicDetailList.get("Floor"));
-                                        address = "Clinic Address: " + block + " " +
-                                                streetName + " #0" + floor + "-" + unitNumber + " Block " +
-                                                block + " Singapore" + postal;
-                                        mTextView_addressClinic.setText(address);
-                                    } else {
-                                        unit = (long) ClinicDetailList.get("Unit number");
-                                        floor = (long) ClinicDetailList.get("Floor");
-
-                                        address="Clinic Address: " + block + " " +
-                                                streetName + " #0" + floor + "-" + unit + " Block " +
-                                                block + " Singapore" + postal;
-                                        mTextView_addressClinic.setText(address);
-                                    }
+                            if (ClinicDetailList.contains("Unit number")&&ClinicDetailList.contains("Floor")&&ClinicDetailList.contains("Block")) {
+                                if (ClinicDetailList.get("Unit number") instanceof String && ClinicDetailList.get("Floor") instanceof String && ClinicDetailList.get("Block") instanceof String) {
+                                    unitNumber = (String) ClinicDetailList.get("Unit number");
+                                    floor = String.valueOf(ClinicDetailList.get("Floor"));
+                                    block = String.valueOf(ClinicDetailList.get("Block"));
+                                    address = "Clinic Address: " + block + " " +
+                                            streetName + " #0" + floor + "-" + unitNumber + " Block " +
+                                            block + " Singapore" + postal;
+                                    mTextView_addressClinic.setText(address);
                                 } else {
+                                    unit = (long) ClinicDetailList.get("Unit number");
+                                    floor = (long) ClinicDetailList.get("Floor");
+                                    block = (long) ClinicDetailList.get("Block");
+
                                     address="Clinic Address: " + block + " " +
-                                            streetName + ", Level: " + floor + " Block " +
-                                            block + " s" + postal;
+                                            streetName + " #0" + floor + "-" + unit + " Block " +
+                                            block + " Singapore" + postal;
                                     mTextView_addressClinic.setText(address);
                                 }
-
-
-                                mTextView_nameClinic.setText("Name of Clinic:   " + clinicName);
-                                mTextView_openingHoursClinic.setText("Opening Hours:   " + "8am - 8pm");
-                                mTextView_phoneClinic.setText("Telephone:   " + telephone);
+                            } else {
+                                address="Clinic Address: " + block + " " +
+                                        streetName + ", Level: " + floor + " Block " +
+                                        block + " s" + postal;
+                                mTextView_addressClinic.setText(address);
                             }
-                         else {
+
+
+                            mTextView_nameClinic.setText("Name of Clinic:   " + clinicName);
+                            mTextView_openingHoursClinic.setText("Opening Hours:   " + "8am - 8pm");
+                            mTextView_phoneClinic.setText("Telephone:   " + telephone);
+                        }
+                        else {
                             Log.d("fetch clinic error", "Error getting documents: ", task.getException());
                         }
                     }
@@ -185,40 +199,6 @@ public class ClinicPage extends AppCompatActivity {
                 startActivity(mapIntent);
                 Log.d("directions","opening gmaps for direction to "+ selectedClinic.getStreetname());
 
-
-
-                //TODO Shift the following code to ClinicAdmin class when the UI is completed
-                //Increment q function
-                if(latestclinicq>currentlyservingQ)
-                {
-                    ClinicAdminQueueController clinicAdminQueueController = new ClinicAdminQueueController();
-                    clinicAdminQueueController.incServeQ(selectedClinic.getClinicID(),currentlyservingQ);
-
-                    currentlyservingQ++;
-                }
-                else
-                {
-                    final ProgressDialog incqueue = new ProgressDialog(ClinicPage.this);
-                    incqueue.setTitle("Unable to increase current Queue");
-                    incqueue.setMessage("Maximum Queue number reached");
-                    incqueue.show();
-                    //set timer for dialog window to close
-                    Runnable progressRunnable = new Runnable() {
-
-                        @Override
-                        public void run() {
-                            incqueue.cancel();
-                        }
-                    };
-
-                    Handler pdCanceller = new Handler();
-                    pdCanceller.postDelayed(progressRunnable, 4000);
-
-                    System.out.println("Cannot increase Queue number");
-                }
-
-
-                Log.d("ClinicCurrentQ", String.valueOf(currentlyservingQ));
             }
         });
     }
@@ -256,8 +236,8 @@ public class ClinicPage extends AppCompatActivity {
         java.util.Date date = new java.util.Date();
         Timestamp local = new Timestamp(date.getTime());
         //String strTime = sdf.format(date);
+        String strTime = "10:00:00";
 
-        String strTime = "14:00:00";
         System.out.println("Local in String format " + strTime);
 
         //one hour before so that last hour of operation , patients would not be anble to make any appointment
@@ -300,18 +280,9 @@ public class ClinicPage extends AppCompatActivity {
                 int totalqueueleft = (((onehrbefore.getHour() - hours) * 60) + (60 - mins)) / serveTime;
 
                 if ((((latestclinicq + 1) - currentlyservingQ) < totalqueueleft) && (startTime.isBefore(LocalTime.parse(strTime)) && (onehrbefore.isAfter(LocalTime.parse(strTime))) && closingTime.isAfter(LocalTime.parse(strTime)))) {
-                    //more than 3 ppl
-                    if (waitingTime > 40) {
-                        sendConfirmationEmail();
-                        Log.e("Email sent", "Email sent to user");
-                    }
-                    //less than 3 ppl, make way down now
-                    else{
-                        makeYourWayDown();
-
-                        Log.e("Email sent", "Email sent to user");
-                    }
-
+                    latestclinicq++;
+                    checkCurrentUserInfo(waitingTime);
+                    System.out.println("must be email issue");
                 }
                 //one hour before closing dont allow booking
                 else if (startTime.isBefore(LocalTime.parse(strTime)) && (onehrbefore.isBefore(LocalTime.parse(strTime))) && closingTime.isAfter(LocalTime.parse(strTime))) {
@@ -412,6 +383,89 @@ public class ClinicPage extends AppCompatActivity {
 
     }
 
+    private void checkCurrentUserInfo(int waitingTime)
+    {
+        UserQueueController userQueueController = new UserQueueController();
+
+        //fetch current user's information
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Users");
+        final DatabaseReference currentUser = databaseReference.child(firebaseUser.getUid());
+        final User[] user = new User[1];
+
+        ValueEventListener userListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                user[0] = dataSnapshot.getValue(User.class);
+                String userID = user[0].getUserId();
+                userCurrentClinic =user[0].getCurrentClinic();
+                userCurrentQueue =user[0].getCurrentQueue();
+                UserQueueController userQueueController = new UserQueueController();
+
+                if(userCurrentClinic !="nil" && userCurrentQueue!=0) {
+                    AlertDialog.Builder havePendingAppt = new AlertDialog.Builder(context);
+                    havePendingAppt.setMessage("You have a pending appointment with " + userCurrentClinic +
+                            "\nQueue No: " + userCurrentQueue +"\n\nDo you want to cancel your appointment with "
+                            +userCurrentClinic +" and book an appointment with " +selectedClinic.getClinicName()+"?");
+                    havePendingAppt.setCancelable(true);
+
+                    havePendingAppt.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            Log.d("userID", userID);
+                            userQueueController.cancelQUser(userID);
+                            userQueueController.assignQToUser(latestclinicq,selectedClinic.getClinicName(),selectedClinic.getClinicID());
+                            if (waitingTime > 40) {
+                                sendConfirmationEmail();
+                                Log.e("Email sent", "Email sent to user");
+                            }
+                            //less than 3 ppl, make way down now
+                            else{
+                                makeYourWayDown();
+                                Log.e("Email sent", "Email sent to user");
+                            }
+                        }});
+
+                    havePendingAppt.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            if (dialog != null) {
+                                latestclinicq--;
+                                dialog.dismiss();
+                            }
+                        }
+                    });
+                    AlertDialog cancelandbook = havePendingAppt.create();
+                    cancelandbook.show();
+                }
+                else
+                {
+                    userQueueController.assignQToUser(latestclinicq,selectedClinic.getClinicName(),selectedClinic.getClinicID());
+
+                    //more than 3 ppl
+                    if (waitingTime > 40) {
+                        sendConfirmationEmail();
+                        Log.e("Email sent", "Email sent to user");
+                    }
+                    //less than 3 ppl, make way down now
+                    else{makeYourWayDown();
+                        Log.e("Email sent", "Email sent to user");
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w("error fetch", "Failed to load data properly", databaseError.toException());
+            }
+
+        };
+        currentUser.addListenerForSingleValueEvent(userListener);
+
+        Log.d("currentlyservingQ after", String.valueOf(currentlyservingQ));
+        Log.d("latestclinicq after", String.valueOf(latestclinicq));
+
+    }
+
     //Send Confirmation email to user
     private void sendConfirmationEmail() {
         String senderemail = "cz2006sickgowhere@gmail.com";
@@ -422,6 +476,7 @@ public class ClinicPage extends AppCompatActivity {
         dialog.setTitle("Confirming your Booking");
         dialog.setMessage("Please wait");
         dialog.show();
+
         Thread sender = new Thread(new Runnable() {
             public void run() {
                 try {
@@ -433,7 +488,7 @@ public class ClinicPage extends AppCompatActivity {
                         sender.sendMail("Booking Confirmation: "+ selectedClinic.getClinicName() + ", Queue No:",
                                 "Hello,\nThis is your Confirmation email, you queue no is .....\n"+
                                         "There are currently " + ((latestclinicq + 1) - currentlyservingQ)
-                                + "person(s) ahead of you in the queue. You may make your way to "+ selectedClinic.getClinicName()
+                                        + "person(s) ahead of you in the queue. You may make your way to "+ selectedClinic.getClinicName()
                                         + "\n\nClinic Address:"  + block + " "+streetName + " #0" +
                                         floor + "-" + unit + " Block " + block + " Singapore" + postal+
                                         " \nThank you your using SickGoWhere.\n\nSickGoWhere",
@@ -441,8 +496,13 @@ public class ClinicPage extends AppCompatActivity {
                     }
                     else
                     {
-                        sender.sendMail("Booking Confirmation",
-                                "This is your Confirmation email, you queue no is 7......",
+                        sender.sendMail("Booking Confirmation: "+ selectedClinic.getClinicName() + ", Queue No:",
+                                "Hello,\nThis is your Confirmation email, you queue no is .....\n"+
+                                        "There are currently " + ((latestclinicq + 1) - currentlyservingQ)
+                                        + "person(s) ahead of you in the queue."
+                                        + "\n\nClinic Address:"  + block + " "+streetName + " #0" +
+                                        floor + "-" + unit + " Block " + block + " Singapore" + postal+
+                                        " \nThank you your using SickGoWhere.\n\nSickGoWhere",
                                 senderemail, recipientemail);
                     }
                     dialog.dismiss();
@@ -453,19 +513,19 @@ public class ClinicPage extends AppCompatActivity {
             }
         });
         sender.start();
+        Log.d("email sent","email sent");
+
 
         //UPDATE latestQNo when new booking is made
-        latestclinicq++;
         clinicRef.document(selectedClinic.getClinicID()).
                 update("latestQNo", latestclinicq)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d("ClinicCurrentQ", "Update ClinicCurrentQ successfully updated!");
                         Log.d("clinicCurrentQ", selectedClinic.getClinicID());
                         Log.d("clinicCurrentQ", selectedClinic.getClinicName());
-
                     }
+
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -473,42 +533,16 @@ public class ClinicPage extends AppCompatActivity {
                         Log.w("ClinicCurrentQ", "Error updating document", e);
                     }
                 });
-        UserQueueController userQueueController = new UserQueueController();
-        userQueueController.assignQToUser(latestclinicq,selectedClinic.getClinicName(),selectedClinic.getClinicID());
+        latestclinicq++;
+        System.out.println("updatedclinic info");
 
-
-        //TODO change to ALL clinic .
-        //TODO i dont think the current q update belongs here***
-        currentlyservingQ++;
-
-
-        clinicRef.document(selectedClinic.getClinicID()).
-                update("ClinicCurrentQ", currentlyservingQ)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("ClinicCurrentQ", "Update ClinicCurrentQ successfully updated!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w("ClinicCurrentQ", "Error updating document", e);
-                    }
-                });
-
-
-        Log.d("currentlyservingQ after", String.valueOf(currentlyservingQ));
-        Log.d("latestclinicq after", String.valueOf(latestclinicq));
-        
     }
 
     private void makeYourWayDown() {
         godown = true;
         AlertDialog.Builder goClinicAlert = new AlertDialog.Builder(context);
-        goClinicAlert.setMessage("Booking is confirmed. Check your email for your booking confirmation. \n \nThere are currently " + ((latestclinicq + 1) - currentlyservingQ) +
+        goClinicAlert.setMessage("Booking is confirmed. Check your email for your booking confirmation. \n \nThere are currently " + ((latestclinicq) - currentlyservingQ) +
                 " person(s) ahead of you in the queue. You may make your way to " + selectedClinic.getClinicName());
-        Log.d("currentCLinciEmail", selectedClinic.getClinicName());
         goClinicAlert.setCancelable(true);
 
         goClinicAlert.setPositiveButton(
@@ -516,10 +550,9 @@ public class ClinicPage extends AppCompatActivity {
                 (dialog, id) -> dialog.cancel());
         AlertDialog alertPatient = goClinicAlert.create();
         alertPatient.show();
+
         sendConfirmationEmail();
     }
-
-
 }
 
 

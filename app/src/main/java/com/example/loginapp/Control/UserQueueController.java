@@ -11,8 +11,10 @@ import com.google.firebase.auth.FirebaseAuth;
         import com.google.firebase.database.DatabaseReference;
         import com.google.firebase.database.FirebaseDatabase;
         import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
-        import java.util.HashMap;
+import java.util.HashMap;
         import java.util.Map;
 
 public class UserQueueController {
@@ -24,11 +26,18 @@ public class UserQueueController {
     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Users");
     // opens up the current user's database reference
     final DatabaseReference currentUser = databaseReference.child(firebaseUser.getUid());
+
+
+
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference clinicRef = db.collection("clinic");
+
     User user;
     String userID;
     String currentClinic;
     int currentQNo;
     String fullName;
+    String bookedClinic;
 
 
     // update current user clinic and queue to firebase
@@ -40,8 +49,11 @@ public class UserQueueController {
                 userID = user.getUserId();
                 fullName = user.getFullName();
 
+
                 user.setCurrentClinic(clinicName);
-                user.setCurrentQueue(latestclinicq+1);
+                user.setCurrentQueue(latestclinicq);
+                user.setClinicID(clinicID);
+                bookedClinic = user.getClinicID();
                 currentClinic=user.getCurrentClinic();
                 currentQNo = user.getCurrentQueue();
                 Map<String, Object> userValues = user.toMap();
@@ -50,7 +62,7 @@ public class UserQueueController {
                 databaseReference.updateChildren(childUpdates);
                 Log.d("currentClinic", fullName + "> "+currentClinic);
                 Log.d("currentQNo", fullName + "> "+ currentQNo);
-
+                Log.d("currentQNo", fullName + "> "+ bookedClinic);
 
             }
 
@@ -64,21 +76,21 @@ public class UserQueueController {
     }
 
     //TODO add this to code
-    //userQueueController.cancelQUser(ClinicID)
-    // latestclinicq--;
     // update current user clinic and queue to firebase when user cancel booking
-    public void cancelQUser(String clinicName) {
+    public void cancelQUser(String userID) {
         ValueEventListener userListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 user = dataSnapshot.getValue(User.class);
-                userID = user.getUserId();
+                UserQueueController.this.userID = user.getUserId();
                 fullName = user.getFullName();
                 user.setCurrentClinic("nil");
                 user.setCurrentQueue(0);
+                user.setClinicID("nil");
 
                 currentClinic=user.getCurrentClinic();
                 currentQNo = user.getCurrentQueue();
+                bookedClinic = user.getClinicID();
 
                 Map<String, Object> userValues = user.toMap();
                 Map<String, Object> childUpdates = new HashMap<>();
@@ -87,6 +99,7 @@ public class UserQueueController {
 
                 Log.d("currentClinic", fullName + "> "+currentClinic);
                 Log.d("currentQNo", fullName + "> "+ currentQNo);
+                Log.d("currentQNo", fullName + "> "+ bookedClinic);
             }
 
             @Override
@@ -97,6 +110,7 @@ public class UserQueueController {
         };
         currentUser.addListenerForSingleValueEvent(userListener);
     }
+
 }
 
 
