@@ -113,9 +113,9 @@ public class ClinicAdminQueueController extends AppCompatActivity {
                 for (int i = 0; i < userArrayList.size(); i++) {
                     if(userArrayList.get(i).getCurrentQueue() == thirduserQ)
                     {
-                        String email = userArrayList.get(i).getEmail();
+                        String recepientemail = userArrayList.get(i).getEmail();
                         String username = userArrayList.get(i).getFullName();
-                        String recepientemail=email;// fetch user's email
+
                         Thread sender = new Thread(new Runnable() {
                             public void run() {
                                 try {
@@ -125,7 +125,6 @@ public class ClinicAdminQueueController extends AppCompatActivity {
                                                     "You may make your way to " + Clinic_name +
                                                     "\nBest Regards,\nSickGoWhere Team.",
                                             senderemail, recepientemail);
-
                                 } catch (Exception e) {
                                     Log.e("mylog", "Error: " + e.getMessage());
                                 }
@@ -146,7 +145,7 @@ public class ClinicAdminQueueController extends AppCompatActivity {
 
     }
 
-    public void wipeAll(String clinicID)
+    public void wipeAll(String clinicID, String Clinic_name)
     {
         //wipe current_patient_count
         clinicRef.document(clinicID).
@@ -178,6 +177,37 @@ public class ClinicAdminQueueController extends AppCompatActivity {
                         Log.w("ClinicCurrentQ", "Error updating document", e);
                     }
                 });
+
+        Query FindMatchClinic = databaseReference.orderByChild("clinicID").equalTo(clinicID);
+        FindMatchClinic.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot userSnapshot: dataSnapshot.getChildren()) {
+                    User user = userSnapshot.getValue(User.class);
+                    userArrayList.add(user);
+                }
+
+                for (int i = 0; i < userArrayList.size(); i++) {
+                    if(userArrayList.get(i).getCurrentQueue() != 0 && userArrayList.get(i).getFullName() != Clinic_name)
+                    {
+                        userArrayList.get(i).setCurrentQueue(0);
+                        userArrayList.get(i).setCurrentClinic("nil");
+                        userArrayList.get(i).setClinicID("nil");
+                        Map<String, Object> userValues = userArrayList.get(i).toMap();
+                        Map<String, Object> childUpdates = new HashMap<>();
+                        childUpdates.put(userArrayList.get(i).getUserId(), userValues);
+                        databaseReference.updateChildren(childUpdates);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+                Log.w("query", "loadPost:onCancelled", databaseError.toException());
+                // ...
+            }
+        });
 
     }
 

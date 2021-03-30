@@ -1,10 +1,12 @@
 package com.example.loginapp.Boundary;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -34,10 +36,15 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 public class Clinic_admin_page extends AppCompatActivity implements FirebaseCallback{
 
@@ -146,7 +153,7 @@ public class Clinic_admin_page extends AppCompatActivity implements FirebaseCall
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         //builder.setTitle("My title");
         if(total_patient_count>current_patient_count) {
-            builder.setMessage("Confirm next patient? \nAction is irreversible!!!!");
+            builder.setMessage("Confirm next patient? \n***ACTION IS IRREVERSIBLE***");
 
             // add a button
             builder.setPositiveButton(
@@ -166,17 +173,13 @@ public class Clinic_admin_page extends AppCompatActivity implements FirebaseCall
                             clinicAdminQueueController.incServeQ( clinicID,  current_patient_count);
 
                             //send reminder email to the third user in Queue
-                            if((total_patient_count-current_patient_count)>=3)
+                            if((total_patient_count-current_patient_count+1)>=3)
                             {
                                 int thirduserQ = (current_patient_count+3);
                                 clinicAdminQueueController.sendReminderEmail(Clinic_name,clinicID,thirduserQ);
                                 System.out.println("third user emails sent");
 
                             }
-
-                            //textview_currentpatient.setText(String.valueOf(current_patient_count));
-
-
                         }
                     });}
                     }
@@ -209,12 +212,52 @@ public class Clinic_admin_page extends AppCompatActivity implements FirebaseCall
 
 
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void button_wipe(View view) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        //builder.setTitle("My title");
+        final Clinic[] clinic = new Clinic[1];
 
-            builder.setMessage("Confirm Wipe Current and Total Queue?");
+        String start;
+        String close;
+        clinicRef.document(clinicID).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                           @Override
+                                           public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                               if (task.isSuccessful()) {
+                                                   DocumentSnapshot ClinicDetailList = task.getResult();
+
+                                                   Map<String, Object> map = ClinicDetailList.getData();
+                                                   clinic[0] = ClinicDetailList.toObject(Clinic.class);
+                                               }
+                                               else {
+                                                   Log.d("fetch clinic error", "Error getting documents: ", task.getException());
+                                               }
+                                           }
+                });
+
+        start = clinic[0].getStartTime();
+        close = clinic[0].getClosingTime();
+
+        LocalTime startTime = LocalTime.parse(start);
+        LocalTime closingTime = LocalTime.parse(close);
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH);
+        TimeZone tz = TimeZone.getTimeZone("Asia/Singapore");
+        sdf.setTimeZone(tz);
+
+        java.util.Date date = new java.util.Date();
+        Timestamp local = new Timestamp(date.getTime());
+        String strTime = sdf.format(date);
+
+        // set time constraint only after clinic operating hours
+        if ((LocalTime.parse(strTime).isAfter(LocalTime.parse(close))) ||
+                (LocalTime.parse(strTime).isBefore(LocalTime.parse(start))))
+        {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Confirm Wipe Current and Total Queue?");
+            builder.setMessage("\n" +
+                    "All user's Q number will be removed from the database! \n\n" +
+                    "***ACTION IS IRREVERSIBLE***");
+
 
             // add a button
             builder.setPositiveButton(
@@ -225,9 +268,10 @@ public class Clinic_admin_page extends AppCompatActivity implements FirebaseCall
                             total_patient_count=0;
                             textview_currentpatient.setText(String.valueOf(current_patient_count));
                             textView_totalpatient.setText(String.valueOf(total_patient_count));
-                            clinicAdminQueueController.wipeAll(clinicID);
-                            //reflect in control
                             dialog.cancel();
+
+                            clinicAdminQueueController.wipeAll(clinicID, Clinic_name);
+
                         }
                     });
             builder.setNegativeButton(
@@ -237,9 +281,28 @@ public class Clinic_admin_page extends AppCompatActivity implements FirebaseCall
                             dialog.cancel();
                         }
                     });
-        // create and show the alert dialog
-        AlertDialog dialog = builder.create();
-        dialog.show();
+            // create and show the alert dialog
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+        else
+        {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+            builder.setMessage("Wipe can only be used after operating hours");
+
+            builder.setNegativeButton(
+                    "Got it!",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+            // create and show the alert dialog
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+
     }
 
     @Override
