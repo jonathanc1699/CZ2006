@@ -77,6 +77,7 @@ public class ClinicAdminQueueController extends AppCompatActivity {
                     {
                         userArrayList.get(i).setCurrentQueue(0);
                         userArrayList.get(i).setCurrentClinic("nil");
+                        userArrayList.get(i).setClinicID("nil");
                         Map<String, Object> userValues = userArrayList.get(i).toMap();
                         Map<String, Object> childUpdates = new HashMap<>();
                         childUpdates.put(userArrayList.get(i).getUserId(), userValues);
@@ -95,29 +96,43 @@ public class ClinicAdminQueueController extends AppCompatActivity {
 
     }
 
-    public void sendReminderEmail(String Clinic_name, int thirduserQ)
+    //Send email reminder to the 3rd person in queue
+    //So that the user can make their way down
+    public void sendReminderEmail(String Clinic_name, String clinicID, int thirduserQ)
     {
         String senderemail = "cz2006sickgowhere@gmail.com";
 
-        Query FindMatchClinic = databaseReference.orderByChild("clinicID").equalTo(Clinic_name);
+        Query FindMatchClinic = databaseReference.orderByChild("clinicID").equalTo(clinicID);
         FindMatchClinic.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot userSnapshot: dataSnapshot.getChildren()) {
                     User user = userSnapshot.getValue(User.class);
                     userArrayList.add(user);
-                    Log.d("it ran", String.valueOf(userArrayList));
                 }
 
                 for (int i = 0; i < userArrayList.size(); i++) {
                     if(userArrayList.get(i).getCurrentQueue() == thirduserQ)
                     {
-                        userArrayList.get(i).setCurrentQueue(0);
-                        userArrayList.get(i).setCurrentClinic("nil");
-                        Map<String, Object> userValues = userArrayList.get(i).toMap();
-                        Map<String, Object> childUpdates = new HashMap<>();
-                        childUpdates.put(userArrayList.get(i).getUserId(), userValues);
-                        databaseReference.updateChildren(childUpdates);
+                        String email = userArrayList.get(i).getEmail();
+                        String username = userArrayList.get(i).getFullName();
+                        String recepientemail=email;// fetch user's email
+                        Thread sender = new Thread(new Runnable() {
+                            public void run() {
+                                try {
+                                    GMailSender sender = new GMailSender("cz2006sickgowhere@gmail.com", "123456sickgowhere");
+                                    sender.sendMail("Appointment Reminder:"+ Clinic_name+ " , Queue number: "+ thirduserQ,
+                                            "Dear "+ username+",\n"+"There are currently "+"3 person(s) ahead of you in the queue. " +
+                                                    "You may make your way to " + Clinic_name +
+                                                    "\nBest Regards,\nSickGoWhere Team.",
+                                            senderemail, recepientemail);
+
+                                } catch (Exception e) {
+                                    Log.e("mylog", "Error: " + e.getMessage());
+                                }
+                            }
+                        });
+                        sender.start();
                     }
                 }
             }
