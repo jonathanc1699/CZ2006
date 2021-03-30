@@ -81,13 +81,13 @@ public class MapAdapterPharmacy {
                                 LatLng Clinic = new LatLng(fb.getLatitude(), fb.getLongitude());
                                 Log.d("tag", "Current clinic's location is " + Clinic);
                                 markerOptions.position(Clinic);
-                                markerOptions.snippet(fb.getPharmacy_ID());
+                                //markerOptions.snippet(fb.getPharmacy_ID());
                                 markerOptions.title(fb.getPharmacy_name());
                                 markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN));
                                 Marker m = gmap.addMarker(markerOptions);
-                                int position = PHARMACYDATA.indexOf(fb);
-                                Object DATA = new Gson().toJson(PHARMACYDATA.get(position));
-                                m.setTag(DATA + "|" + position);
+//                                int position = PHARMACYDATA.indexOf(fb);
+//                                Object DATA = new Gson().toJson(PHARMACYDATA.get(position));
+                            m.setTag(fb.getPharmacy_ID());
                                 gmap.moveCamera(CameraUpdateFactory.newLatLng(Clinic));
                             gmap.moveCamera(CameraUpdateFactory.newLatLngZoom(SGLatLng, zoom));
                                 markers.add(m);
@@ -143,15 +143,17 @@ public class MapAdapterPharmacy {
             MarkerOptions markerOptions = new MarkerOptions();
 
             for (Pharmacy fb : PHARMACYDATA) {
-                LatLng locationClinic = new LatLng(fb.getLatitude(),fb.getLongitude());
-                markerOptions.position(locationClinic);
-                markerOptions.snippet(fb.getPharmacy_ID());
+                LatLng Clinic = new LatLng(fb.getLatitude(), fb.getLongitude());
+                Log.d("tag", "Current clinic's location is " + Clinic);
+                markerOptions.position(Clinic);
+                //markerOptions.snippet(fb.getPharmacy_ID());
                 markerOptions.title(fb.getPharmacy_name());
                 markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN));
-                Marker m = gmap.addMarker(markerOptions.visible(false));
-                int position = PHARMACYDATA.indexOf(fb);
-                Object DATA = new Gson().toJson(PHARMACYDATA.get(position));
-                m.setTag(DATA +"|"+ position);
+                Marker m = gmap.addMarker(markerOptions);
+                m.setVisible(false);
+//                                int position = PHARMACYDATA.indexOf(fb);
+//                                Object DATA = new Gson().toJson(PHARMACYDATA.get(position));
+                m.setTag(fb.getPharmacy_ID());
                 markers.add(m);
             }
 
