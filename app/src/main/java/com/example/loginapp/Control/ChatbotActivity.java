@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.loginapp.Boundary.MainActivity;
 import com.example.loginapp.Boundary.NearestClinic;
 import com.example.loginapp.Boundary.NearestPharmacy;
 import com.example.loginapp.Control.MessageAdapter;
@@ -25,6 +26,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -74,6 +76,7 @@ public class ChatbotActivity extends AppCompatActivity implements MessageAdapter
                     sendMessage(userInput.getText().toString(), true);
                     String userinput = userInput.getText().toString();
 
+
                     if((!userInput.getText().toString().equals("stop")) && (allsymptoms.contains(userinput))&& (!tempList.contains(userinput)))  {
                         tempList.add(userinput);
                         String symptomString = tempList.get(0);
@@ -95,9 +98,13 @@ public class ChatbotActivity extends AppCompatActivity implements MessageAdapter
                             }
                             else {
                                 sendMessage("You have entered stop. Processing symptoms", false);
+                                userInput.setFocusable(false);
                                 ArrayList<String> possiblediseases = new ArrayList<String>();
                                 possiblediseases = (ArrayList<String>) alldisease.clone();
                                 genRecommend(possiblediseases);
+                                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                                sendMessage("Chat has been disabled. To talk to chatbot again, click here", false);
                             }
                         }
                         else if (tempList.contains(userinput)){
@@ -258,13 +265,23 @@ public class ChatbotActivity extends AppCompatActivity implements MessageAdapter
     }
     @Override
     public void onNoteClick(int position) {
-        if (responseMessageList.size() - position - 1 == 0) {
+        if (responseMessageList.size() - position - 2 == 0) {
             if (clinic.equals("false")) {
                 startActivity(new Intent(getApplicationContext(), NearestPharmacy.class));
                 finish();
             } else if (clinic.equals("true")) {
                 startActivity(new Intent(getApplicationContext(), NearestClinic.class));
                 finish();
+            }
+        else if (responseMessageList.size() - position - 1 == 0){
+
+                //finish();
+                //overridePendingTransition( 0, 0);
+                //startActivity(getIntent());
+                //overridePendingTransition( 0, 0);
+                this.recreate();
+
+
             }
         }
     }
