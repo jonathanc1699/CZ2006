@@ -63,7 +63,7 @@ public class ChatbotActivity extends AppCompatActivity implements MessageAdapter
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(messageAdapter);
 
-        sendMessage("Welcome to the chatbot", false);
+        sendMessage("Welcome! Tap on the chat field to input your symptoms", false);
         sendMessage("List of possible symptoms: fatigue, nausea, swollen glands, rash, headache, abdominal pain, appetite loss, fever, dark urine, joint pain, jaundice, flu, diarrhea, cough, red eyes.", false);
 
 
@@ -89,10 +89,16 @@ public class ChatbotActivity extends AppCompatActivity implements MessageAdapter
                     }
                     else { // if there is an error, or user keys stop
                         if (userInput.getText().toString().equals("stop")) {
-                            sendMessage("You have entered stop. Processing symptoms", false);
-                            ArrayList<String> possiblediseases = new ArrayList<String>();
-                            possiblediseases = (ArrayList<String>) alldisease.clone();
-                            stop(possiblediseases);
+                            if (checkEmpty(tempList)){
+                                sendMessage("You have entered stop. There are no symptoms entered. Please key in your symptoms.", false);
+                                sendMessage("List of possible symptoms: fatigue, nausea, swollen glands, rash, headache, abdominal pain, appetite loss, fever, dark urine, joint pain, jaundice, flu, diarrhea, cough, red eyes.", false);
+                            }
+                            else {
+                                sendMessage("You have entered stop. Processing symptoms", false);
+                                ArrayList<String> possiblediseases = new ArrayList<String>();
+                                possiblediseases = (ArrayList<String>) alldisease.clone();
+                                genRecommend(possiblediseases);
+                            }
                         }
                         else if (tempList.contains(userinput)){
                             sendMessage("Incorrect symptom. You entered a repeat symptom:" + userInput.getText().toString() + ". Enter 'stop' if you do not have anymore symptoms to add", false);
@@ -188,7 +194,7 @@ public class ChatbotActivity extends AppCompatActivity implements MessageAdapter
         }
     }
 
-    public void stop(ArrayList<String> possiblediseases) {
+    public void genRecommend(ArrayList<String> possiblediseases) {
         //start with all the disease
         int matchcount = 0;
         int highestcount = 0;
@@ -240,7 +246,16 @@ public class ChatbotActivity extends AppCompatActivity implements MessageAdapter
         }
         riskLevel(highestcountdiseasearray, possiblediseases.size(), highestcount, idk);
     }
+    public boolean checkEmpty(List<String>templist){
+        if (templist.size()==0){
+            return true;
 
+        }
+
+        else
+            return false;
+
+    }
     @Override
     public void onNoteClick(int position) {
         if (responseMessageList.size() - position - 1 == 0) {
