@@ -15,7 +15,6 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.example.loginapp.Control.ClinicAdminQueueController;
 import com.example.loginapp.Control.FirebaseCallback;
-import com.example.loginapp.Control.UserQueueController;
 import com.example.loginapp.Entity.Clinic;
 import com.example.loginapp.Entity.User;
 import com.example.loginapp.R;
@@ -39,9 +38,6 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
@@ -61,6 +57,8 @@ public class Clinic_admin_page extends AppCompatActivity implements FirebaseCall
     private int total_patient_count;
     private String Clinic_name;
 
+
+
     TextView textview_currentpatient;
     TextView textView_clinicname;
     TextView textView_totalpatient;
@@ -76,10 +74,7 @@ public class Clinic_admin_page extends AppCompatActivity implements FirebaseCall
     ClinicAdminQueueController clinicAdminQueueController = new ClinicAdminQueueController();
 
 
-    // used to store the clinicID retrieved from firebase synchronously
-    @Override
     public void onCallback(String value){}
-    // loads clinic ID and stores it for use locally in order to pass through and query firestore for clinic details
     public void loadClinic(FirebaseCallback Callback) {
 
         ValueEventListener userlistener = new ValueEventListener() {
@@ -106,6 +101,7 @@ public class Clinic_admin_page extends AppCompatActivity implements FirebaseCall
     }
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,7 +112,6 @@ public class Clinic_admin_page extends AppCompatActivity implements FirebaseCall
             @Override
             public void onCallback(String ID) {
                 clinicID = ID;
-                //TODO change to onSnapshot instead of onComplete
                 final DocumentReference AdminRef = clinicRef.document(clinicID);
                 AdminRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
                     @Override
@@ -221,18 +216,18 @@ public class Clinic_admin_page extends AppCompatActivity implements FirebaseCall
         String close;
         clinicRef.document(clinicID).get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                           @Override
-                                           public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                               if (task.isSuccessful()) {
-                                                   DocumentSnapshot ClinicDetailList = task.getResult();
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot ClinicDetailList = task.getResult();
 
-                                                   Map<String, Object> map = ClinicDetailList.getData();
-                                                   clinic[0] = ClinicDetailList.toObject(Clinic.class);
-                                               }
-                                               else {
-                                                   Log.d("fetch clinic error", "Error getting documents: ", task.getException());
-                                               }
-                                           }
+                            Map<String, Object> map = ClinicDetailList.getData();
+                            clinic[0] = ClinicDetailList.toObject(Clinic.class);
+                        }
+                        else {
+                            Log.d("fetch clinic error", "Error getting documents: ", task.getException());
+                        }
+                    }
                 });
 
         start = clinic[0].getStartTime();

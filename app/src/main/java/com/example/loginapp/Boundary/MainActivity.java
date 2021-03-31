@@ -1,21 +1,20 @@
 package com.example.loginapp.Boundary;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.renderscript.Sampler;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.loginapp.Control.ChatbotActivity;
-import com.example.loginapp.Control.ClinicController;
 import com.example.loginapp.Control.ClinicPage;
+import com.example.loginapp.Control.FirebaseCallback;
 import com.example.loginapp.Entity.Clinic;
 import com.example.loginapp.Entity.User;
 import com.example.loginapp.R;
@@ -29,29 +28,61 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.Map;
+
+public class MainActivity extends AppCompatActivity implements FirebaseCallback {
     User user;
     String currentClinicID;
     String clinicName;
     int currentQueueNumber=1;
     Intent intent;
     Button buttonname;
-
     TextView currentQueue;
     TextView timing;
     TextView clinic;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference clinicRef = db.collection("clinic");
+    FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Users");
+    final DatabaseReference currentUser = databaseReference.child(firebaseUser.getUid());
 
+    @Override
+    public void onCallback(String value) {
+
+    }
+    public void loadClinic(FirebaseCallback Callback) {
+
+        ValueEventListener userlistener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                User user = snapshot.getValue(User.class);
+                //Map<String, Object> userValues = user.altMap();
+                String clinicID = user.getClinicID();
+                Log.d("firebase", clinicID);
+                Callback.onCallback(clinicID);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.d("load", "Error");
+
+            }
+        };
+        currentUser.addListenerForSingleValueEvent(userlistener);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         View deleteuserlist = findViewById(R.id.adminuserlist);
         deleteuserlist.setVisibility(View.GONE);
+
         View enableuserlist = findViewById(R.id.enableuserlist);
         enableuserlist.setVisibility(View.GONE);
 
@@ -71,18 +102,12 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // Log.d("3", clinicName);
                 intent = new Intent(MainActivity.this, ClinicPage.class);
-                intent.putExtra("main Clinic Name", clinicName);
-                intent.putExtra("main Clinic ID",currentClinicID);
+                intent.putExtra("main Clinic Name ", clinicName);
+                intent.putExtra("main Clinic ID ",currentClinicID);
                 startActivity(intent);
             }
         });
 
-
-
-
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Users");
-        final DatabaseReference currentUser = databaseReference.child(firebaseUser.getUid());
 
         ValueEventListener userListener = new ValueEventListener() {
             @Override
@@ -97,9 +122,6 @@ public class MainActivity extends AppCompatActivity {
                 currentQueueNumber = user.getCurrentQueue();
                 clinic.setText(clinicName);
                 currentQueue.setText("Current queue number: " + String.valueOf(currentQueueNumber));
-                timing.setText(String.valueOf(currentQueueNumber*10)+"Mins More");
-
-
 
             }
 
@@ -111,11 +133,63 @@ public class MainActivity extends AppCompatActivity {
         };
         currentUser.addListenerForSingleValueEvent(userListener);
 
+        loadClinic(new FirebaseCallback() {
+            @Override
+            public void onCallback(String ID) {
+                currentClinicID = ID;
+                clinicRef.document(currentClinicID).get()
+                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    DocumentSnapshot ClinicDetailList = task.getResult();
+
+                                    Map<String, Object> map = ClinicDetailList.getData();
+                                    Clinic clinic = ClinicDetailList.toObject(Clinic.class);
+                                    int serveTime = 10;
+                                    int latestclinicq = clinic.getLatestQNo();
+                                    int currentlyservingQ = clinic.getClinicCurrentQ();
+                                    int waitingtime = (latestclinicq - currentlyservingQ) * serveTime + 15;
+                                    int hour = waitingtime/60;
+                                    int min = waitingtime%60;
+                                    if (waitingtime>60)
+                                    {
+                                        timing.setText("Waiting time: " + hour+ " hr " +min + " mins");
+                                    }
+                                    else
+                                        timing.setText("Waiting time: " + min + " mins");
 
 
+                                } else {
+                                    Log.d("fetch clinic error", "Error getting documents: ", task.getException());
+                                }
+                            }
+                        });
+            }});
         View clinic = findViewById(R.id.ClinicAdminPage);
         clinic.setVisibility(View.GONE);
-            }
+        //TODO cancel button????????
+
+        //Under cancel button function
+        /*
+        //Cancel appointment
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setMessage("Appoinment has been cancelled");
+
+        builder.setNegativeButton(
+                "Got it!",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        */
+
+
+    }
 
 
 
@@ -140,6 +214,8 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
+
+
 //    public void ClinicAdminPage(View view) {
 //        startActivity(new Intent(getApplicationContext(), Clinic_admin_page.class));
 //        finish();
@@ -149,10 +225,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-    public void currentAppointment (View view){
-
-    }
 
 
 }
