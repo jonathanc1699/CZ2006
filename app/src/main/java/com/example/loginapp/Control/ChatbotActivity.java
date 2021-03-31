@@ -47,6 +47,7 @@ public class ChatbotActivity extends AppCompatActivity implements MessageAdapter
     private static ArrayList<String> allsymptoms = new ArrayList<String>(); // contains all 15 symptoms possible.
     private static ArrayList<String> alldisease=new ArrayList<String>(); // contains all possible diseases
     private String clinic = "null";
+    private ChatbotController cb= new ChatbotController();
 
     private FirebaseFirestore fstore = FirebaseFirestore.getInstance();
     private CollectionReference diseaseRef = fstore.collection("infectdisease");
@@ -65,7 +66,7 @@ public class ChatbotActivity extends AppCompatActivity implements MessageAdapter
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(messageAdapter);
 
-        sendMessage("Welcome! Tap on the chat field to input your symptoms", false);
+        sendMessage("Welcome to the infectious disease bot! Tap on the chat field to input your symptoms", false);
         sendMessage("List of possible symptoms: fatigue, nausea, swollen glands, rash, headache, abdominal pain, appetite loss, fever, dark urine, joint pain, jaundice, flu, diarrhea, cough, red eyes.", false);
 
 
@@ -92,7 +93,7 @@ public class ChatbotActivity extends AppCompatActivity implements MessageAdapter
                     }
                     else { // if there is an error, or user keys stop
                         if (userInput.getText().toString().equals("stop")) {
-                            if (checkEmpty(tempList)){
+                            if (cb.checkEmpty(tempList)){
                                 sendMessage("You have entered stop. There are no symptoms entered. Please key in your symptoms.", false);
                                 sendMessage("List of possible symptoms: fatigue, nausea, swollen glands, rash, headache, abdominal pain, appetite loss, fever, dark urine, joint pain, jaundice, flu, diarrhea, cough, red eyes.", false);
                             }
@@ -101,7 +102,9 @@ public class ChatbotActivity extends AppCompatActivity implements MessageAdapter
                                 userInput.setFocusable(false);
                                 ArrayList<String> possiblediseases = new ArrayList<String>();
                                 possiblediseases = (ArrayList<String>) alldisease.clone();
-                                genRecommend(possiblediseases);
+
+                                Chatstats cs= cb.getRecommend(possiblediseases,myMap,tempList);
+                                printriskLevel(cs.getHighestcountdiseasearray(),cs.getPossiblediseasesize(), cs.getHighestcount(), cs.getIdk());
                                 InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                                 imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
                                 sendMessage("Chat has been disabled. To talk to chatbot again, click here", false);
@@ -182,13 +185,15 @@ public class ChatbotActivity extends AppCompatActivity implements MessageAdapter
         });
     }
 
-    public void riskLevel(ArrayList<String> highestcountdiseasearray, int possiblediseasesSize, int highestcount, int idk){
+    public void printriskLevel(ArrayList<String> highestcountdiseasearray, int possiblediseasesSize, int highestcount, int idk){
         String highestcountdiseasestring = highestcountdiseasearray.get(0);
-        Log.d("ChatbotActivity1111", highestcountdiseasestring);
         highestcountdiseasestring = arraylistToString(highestcountdiseasestring, highestcountdiseasearray);
         sendMessage("You are at risk of: " + highestcountdiseasestring + " with a symptom match rate of " + (float) highestcount/idk * 100 + "%", false);
+        String highrisk= "true";
+        highrisk=cb.highriskLevel(possiblediseasesSize,highestcount,idk);
 
-        if (possiblediseasesSize <=3 || (float) highestcount/idk <0.5) {
+
+        if (highrisk=="false") {
             sendMessage("Your risk level is estimated to be low, we recommend that you visit a pharmacy to purchase medication and self-medicate.", false);
             sendMessage("Click here to be redirected to the pharmacy page.", false);
             clinic = "false";
@@ -201,7 +206,7 @@ public class ChatbotActivity extends AppCompatActivity implements MessageAdapter
         }
     }
 
-    public void genRecommend(ArrayList<String> possiblediseases) {
+    /*public void getRecommend(ArrayList<String> possiblediseases) {
         //start with all the disease
         int matchcount = 0;
         int highestcount = 0;
@@ -251,18 +256,9 @@ public class ChatbotActivity extends AppCompatActivity implements MessageAdapter
                 }
             }
         }
-        riskLevel(highestcountdiseasearray, possiblediseases.size(), highestcount, idk);
-    }
-    public boolean checkEmpty(List<String>templist){
-        if (templist.size()==0){
-            return true;
+        printriskLevel(highestcountdiseasearray, possiblediseases.size(), highestcount, idk);
+    }*/
 
-        }
-
-        else
-            return false;
-
-    }
     @Override
     public void onNoteClick(int position) {
         if (responseMessageList.size() - position - 2 == 0) {
