@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import com.example.loginapp.Boundary.mainactivityAdmin;
 import com.example.loginapp.R;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class PharmacyPage extends AppCompatActivity {
     TextView mTextView_namePharmacy;
@@ -21,6 +23,9 @@ public class PharmacyPage extends AppCompatActivity {
 
     String PharmacyName;
     String PharmacyAddress;
+
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference clinicRef = db.collection("pharmacy");
 
 
     @Override
