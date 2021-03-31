@@ -60,9 +60,17 @@ public class MainActivity extends AppCompatActivity implements FirebaseCallback 
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User user = snapshot.getValue(User.class);
                 //Map<String, Object> userValues = user.altMap();
-                String clinicID = user.getClinicID();
-                Log.d("firebase", clinicID);
-                Callback.onCallback(clinicID);
+                if(user.getClinicID() != null) {
+                    String clinicID = user.getClinicID();
+                    Log.d("firebase", clinicID);
+                    Callback.onCallback(clinicID);
+                }
+                else
+                {
+                    String clinicID = "nil";
+                    Log.d("firebase", clinicID);
+                    Callback.onCallback(clinicID);
+                }
 
             }
 
@@ -102,14 +110,24 @@ public class MainActivity extends AppCompatActivity implements FirebaseCallback 
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 user = snapshot.getValue(User.class);
                 currentClinicID = user.getClinicID();
-                if(currentClinicID!=null){
+                if(currentClinicID!=null && currentClinicID !="nil"){
                     contraint.setVisibility(View.VISIBLE);
+                    clinicName = user.getCurrentClinic();
+                    clinic.setText(clinicName);
+                    currentQueueNumber = user.getCurrentQueue();
+                    clinic.setText(clinicName);
+                    currentQueue.setText("Current queue number: " + String.valueOf(currentQueueNumber));
                 }
-                clinicName = user.getCurrentClinic();
-                clinic.setText(clinicName);
-                currentQueueNumber = user.getCurrentQueue();
-                clinic.setText(clinicName);
-                currentQueue.setText("Current queue number: " + String.valueOf(currentQueueNumber));
+                else{
+                    contraint.setVisibility(View.VISIBLE);
+                    clinic.setText("You have no current booking");
+                    currentQueue.setText("");
+                    timing.setText("");
+                    buttonname.setEnabled(false);
+
+                }
+
+
 
             }
 
@@ -125,51 +143,58 @@ public class MainActivity extends AppCompatActivity implements FirebaseCallback 
             @Override
             public void onCallback(String ID) {
                 currentClinicID = ID;
-                Log.d("currentAppointmet", currentClinicID);
-                clinicRef.document(currentClinicID).get()
-                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    DocumentSnapshot ClinicDetailList = task.getResult();
+                Log.d("currentAppointmet11", currentClinicID);
+                if (currentClinicID != "nil") {
+                    Log.d("currentAppointmet", currentClinicID);
+                    clinicRef.document(currentClinicID).get()
+                            .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        DocumentSnapshot ClinicDetailList = task.getResult();
 
-                                    Map<String, Object> map = ClinicDetailList.getData();
-                                    Clinic clinic = ClinicDetailList.toObject(Clinic.class);
-                                    int serveTime = 10;
-                                    int latestclinicq = clinic.getLatestQNo();
-                                    int currentlyservingQ = clinic.getClinicCurrentQ();
-                                    int waitingtime = (latestclinicq - currentlyservingQ) * serveTime + 15;
-                                    int hour = waitingtime/60;
-                                    int min = waitingtime%60;
-                                    if (waitingtime>60)
-                                    {
-                                        timing.setText("Waiting time: " + hour+ " hr " +min + " mins");
+                                        Map<String, Object> map = ClinicDetailList.getData();
+                                        Clinic clinic = ClinicDetailList.toObject(Clinic.class);
+                                        int serveTime = 10;
+                                        int latestclinicq = clinic.getLatestQNo();
+                                        int currentlyservingQ = clinic.getClinicCurrentQ();
+                                        int waitingtime = (latestclinicq - currentlyservingQ) * serveTime + 15;
+                                        int hour = waitingtime / 60;
+                                        int min = waitingtime % 60;
+                                        if (waitingtime > 60) {
+                                            timing.setText("Waiting time: " + hour + " hr " + min + " mins");
+                                        } else
+                                            timing.setText("Waiting time: " + min + " mins");
+
+
+                                    } else {
+                                        Log.d("fetch clinic error", "Error getting documents: ", task.getException());
                                     }
-                                    else
-                                        timing.setText("Waiting time: " + min + " mins");
-
-
-                                } else {
-                                    Log.d("fetch clinic error", "Error getting documents: ", task.getException());
                                 }
-                            }
-                        });
-                buttonname.setOnClickListener(new View.OnClickListener() {
+                            });
+                    buttonname.setOnClickListener(new View.OnClickListener() {
 
-                    @Override
-                    public void onClick(View view) {
-                        // Log.d("3", clinicName);
-                        intent = new Intent(MainActivity.this, ClinicPage.class);
-                        Log.d("currentAppointmet11", currentClinicID);
-                        intent.putExtra("main Clinic ID",currentClinicID);
-                        intent.putExtra("main Clinic name",clinicName);
-                        startActivity(intent);
-                    }
-                });
-            }});
+                        @Override
+                        public void onClick(View view) {
+                            // Log.d("3", clinicName);
+                            intent = new Intent(MainActivity.this, ClinicPage.class);
+                            Log.d("currentAppointmet11", currentClinicID);
+                            intent.putExtra("main Clinic ID", currentClinicID);
+                            intent.putExtra("main Clinic name", clinicName);
+                            startActivity(intent);
+                        }
+                    });
+                }
+                else
+                {
+                    currentClinicID = "nil";
+                }
+            }
+        });
         View clinic = findViewById(R.id.ClinicAdminPage);
         clinic.setVisibility(View.GONE);
         //TODO cancel button????????
+
 
         //Under cancel button function
         /*
