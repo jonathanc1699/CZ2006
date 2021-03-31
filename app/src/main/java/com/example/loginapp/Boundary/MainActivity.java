@@ -96,18 +96,6 @@ public class MainActivity extends AppCompatActivity implements FirebaseCallback 
         timing= (TextView) findViewById(R.id.timing);
         clinic= (TextView) findViewById(R.id.currentclinic);
 
-        buttonname.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                // Log.d("3", clinicName);
-                intent = new Intent(MainActivity.this, ClinicPage.class);
-                intent.putExtra("main Clinic Name ", clinicName);
-                intent.putExtra("main Clinic ID ",currentClinicID);
-                startActivity(intent);
-            }
-        });
-
 
         ValueEventListener userListener = new ValueEventListener() {
             @Override
@@ -137,6 +125,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseCallback 
             @Override
             public void onCallback(String ID) {
                 currentClinicID = ID;
+                Log.d("currentAppointmet", currentClinicID);
                 clinicRef.document(currentClinicID).get()
                         .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                             @Override
@@ -165,6 +154,18 @@ public class MainActivity extends AppCompatActivity implements FirebaseCallback 
                                 }
                             }
                         });
+                buttonname.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View view) {
+                        // Log.d("3", clinicName);
+                        intent = new Intent(MainActivity.this, ClinicPage.class);
+                        Log.d("currentAppointmet11", currentClinicID);
+                        intent.putExtra("main Clinic ID",currentClinicID);
+                        intent.putExtra("main Clinic name",clinicName);
+                        startActivity(intent);
+                    }
+                });
             }});
         View clinic = findViewById(R.id.ClinicAdminPage);
         clinic.setVisibility(View.GONE);

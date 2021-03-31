@@ -109,9 +109,11 @@ public class ClinicPage extends AppCompatActivity {
         ClinicID = getIntent().getStringExtra("Clinic ID");
         clinicName= getIntent().getStringExtra("Clinic Name");
 
-        if(ClinicID==null || clinicName==null){
+        if(ClinicID == null){
             ClinicID = getIntent().getStringExtra("main Clinic ID");
-            clinicName= getIntent().getStringExtra("main Clinic Name");
+            clinicName = getIntent().getStringExtra("main Clinic name");
+            Log.d("currentAppointmet22", ClinicID);
+            Log.d("currentAppointmet22", clinicName);
         }
 
 
