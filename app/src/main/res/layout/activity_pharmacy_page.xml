@@ -61,7 +61,15 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:layout_weight="1"
-            android:text="Directions" />
+            android:text="Directions by car" />
+
+        <Button
+            android:id="@+id/button_direction_pharm_walk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:layout_weight="1"
+            android:text="Directions by walking" />
 
     </LinearLayout>
 

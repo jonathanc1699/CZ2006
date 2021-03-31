@@ -66,6 +66,7 @@ public class ClinicPage extends AppCompatActivity {
 
     final Context context = this;
     Button mbutton_direction;
+    Button mbutton_directionwalk;
     Button mbutton_queue;
     TextView mTextView_nameClinic;
     TextView mTextView_openingHoursClinic;
@@ -120,6 +121,7 @@ public class ClinicPage extends AppCompatActivity {
         mImageView_Clinic = (ImageView) findViewById(R.id.image_Clinic);
         mbutton_queue = (Button) findViewById(R.id.button_queue);
         mbutton_direction = (Button) findViewById(R.id.button_direction1);
+        mbutton_directionwalk = (Button) findViewById(R.id.button_direction2);
         mTextView_nameClinic = (TextView) findViewById(R.id.textview_nameClinic);
         mTextView_openingHoursClinic = (TextView) findViewById(R.id.textview_openingHoursClinic);
         mTextView_phoneClinic = (TextView) findViewById(R.id.textview_phoneClinic);
@@ -198,6 +200,21 @@ public class ClinicPage extends AppCompatActivity {
                 // Create a Uri from an intent string. Use the result to create an Intent.
                 Log.d("directions","trying to open gmaps for directions to "+ selectedClinic.getStreetname());
                 Uri gmmIntentUri = Uri.parse("google.navigation:q= "+ selectedClinic.getLatitude() + ","+ selectedClinic.getLongitude());
+                // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                // Make the Intent explicit by setting the Google Maps package
+                mapIntent.setPackage("com.google.android.apps.maps");
+                startActivity(mapIntent);
+                Log.d("directions","opening gmaps for direction to "+ selectedClinic.getStreetname());
+
+            }
+        });
+        mbutton_directionwalk.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                //TODO need to link to googlemap
+                // Create a Uri from an intent string. Use the result to create an Intent.
+                Log.d("directions","trying to open gmaps for directions to "+ selectedClinic.getStreetname());
+                Uri gmmIntentUri = Uri.parse("google.navigation:q= "+ selectedClinic.getLatitude() + ","+ selectedClinic.getLongitude() + "&mode=w");
                 // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
                 Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
                 // Make the Intent explicit by setting the Google Maps package
