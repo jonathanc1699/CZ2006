@@ -185,10 +185,11 @@ public class MapAdapterPharmacy {
                 return o1.Distance < o2.Distance ? -1:1;
             }
         });
-        Log.d("tag","Nearest pharmacy is "+DistToMe.get(0).getClinicName().toString());
+        Log.d("tag","Nearest pharmacy is "+DistToMe.get(0).getClinicName());
         for(int i=0;i<markers.size();i++){
             if(markers.get(i).getTitle().equals(DistToMe.get(0).getClinicName())){
                 markers.get(i).setVisible(true);
+                markers.get(i).showInfoWindow();
                 Log.d("tag","nearest pharmacy marker set to visible");
             }
         }

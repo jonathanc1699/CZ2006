@@ -190,6 +190,7 @@ public class MapAdapter {
         for(int i=0;i<markers.size();i++){
             if(markers.get(i).getTitle().equals(DistToMe.get(0).getClinicName())){
                 markers.get(i).setVisible(true);
+                markers.get(i).showInfoWindow();
                 Log.d("tag","nearest clnic marker set to visible");
             }
         }

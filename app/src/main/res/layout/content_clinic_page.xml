@@ -95,7 +95,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:layout_weight="1"
-                android:text="Take Queue Number" />
+                android:text="Directions by car" />
 
             <Button
                 android:id="@+id/button_direction2"
@@ -103,7 +103,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:layout_weight="1"
-                android:text="Directions" />
+                android:text="Directions by walking" />
 
         </LinearLayout>
 

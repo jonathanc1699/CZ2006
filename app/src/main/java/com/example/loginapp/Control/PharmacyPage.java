@@ -28,6 +28,7 @@ public class PharmacyPage extends AppCompatActivity {
     TextView mTextView_openingHoursPharmacy;
     TextView mTextView_addressPharmacy;
     Button mbutton_direction;
+    Button mbutton_direction_walk;
 
     String PharmacyName;
     String PharmacyAddress;
@@ -42,6 +43,7 @@ public class PharmacyPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pharmacy_page);
         mbutton_direction = (Button) findViewById(R.id.button_direction_pharm);
+        mbutton_direction_walk = (Button) findViewById(R.id.button_direction_pharm_walk);
         mTextView_namePharmacy = (TextView) findViewById(R.id.textview_namePharmacy);
         mTextView_addressPharmacy = (TextView) findViewById(R.id.textview_addressPharmacy);
         mTextView_openingHoursPharmacy = (TextView) findViewById(R.id.textview_openingHoursPharmacy);
@@ -77,21 +79,37 @@ public class PharmacyPage extends AppCompatActivity {
 
 
 
-//        mbutton_direction.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                //TODO need to link to googlemap
-//                // Create a Uri from an intent string. Use the result to create an Intent.
-//                Log.d("directions","trying to open gmaps for directions to "+ selectedPharmacy.getStreetname());
-//                Uri gmmIntentUri = Uri.parse("google.navigation:q= "+ selectedPharmacy.getLatitude() + ","+ selectedPharmacy.getLongitude());
-//                // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
-//                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-//                // Make the Intent explicit by setting the Google Maps package
-//                mapIntent.setPackage("com.google.android.apps.maps");
-//                startActivity(mapIntent);
-//                Log.d("directions","opening gmaps for direction to "+ selectedPharmacy.getStreetname());
-//            }
-//        });
+        mbutton_direction.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO need to link to googlemap
+                // Create a Uri from an intent string. Use the result to create an Intent.
+                Log.d("directions","trying to open gmaps for directions to "+ selectedPharmacy.getPharmacy_address());
+                Uri gmmIntentUri = Uri.parse("google.navigation:q= "+ selectedPharmacy.getLatitude() + ","+ selectedPharmacy.getLongitude());
+                // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                // Make the Intent explicit by setting the Google Maps package
+                mapIntent.setPackage("com.google.android.apps.maps");
+                startActivity(mapIntent);
+                Log.d("directions","opening gmaps for direction to "+ selectedPharmacy.getPharmacy_address());
+            }
+        });
+
+        mbutton_direction_walk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO need to link to googlemap
+                // Create a Uri from an intent string. Use the result to create an Intent.
+                Log.d("directions","trying to open gmaps for directions to "+ selectedPharmacy.getPharmacy_address());
+                Uri gmmIntentUri = Uri.parse("google.navigation:q= "+ selectedPharmacy.getLatitude() + ","+ selectedPharmacy.getLongitude() + "&mode=w");
+                // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                // Make the Intent explicit by setting the Google Maps package
+                mapIntent.setPackage("com.google.android.apps.maps");
+                startActivity(mapIntent);
+                Log.d("directions","opening gmaps for direction to "+ selectedPharmacy.getPharmacy_address());
+            }
+        });
         
     }
     @Override
