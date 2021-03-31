@@ -8,7 +8,8 @@
     tools:context=".Control.ClinicPage">
 
 
-
-    <include layout="@layout/content_clinic_page" />
+    <include
+        layout="@layout/content_clinic_page"
+        android:layout_height="686dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

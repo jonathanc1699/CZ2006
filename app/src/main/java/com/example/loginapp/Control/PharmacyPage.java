@@ -1,5 +1,6 @@
 package com.example.loginapp.Control;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -11,9 +12,16 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.loginapp.Boundary.mainactivityAdmin;
+import com.example.loginapp.Entity.Clinic;
+import com.example.loginapp.Entity.Pharmacy;
 import com.example.loginapp.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Map;
 
 public class PharmacyPage extends AppCompatActivity {
     TextView mTextView_namePharmacy;
@@ -23,9 +31,10 @@ public class PharmacyPage extends AppCompatActivity {
 
     String PharmacyName;
     String PharmacyAddress;
-
+    String PharmacyID;
+    Pharmacy selectedPharmacy;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference clinicRef = db.collection("pharmacy");
+    private CollectionReference pharmacyRef = db.collection("pharmacy");
 
 
     @Override
@@ -36,10 +45,37 @@ public class PharmacyPage extends AppCompatActivity {
         mTextView_namePharmacy = (TextView) findViewById(R.id.textview_namePharmacy);
         mTextView_addressPharmacy = (TextView) findViewById(R.id.textview_addressPharmacy);
         mTextView_openingHoursPharmacy = (TextView) findViewById(R.id.textview_openingHoursPharmacy);
-        
-        mTextView_namePharmacy.setText("Name of Pharmacy:   " + PharmacyName);
-        mTextView_addressPharmacy.setText("Address of Pharmacy:   " + PharmacyAddress);
-        mTextView_openingHoursPharmacy.setText("Opening Hours of Pharmacy:  8AM - 8PM ");
+
+        PharmacyID = getIntent().getStringExtra("Pharmacy ID");
+        PharmacyName= getIntent().getStringExtra("Pharmacy Name");
+
+
+
+
+
+        pharmacyRef.document(PharmacyID).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot PharmacyDetailList = task.getResult();
+
+                            Map<String, Object> map = PharmacyDetailList.getData();
+                            selectedPharmacy = PharmacyDetailList.toObject(Pharmacy.class);
+                            selectedPharmacy.setPharmacy_ID(PharmacyID);
+                            PharmacyAddress = selectedPharmacy.getPharmacy_address();
+                            mTextView_namePharmacy.setText("Name of Pharmacy:   " + PharmacyName);
+                            mTextView_addressPharmacy.setText("Address of Pharmacy:   " + PharmacyAddress);
+                            mTextView_openingHoursPharmacy.setText("Opening Hours of Pharmacy:  8AM - 8PM ");
+                        }
+
+                        else {
+                            Log.d("fetch clinic error", "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+
+
 
 //        mbutton_direction.setOnClickListener(new View.OnClickListener() {
 //            @Override

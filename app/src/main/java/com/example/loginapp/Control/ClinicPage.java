@@ -22,6 +22,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.loginapp.Boundary.Clinic_admin_page;
+import com.example.loginapp.Boundary.DisableAdminPage;
+import com.example.loginapp.Boundary.ListofClinics;
 import com.example.loginapp.Boundary.mainactivityAdmin;
 import com.example.loginapp.Entity.Clinic;
 import com.example.loginapp.Entity.User;
@@ -117,7 +119,7 @@ public class ClinicPage extends AppCompatActivity {
 
         mImageView_Clinic = (ImageView) findViewById(R.id.image_Clinic);
         mbutton_queue = (Button) findViewById(R.id.button_queue);
-        mbutton_direction = (Button) findViewById(R.id.button_direction);
+        mbutton_direction = (Button) findViewById(R.id.button_direction1);
         mTextView_nameClinic = (TextView) findViewById(R.id.textview_nameClinic);
         mTextView_openingHoursClinic = (TextView) findViewById(R.id.textview_openingHoursClinic);
         mTextView_phoneClinic = (TextView) findViewById(R.id.textview_phoneClinic);

@@ -13,6 +13,9 @@ public class Pharmacy extends MedicalLocation{
         this.pharmacy_ID=pharmacy_ID;
     }
 
+    public Pharmacy() {
+    }
+
     public String getPharmacy_ID() {
         return pharmacy_ID;
     }
@@ -32,4 +35,9 @@ public class Pharmacy extends MedicalLocation{
     public void setPharmacy_name(String pharmacy_name) {
         this.pharmacy_name = pharmacy_name;
     }
+    public void setPharmacy_ID(String pharmacy_ID) {
+        this.pharmacy_ID = pharmacy_ID;
+    }
 }
+
+

@@ -4,13 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".Control.ClinicPage"
     tools:showIn="@layout/activity_clinic_page">
 
     <LinearLayout
-        android:layout_width="395dp"
-        android:layout_height="692dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
@@ -24,35 +23,20 @@
         <ImageView
             android:id="@+id/image_Clinic"
             android:layout_width="match_parent"
-            android:layout_height="41dp"
+            android:layout_height="136dp"
             android:layout_margin="16dp"
             android:layout_weight="4"
             android:background="@drawable/fullerton"
             android:visibility="visible"
             tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
-        <TextView
-            android:id="@+id/textview_nameClinic"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_weight="1"
-            android:text="Name" />
 
-        <TextView
-            android:id="@+id/textview_openingHoursClinic"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_weight="1"
-            android:text="Opening Hours" />
 
         <TextView
             android:id="@+id/textview_phoneClinic"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
+            android:layout_margin="16dp"
             android:layout_weight="1"
             android:text="Phone Number" />
 
@@ -60,15 +44,32 @@
             android:id="@+id/textview_addressClinic"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
+            android:layout_margin="16dp"
             android:layout_weight="1"
             android:text="Address" />
+
+        <TextView
+            android:id="@+id/textview_nameClinic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+
+            android:layout_weight="1"
+            android:text="Name" />
+
+        <TextView
+            android:id="@+id/textview_openingHoursClinic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:layout_weight="1"
+            android:text="Opening Hours" />
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:layout_weight="0.2"
+            android:layout_weight="1"
             android:orientation="horizontal">
 
             <Button
@@ -79,20 +80,13 @@
                 android:layout_weight="1"
                 android:text="Take Queue Number" />
 
-            <Button
-                android:id="@+id/button_direction"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:layout_weight="1"
-                android:text="Directions" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.2"
+            android:layout_weight="1"
             android:orientation="horizontal">
 
             <Button
