@@ -1,9 +1,18 @@
 
 package com.example.loginapp.Control;
 
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+
+import com.example.loginapp.Boundary.Clinic_admin_page;
 import com.example.loginapp.Entity.User;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
         import com.google.firebase.auth.FirebaseUser;
         import com.google.firebase.database.DataSnapshot;
@@ -18,6 +27,10 @@ import java.util.HashMap;
         import java.util.Map;
 
 public class UserQueueController {
+
+
+
+    final UserQueueController context = this;
 
     // upon registration, default for queue and current clinic are 0 and null respectively
     // queueController is used to modify the values in firebase
@@ -111,6 +124,35 @@ public class UserQueueController {
         currentUser.addListenerForSingleValueEvent(userListener);
     }
 
+    /*
+    //Send Cancellation email to user
+    private void sendCancellationEmail() {
+        String senderemail = "cz2006sickgowhere@gmail.com";
+        String userEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        String recipientemail = userEmail;// fetch user's email
+
+        Thread sender = new Thread(new Runnable() {
+            public void run() {
+                try {
+                    //ToDO GET the booking details for the confirmation email.
+                    GMailSender sender = new GMailSender("cz2006sickgowhere@gmail.com", "123456sickgowhere");
+                    sender.sendMail("Appointment cancellation confirmation",
+                            "This is a confirmation that your appointment with " +
+                                    + clinicname + " has been cancelled at your request." +
+                                    " \n\nThank you for using SickGoWhere.\n\nSickGoWhere",
+                            senderemail, recipientemail);
+
+                } catch (Exception e) {
+                    Log.e("mylog", "Error: " + e.getMessage());
+                }
+            }
+        });
+        sender.start();
+        Log.d("cancellation email sent","email sent");
+
+    }
+
+     */
 }
 
 

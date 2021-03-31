@@ -141,10 +141,10 @@
             android:textColorHint="#FFFFFF"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.73"
+            app:layout_constraintHorizontal_bias="0.707"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.99">
+            app:layout_constraintVertical_bias="0.932">
 
         </Button>
 
@@ -209,10 +209,10 @@
             app:backgroundTint="@color/persistent_search_view_divider_color"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.977"
+            app:layout_constraintHorizontal_bias="0.948"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0"
+            app:layout_constraintVertical_bias="0.977"
             app:srcCompat="@android:drawable/ic_delete" />
 
 
