@@ -6,11 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.loginapp.Boundary.MainActivity;
-import com.example.loginapp.Boundary.NearestClinic;
-import com.example.loginapp.Boundary.NearestPharmacy;
-import com.example.loginapp.Control.MessageAdapter;
-import com.example.loginapp.Control.ResponseMessage;
+import com.example.loginapp.Boundary.MapsActivity;
+import com.example.loginapp.Boundary.MapsActivityPharmacy;
 import com.example.loginapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -268,19 +265,16 @@ public class ChatbotActivity extends AppCompatActivity implements MessageAdapter
     public void onNoteClick(int position) {
         if (responseMessageList.size() - position - 2 == 0) {
             if (clinic.equals("false")) {
-                startActivity(new Intent(getApplicationContext(), NearestPharmacy.class));
+                startActivity(new Intent(getApplicationContext(), MapsActivityPharmacy.class));
                 finish();
             } else if (clinic.equals("true")) {
-                startActivity(new Intent(getApplicationContext(), NearestClinic.class));
+                startActivity(new Intent(getApplicationContext(), MapsActivity.class));
                 finish();
             }
         else if (responseMessageList.size() - position - 1 == 0){
-
-                //finish();
-                //overridePendingTransition( 0, 0);
-                //startActivity(getIntent());
-                //overridePendingTransition( 0, 0);
-                this.recreate();
+            Log.d("hi", "haiyaaa");
+            finish();
+            startActivity(getIntent());
 
 
             }
