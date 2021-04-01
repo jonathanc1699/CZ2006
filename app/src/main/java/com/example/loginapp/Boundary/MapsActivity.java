@@ -199,7 +199,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             if (location != null) {
                 LatLng myLatLng = new LatLng(location.getLatitude(), location.getLongitude());
                 Log.d("tag", "My location is " + location);
-                mMap.addMarker(new MarkerOptions().position(myLatLng).title("You are here"));
+                Marker m = mMap.addMarker(new MarkerOptions().position(myLatLng).title("You are here"));
+                m.showInfoWindow();
 
             }
         });}
