@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseCallback 
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 user = snapshot.getValue(User.class);
                 currentClinicID = user.getClinicID();
-                if(currentClinicID!=null && currentClinicID !="nil"){
+                if(currentClinicID!=null && !currentClinicID.equals("nil")){
                     contraint.setVisibility(View.VISIBLE);
                     clinicName = user.getCurrentClinic();
                     clinic.setText(clinicName);
@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseCallback 
             public void onCallback(String ID) {
                 currentClinicID = ID;
                 Log.d("currentAppointmet11", currentClinicID);
-                if (currentClinicID != "nil") {
+                if (!currentClinicID.equals("nil")) {
                     Log.d("currentAppointmet", currentClinicID);
                     clinicRef.document(currentClinicID).get()
                             .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
