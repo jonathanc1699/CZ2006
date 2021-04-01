@@ -242,7 +242,7 @@ public class MapsActivityPharmacy extends AppCompatActivity implements OnMapRead
 
     @Override
     public void onBackPressed() {
-            Intent myIntent = new Intent(getApplicationContext(), NearestClinic.class);
+            Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
             startActivityForResult(myIntent, 0);
             super.onBackPressed();
     }
