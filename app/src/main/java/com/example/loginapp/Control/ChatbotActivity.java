@@ -186,9 +186,14 @@ public class ChatbotActivity extends AppCompatActivity implements MessageAdapter
     }
 
     public void printriskLevel(ArrayList<String> highestcountdiseasearray, int possiblediseasesSize, int highestcount, int idk){
-        String highestcountdiseasestring = highestcountdiseasearray.get(0);
-        highestcountdiseasestring = arraylistToString(highestcountdiseasestring, highestcountdiseasearray);
-        sendMessage("You are at risk of: " + highestcountdiseasestring + " with a symptom match rate of " + (float) highestcount/idk * 100 + "%", false);
+
+        if ((highestcountdiseasearray.size())>0) {
+            String highestcountdiseasestring = highestcountdiseasearray.get(0);
+            highestcountdiseasestring = arraylistToString(highestcountdiseasestring, highestcountdiseasearray);
+            sendMessage("You are at risk of: " + highestcountdiseasestring + " with a symptom match rate of " + (float) highestcount / idk * 100 + "%", false);
+        }
+
+
         String highrisk= "true";
         highrisk=cb.highriskLevel(possiblediseasesSize,highestcount,idk);
 
