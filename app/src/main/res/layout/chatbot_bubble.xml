@@ -9,7 +9,7 @@
         android:id="@+id/textMessage"
         android:layout_margin="8dp"
         android:padding="12dp"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:background="@drawable/chatbot_bubble"
         android:layout_alignParentStart="true"
         android:elevation="3dp"/>

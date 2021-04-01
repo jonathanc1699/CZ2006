@@ -13,7 +13,6 @@
         <activity android:name=".Boundary.Clinic_admin_page" />
         <activity android:name=".Boundary.ListofClinics" />
         <activity android:name=".Boundary.ListofPharmacies" />
-        <activity android:name=".Boundary.NearestPharmacy" />
 
         <activity
             android:name=".Control.ChatbotActivity"
@@ -23,7 +22,6 @@
         <activity android:name=".Boundary.MapsActivity" />
         <activity android:name=".Boundary.MapsActivityPharmacy" />
         <activity android:name=".Boundary.mainactivityAdmin" />
-        <activity android:name=".Boundary.NearestClinic" />
         <activity android:name=".Boundary.EnableAdminPage" />
         <activity
             android:name=".Boundary.Login"

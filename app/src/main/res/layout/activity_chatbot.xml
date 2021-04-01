@@ -12,7 +12,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_margin="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:background="@drawable/bg_edit_text"
         android:elevation="3dp"
         android:hint="Please enter your symptoms one by one"
@@ -20,8 +23,8 @@
         android:imeOptions="actionSend"
         android:inputType="text"
         android:padding="12dp"
-        android:textColor="#fff"
-        android:textColorHint="#fff"
+        android:textColor="#7E7A7A"
+        android:textColorHint="#7E7A7A"
         android:textSize="18sp" />
 
     <androidx.recyclerview.widget.RecyclerView
