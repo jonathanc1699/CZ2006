@@ -232,11 +232,11 @@ public class MainActivity extends AppCompatActivity implements FirebaseCallback 
     }
 
     public void nearestClinic (View view) {
-        startActivity(new Intent(getApplicationContext(),NearestClinic.class));
+        startActivity(new Intent(getApplicationContext(),MapsActivity.class));
         finish();
     }
     public void nearestPharmacy (View view) {
-        startActivity(new Intent(getApplicationContext(),NearestPharmacy.class));
+        startActivity(new Intent(getApplicationContext(),MapsActivityPharmacy.class));
         finish();
     }
 
