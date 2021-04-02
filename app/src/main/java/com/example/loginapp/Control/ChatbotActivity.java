@@ -190,7 +190,12 @@ public class ChatbotActivity extends AppCompatActivity implements MessageAdapter
         if ((highestcountdiseasearray.size())>0) {
             String highestcountdiseasestring = highestcountdiseasearray.get(0);
             highestcountdiseasestring = arraylistToString(highestcountdiseasestring, highestcountdiseasearray);
-            sendMessage("You are at risk of: " + highestcountdiseasestring + " with a symptom match rate of " + (float) highestcount / possibleSymptomsCount * 100 + "%", false);
+             float symptomMatchRate = (float) highestcount / possibleSymptomsCount * 100;
+            sendMessage("You are at risk of: " + highestcountdiseasestring + " with a symptom match rate of up to " + (String.format("%.2f", symptomMatchRate)) + "%", false);
+        }
+
+        else if (highestcountdiseasearray.size()==0) {
+            sendMessage("There are no diseases in the database that match your symptoms.", false);
         }
 
 
@@ -268,20 +273,18 @@ public class ChatbotActivity extends AppCompatActivity implements MessageAdapter
 
     @Override
     public void onNoteClick(int position) {
-        if (responseMessageList.size() - position - 2 == 0) {
+        if (responseMessageList.size() - position - 1 == 0) {
+            Intent intent = getIntent();
+            finish();
+            startActivity(intent);
+            }
+        else if (responseMessageList.size() - position - 2 == 0){
             if (clinic.equals("false")) {
                 startActivity(new Intent(getApplicationContext(), MapsActivityPharmacy.class));
                 finish();
             } else if (clinic.equals("true")) {
                 startActivity(new Intent(getApplicationContext(), MapsActivity.class));
                 finish();
-            }
-        else if (responseMessageList.size() - position - 1 == 0){
-            Log.d("hi", "haiyaaa");
-            finish();
-            super.onCreate(null);
-
-
             }
         }
     }

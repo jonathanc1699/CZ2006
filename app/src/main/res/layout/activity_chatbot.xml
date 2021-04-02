@@ -23,8 +23,8 @@
         android:imeOptions="actionSend"
         android:inputType="text"
         android:padding="12dp"
-        android:textColor="#7E7A7A"
-        android:textColorHint="#7E7A7A"
+        android:textColor="#fff"
+        android:textColorHint="#fff"
         android:textSize="18sp" />
 
     <androidx.recyclerview.widget.RecyclerView
