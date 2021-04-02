@@ -5,14 +5,14 @@ import java.util.ArrayList;
 public class Chatstats {
     private ArrayList<String> highestcountdiseasearray;
     private int highestcount;
-    private int symptomsMatchedAgainstDisease;
+    private int possibleSymptomsCount;
     private int possiblediseasesize;
 
-    public Chatstats(ArrayList<String> highestcountdiseasearray,int possiblediseasesize, int highestcount, int symptomsMatchedAgainstDisease ) {
+    public Chatstats(ArrayList<String> highestcountdiseasearray,int possiblediseasesize, int highestcount, int possibleSymptomsCount ) {
         this.highestcountdiseasearray = highestcountdiseasearray;
         this.possiblediseasesize = possiblediseasesize;
         this.highestcount = highestcount;
-        this.symptomsMatchedAgainstDisease = symptomsMatchedAgainstDisease;
+        this.possibleSymptomsCount = possibleSymptomsCount;
 
     }
 
@@ -48,12 +48,12 @@ public class Chatstats {
         this.highestcount = highestcount;
     }
 
-    public int getSymptomsMatchedAgainstDisease() {
-        return symptomsMatchedAgainstDisease;
+    public int getPossibleSymptomsCount() {
+        return possibleSymptomsCount;
     }
 
-    public void setSymptomsMatchedAgainstDisease(int symptomsMatchedAgainstDisease) {
-        this.symptomsMatchedAgainstDisease = symptomsMatchedAgainstDisease;
+    public void setPossibleSymptomsCount(int possibleSymptomsCount) {
+        this.possibleSymptomsCount = possibleSymptomsCount;
     }
 
 

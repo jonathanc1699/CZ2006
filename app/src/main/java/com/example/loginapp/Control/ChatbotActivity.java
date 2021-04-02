@@ -103,7 +103,7 @@ public class ChatbotActivity extends AppCompatActivity implements MessageAdapter
                                 possiblediseases = (ArrayList<String>) alldisease.clone();
 
                                 Chatstats cs= cb.getRecommend(possiblediseases,myMap,tempList);
-                                printriskLevel(cs.getHighestcountdiseasearray(),tempList.size(), cs.getHighestcount(), cs.getSymptomsMatchedAgainstDisease());
+                                printriskLevel(cs.getHighestcountdiseasearray(),tempList.size(), cs.getHighestcount(), cs.getPossibleSymptomsCount());
                                 InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                                 imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
                                 sendMessage("Chat has been disabled. To talk to chatbot again, click here", false);
@@ -185,17 +185,17 @@ public class ChatbotActivity extends AppCompatActivity implements MessageAdapter
         });
     }
 
-    public void printriskLevel(ArrayList<String> highestcountdiseasearray, int possiblesymptomSize, int highestcount, int symptomsMatchedAgainstDisease){
+    public void printriskLevel(ArrayList<String> highestcountdiseasearray, int possiblesymptomSize, int highestcount, int possibleSymptomsCount){
 
         if ((highestcountdiseasearray.size())>0) {
             String highestcountdiseasestring = highestcountdiseasearray.get(0);
             highestcountdiseasestring = arraylistToString(highestcountdiseasestring, highestcountdiseasearray);
-            sendMessage("You are at risk of: " + highestcountdiseasestring + " with a symptom match rate of " + (float) highestcount / symptomsMatchedAgainstDisease * 100 + "%", false);
+            sendMessage("You are at risk of: " + highestcountdiseasestring + " with a symptom match rate of " + (float) highestcount / possibleSymptomsCount * 100 + "%", false);
         }
 
 
         String highrisk= "true";
-        highrisk=cb.highriskLevel(possiblesymptomSize,highestcount,symptomsMatchedAgainstDisease);
+        highrisk=cb.highriskLevel(possiblesymptomSize,highestcount,possibleSymptomsCount);
 
 
         if (highrisk=="false") {
@@ -243,26 +243,28 @@ public class ChatbotActivity extends AppCompatActivity implements MessageAdapter
         }
 
 
-        int symptomsMatchedAgainstDisease = 0;
+        int possibleSymptomsCount = 0;
         for (Map.Entry<String, ArrayList<String>> entry : myMap.entrySet()) {
             String diseasename2 = entry.getKey();
             for (int s = 0; s < highestcountdiseasearray.size(); s++) {
                 if (diseasename2.equals(highestcountdiseasearray.get(s))) {
                     ArrayList<String> highestcountdiseasesymptoms = new ArrayList<String>();
                     ArrayList<String> arraysymptoms= entry.getValue();
-                    symptomsMatchedAgainstDisease = 0;
+                    possibleSymptomsCount = 0;
                     for (int t = 0; t < arraysymptoms.size(); t++) {
 
                         if (arraysymptoms.get(t).equals("fatigue") || arraysymptoms.get(t).equals("nausea") || arraysymptoms.get(t).equals("swollen glands") || arraysymptoms.get(t).equals("rash") || arraysymptoms.get(t).equals("headache") || arraysymptoms.get(t).equals("abdominal pain") || arraysymptoms.get(t).equals("appetite loss") || arraysymptoms.get(t).equals("fever") || arraysymptoms.get(t).equals("dark urine") || arraysymptoms.get(t).equals("joint pain") || arraysymptoms.get(t).equals("jaundice") || arraysymptoms.get(t).equals("flu") || arraysymptoms.get(t).equals("diarrhea") || arraysymptoms.get(t).equals("cough") || arraysymptoms.get(t).equals("red eyes")) {
                             highestcountdiseasesymptoms.add(arraysymptoms.get(t));
-                            symptomsMatchedAgainstDisease++;
+                            possibleSymptomsCount++;
                         }
                     }
                 }
             }
         }
-        printriskLevel(highestcountdiseasearray, possiblediseases.size(), highestcount, symptomsMatchedAgainstDisease);
+        printriskLevel(highestcountdiseasearray, possiblediseases.size(), highestcount, possibleSymptomsCount);
     }*/
+
+
 
     @Override
     public void onNoteClick(int position) {
