@@ -5,7 +5,7 @@
     android:id="@+id/mainmenu"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/pharmacybackground"
+    android:background="@color/places_autocomplete_search_hint"
     tools:context=".Boundary.MainActivity">
 
     <Button
@@ -80,10 +80,10 @@
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.11"
+        app:layout_constraintHorizontal_bias="0.125"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.944" />
+        app:layout_constraintVertical_bias="0.844" />
 
     <Button
         android:id="@+id/enableuserlist"
@@ -95,24 +95,10 @@
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.936"
+        app:layout_constraintHorizontal_bias="0.934"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.944" />
-
-    <Button
-        android:id="@+id/ClinicAdminPage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/white"
-        android:onClick="ClinicAdminPage"
-        android:text="Clinic Admin Page"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.843" />
+        app:layout_constraintVertical_bias="0.844" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/Appointmentlayout"
@@ -200,11 +186,10 @@
             tools:ignore="MissingConstraints" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/floatingActionButton"
+            android:id="@+id/Cancelqueuebutton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:clickable="true"
-            app:backgroundTint="@color/persistent_search_view_divider_color"
+            app:backgroundTint="@color/design_default_color_secondary_variant"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.948"

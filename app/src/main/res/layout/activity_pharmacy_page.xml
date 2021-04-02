@@ -30,13 +30,12 @@
             tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
         <TextView
-            android:id="@+id/textview_openingHoursPharmacy"
+            android:id="@+id/textview_namePharmacy"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:layout_weight="1"
-            android:text="Opening Hours" />
-
+            android:text="Name" />
 
         <TextView
             android:id="@+id/textview_addressPharmacy"
@@ -46,14 +45,15 @@
             android:layout_weight="1"
             android:text="Address" />
 
-
         <TextView
-            android:id="@+id/textview_namePharmacy"
+            android:id="@+id/textview_openingHoursPharmacy"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:layout_weight="1"
-            android:text="Name" />
+            android:text="Opening Hours" />
+
+
 
         <Button
             android:id="@+id/button_direction_pharm"

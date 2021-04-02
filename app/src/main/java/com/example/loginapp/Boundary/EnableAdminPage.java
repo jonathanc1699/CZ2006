@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.SearchView;
 
 import com.example.loginapp.Control.AdminController;
+import com.example.loginapp.Control.EnableDeletedUser;
 import com.example.loginapp.Entity.User;
 import com.example.loginapp.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -145,8 +146,7 @@ public class EnableAdminPage extends AppCompatActivity {
 
         MenuItem alph = menu.findItem(R.id.arrangebyalphabetical);
         alph.setVisible(false);
-        MenuItem dist = menu.findItem(R.id.arrangedist);
-        dist.setVisible(false);
+
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -217,6 +217,15 @@ public class EnableAdminPage extends AppCompatActivity {
                 HashMap<String, Object> map = new HashMap<>();
                 map.put("disabled", false);
                 //removeUser.removeValue();
+
+
+
+                String username =User.get(((int)position)).getFullName();
+                Log.d("username", username);
+                String useremail=User.get(((int)position)).getEmail();
+                Log.d("email", useremail);
+                EnableDeletedUser enableDeletedUser = new EnableDeletedUser();
+                enableDeletedUser.sendEnableEmail( useremail, username);
                 UserToUpdate.updateChildren(map);
                 mAdminController.remove(User.get((int) position));
                 mAdminController.getFilter().filter(newtext);

@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.loginapp.Control.ChatbotActivity;
 import com.example.loginapp.Control.ClinicPage;
@@ -20,6 +21,7 @@ import com.example.loginapp.Entity.User;
 import com.example.loginapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -40,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseCallback 
     int currentQueueNumber=1;
     Intent intent;
     Button buttonname;
+    FloatingActionButton buttoncancelqueue;
     TextView currentQueue;
     TextView timing;
     TextView clinic;
@@ -99,6 +102,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseCallback 
 
 
         buttonname = (Button) findViewById(R.id.appointmentBox);
+        buttoncancelqueue = findViewById(R.id.Cancelqueuebutton);
 
         currentQueue = (TextView) findViewById(R.id.currentqueuenumber);
         timing= (TextView) findViewById(R.id.timing);
@@ -184,6 +188,15 @@ public class MainActivity extends AppCompatActivity implements FirebaseCallback 
                             startActivity(intent);
                         }
                     });
+                    buttoncancelqueue.setOnClickListener(new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View view) {
+                           //TODO cancel queue appointment
+                            Toast.makeText(MainActivity.this, "Cancelqueue",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    });
                 }
                 else
                 {
@@ -191,9 +204,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseCallback 
                 }
             }
         });
-        View clinic = findViewById(R.id.ClinicAdminPage);
-        clinic.setVisibility(View.GONE);
-        //TODO cancel button????????
+
 
 
         //Under cancel button function
@@ -239,6 +250,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseCallback 
         startActivity(new Intent(getApplicationContext(),MapsActivityPharmacy.class));
         finish();
     }
+
 
 
 

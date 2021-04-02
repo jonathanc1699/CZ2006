@@ -1,8 +1,10 @@
 package com.example.loginapp.Boundary;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -14,6 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.loginapp.Control.FirebaseCallback;
 import com.example.loginapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -144,7 +147,29 @@ public class Login extends AppCompatActivity {
 //                                    intent.putExtra("CLINIC_NAME", arrayList.get(i));
                                     }
                                     else {
-                                        Toast.makeText(getApplicationContext(), "Your account has been disabled", Toast.LENGTH_LONG).show();
+                                        //Toast.makeText(getApplicationContext(), "Your account has been disabled", Toast.LENGTH_LONG).show();
+
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
+                                        //builder.setTitle("My title");
+                                        builder.setMessage("Your account has been disabled");
+                                        // add a button
+                                            builder.setPositiveButton(
+                                                    "OK",
+                                                    new DialogInterface.OnClickListener() {
+                                                        public void onClick(DialogInterface dialog, int id) {
+                                                            dialog.cancel();
+                                                            startActivity(new Intent(getApplicationContext(),Login.class));
+                                                            finish();
+//                                                            finish();
+//                                                            startActivity(getIntent());
+                                                        }
+                                                    });
+
+
+
+                                        // create and show the alert dialog
+                                        AlertDialog dialog = builder.create();
+                                        dialog.show();
                                     }
 
 

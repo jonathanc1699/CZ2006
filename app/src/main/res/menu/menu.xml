@@ -16,9 +16,6 @@
 
         app:showAsAction="never" />
 
-    <item
-        android:id="@+id/arrangedist"
-        android:title="arrange by distance"
-        app:showAsAction="never" />
+
 
 </menu>

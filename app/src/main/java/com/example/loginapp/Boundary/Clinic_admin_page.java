@@ -302,9 +302,15 @@ public class Clinic_admin_page extends AppCompatActivity implements FirebaseCall
 
     @Override
     public void onBackPressed() {
-        Intent myIntent = new Intent(getApplicationContext(), mainactivityAdmin.class);
+        Intent myIntent = new Intent(getApplicationContext(), Login.class);
         startActivityForResult(myIntent, 0);
         super.onBackPressed();
+    }
+
+    public void button_logout (View view){
+        FirebaseAuth.getInstance().signOut();
+        startActivity(new Intent(getApplicationContext(),Login.class));
+        finish();
     }
 
 

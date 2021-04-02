@@ -37,10 +37,7 @@ public class mainactivityAdmin extends AppCompatActivity {
         startActivity(new Intent(getApplicationContext(), DisableAdminPage.class));
         finish();
     }
-    public void ClinicAdminPage(View view) {
-        startActivity(new Intent(getApplicationContext(), Clinic_admin_page.class));
-        finish();
-    }
+
     public void enableuserlist(View view) {
         startActivity(new Intent(getApplicationContext(), EnableAdminPage.class));
         finish();

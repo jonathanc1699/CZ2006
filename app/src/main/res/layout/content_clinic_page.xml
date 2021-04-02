@@ -30,24 +30,6 @@
             android:visibility="visible"
             tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
-
-
-        <TextView
-            android:id="@+id/textview_phoneClinic"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:layout_weight="1"
-            android:text="Phone Number" />
-
-        <TextView
-            android:id="@+id/textview_addressClinic"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:layout_weight="1"
-            android:text="Address" />
-
         <TextView
             android:id="@+id/textview_nameClinic"
             android:layout_width="match_parent"
@@ -58,12 +40,31 @@
             android:text="Name" />
 
         <TextView
+            android:id="@+id/textview_addressClinic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:layout_weight="1"
+            android:text="Address" />
+
+        <TextView
             android:id="@+id/textview_openingHoursClinic"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:layout_weight="1"
             android:text="Opening Hours" />
+
+        <TextView
+            android:id="@+id/textview_phoneClinic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:layout_weight="1"
+            android:text="Phone Number" />
+
+
+
 
 
         <LinearLayout
