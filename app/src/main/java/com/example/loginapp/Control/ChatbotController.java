@@ -8,10 +8,10 @@ import java.util.Map;
 
 public class ChatbotController {
 
-    public String highriskLevel(int possiblediseasesSize, int highestcount, int idk) {
+    public String highriskLevel(int possiblesymptomSize, int highestcount, int idk) {
 
 
-        if (possiblediseasesSize <= 3 || (float) highestcount / idk < 0.5) {
+        if (possiblesymptomSize <= 3 || (float) highestcount / idk < 0.5) {
             return "false";
         } else {
             return "true";

@@ -80,11 +80,13 @@ public class ChatbotActivity extends AppCompatActivity implements MessageAdapter
                         String symptomString = tempList.get(0);
                         if(responseMessageList.size() == 1) {
                             sendMessage("Your symptoms are: " + userInput.getText().toString() + ". Enter 'stop' if you do not have anymore symptoms to add", false);
+                            sendMessage("List of possible symptoms: fatigue, nausea, swollen glands, rash, headache, abdominal pain, appetite loss, fever, dark urine, joint pain, jaundice, flu, diarrhea, cough, red eyes.", false);
                         }
 
                         else {
                             symptomString = arraylistToString(symptomString, (ArrayList<String>) tempList);
                             sendMessage("Your symptoms are: " + symptomString + ". Enter 'stop' if you do not have anymore symptoms to add", false);
+                            sendMessage("List of possible symptoms: fatigue, nausea, swollen glands, rash, headache, abdominal pain, appetite loss, fever, dark urine, joint pain, jaundice, flu, diarrhea, cough, red eyes.", false);
 
                         }
                     }
@@ -101,7 +103,7 @@ public class ChatbotActivity extends AppCompatActivity implements MessageAdapter
                                 possiblediseases = (ArrayList<String>) alldisease.clone();
 
                                 Chatstats cs= cb.getRecommend(possiblediseases,myMap,tempList);
-                                printriskLevel(cs.getHighestcountdiseasearray(),cs.getPossiblediseasesize(), cs.getHighestcount(), cs.getIdk());
+                                printriskLevel(cs.getHighestcountdiseasearray(),tempList.size(), cs.getHighestcount(), cs.getIdk());
                                 InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                                 imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
                                 sendMessage("Chat has been disabled. To talk to chatbot again, click here", false);
@@ -113,6 +115,7 @@ public class ChatbotActivity extends AppCompatActivity implements MessageAdapter
 
                         else if (!(allsymptoms.contains(userinput))){
                             sendMessage("Incorrect symptom. Does not belong to symptom list. You entered:" + userInput.getText().toString() + ". Enter 'stop' if you do not have anymore symptoms to add", false);
+                            sendMessage("List of possible symptoms: fatigue, nausea, swollen glands, rash, headache, abdominal pain, appetite loss, fever, dark urine, joint pain, jaundice, flu, diarrhea, cough, red eyes.", false);
                         }
 
                     }
@@ -182,7 +185,7 @@ public class ChatbotActivity extends AppCompatActivity implements MessageAdapter
         });
     }
 
-    public void printriskLevel(ArrayList<String> highestcountdiseasearray, int possiblediseasesSize, int highestcount, int idk){
+    public void printriskLevel(ArrayList<String> highestcountdiseasearray, int possiblesymptomSize, int highestcount, int idk){
 
         if ((highestcountdiseasearray.size())>0) {
             String highestcountdiseasestring = highestcountdiseasearray.get(0);
@@ -192,7 +195,7 @@ public class ChatbotActivity extends AppCompatActivity implements MessageAdapter
 
 
         String highrisk= "true";
-        highrisk=cb.highriskLevel(possiblediseasesSize,highestcount,idk);
+        highrisk=cb.highriskLevel(possiblesymptomSize,highestcount,idk);
 
 
         if (highrisk=="false") {
