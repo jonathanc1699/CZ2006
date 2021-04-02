@@ -38,7 +38,7 @@ public class ChatbotActivity extends AppCompatActivity implements MessageAdapter
     RecyclerView recyclerView;
     List<ResponseMessage> responseMessageList;
     MessageAdapter messageAdapter;
-    List<String> tempList =new ArrayList<String>();
+    List<String> tempList =new ArrayList<String>(); //user's valid symptoms that have been verified against db
     //private static ArrayList<String> diseaseDB =new ArrayList<String>();
     private static HashMap<String, ArrayList<String>> myMap = new HashMap<String, ArrayList<String>>(); // hashmap created.
     private static ArrayList<String> allsymptoms = new ArrayList<String>(); // contains all 15 symptoms possible.
@@ -103,7 +103,7 @@ public class ChatbotActivity extends AppCompatActivity implements MessageAdapter
                                 possiblediseases = (ArrayList<String>) alldisease.clone();
 
                                 Chatstats cs= cb.getRecommend(possiblediseases,myMap,tempList);
-                                printriskLevel(cs.getHighestcountdiseasearray(),tempList.size(), cs.getHighestcount(), cs.getIdk());
+                                printriskLevel(cs.getHighestcountdiseasearray(),tempList.size(), cs.getHighestcount(), cs.getSymptomsMatchedAgainstDisease());
                                 InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                                 imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
                                 sendMessage("Chat has been disabled. To talk to chatbot again, click here", false);
@@ -185,17 +185,17 @@ public class ChatbotActivity extends AppCompatActivity implements MessageAdapter
         });
     }
 
-    public void printriskLevel(ArrayList<String> highestcountdiseasearray, int possiblesymptomSize, int highestcount, int idk){
+    public void printriskLevel(ArrayList<String> highestcountdiseasearray, int possiblesymptomSize, int highestcount, int symptomsMatchedAgainstDisease){
 
         if ((highestcountdiseasearray.size())>0) {
             String highestcountdiseasestring = highestcountdiseasearray.get(0);
             highestcountdiseasestring = arraylistToString(highestcountdiseasestring, highestcountdiseasearray);
-            sendMessage("You are at risk of: " + highestcountdiseasestring + " with a symptom match rate of " + (float) highestcount / idk * 100 + "%", false);
+            sendMessage("You are at risk of: " + highestcountdiseasestring + " with a symptom match rate of " + (float) highestcount / symptomsMatchedAgainstDisease * 100 + "%", false);
         }
 
 
         String highrisk= "true";
-        highrisk=cb.highriskLevel(possiblesymptomSize,highestcount,idk);
+        highrisk=cb.highriskLevel(possiblesymptomSize,highestcount,symptomsMatchedAgainstDisease);
 
 
         if (highrisk=="false") {
@@ -243,25 +243,25 @@ public class ChatbotActivity extends AppCompatActivity implements MessageAdapter
         }
 
 
-        int idk = 0;
+        int symptomsMatchedAgainstDisease = 0;
         for (Map.Entry<String, ArrayList<String>> entry : myMap.entrySet()) {
             String diseasename2 = entry.getKey();
             for (int s = 0; s < highestcountdiseasearray.size(); s++) {
                 if (diseasename2.equals(highestcountdiseasearray.get(s))) {
                     ArrayList<String> highestcountdiseasesymptoms = new ArrayList<String>();
                     ArrayList<String> arraysymptoms= entry.getValue();
-                    idk = 0;
+                    symptomsMatchedAgainstDisease = 0;
                     for (int t = 0; t < arraysymptoms.size(); t++) {
 
                         if (arraysymptoms.get(t).equals("fatigue") || arraysymptoms.get(t).equals("nausea") || arraysymptoms.get(t).equals("swollen glands") || arraysymptoms.get(t).equals("rash") || arraysymptoms.get(t).equals("headache") || arraysymptoms.get(t).equals("abdominal pain") || arraysymptoms.get(t).equals("appetite loss") || arraysymptoms.get(t).equals("fever") || arraysymptoms.get(t).equals("dark urine") || arraysymptoms.get(t).equals("joint pain") || arraysymptoms.get(t).equals("jaundice") || arraysymptoms.get(t).equals("flu") || arraysymptoms.get(t).equals("diarrhea") || arraysymptoms.get(t).equals("cough") || arraysymptoms.get(t).equals("red eyes")) {
                             highestcountdiseasesymptoms.add(arraysymptoms.get(t));
-                            idk++;
+                            symptomsMatchedAgainstDisease++;
                         }
                     }
                 }
             }
         }
-        printriskLevel(highestcountdiseasearray, possiblediseases.size(), highestcount, idk);
+        printriskLevel(highestcountdiseasearray, possiblediseases.size(), highestcount, symptomsMatchedAgainstDisease);
     }*/
 
     @Override
@@ -277,7 +277,7 @@ public class ChatbotActivity extends AppCompatActivity implements MessageAdapter
         else if (responseMessageList.size() - position - 1 == 0){
             Log.d("hi", "haiyaaa");
             finish();
-            startActivity(getIntent());
+            super.onCreate(null);
 
 
             }

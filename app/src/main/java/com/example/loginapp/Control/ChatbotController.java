@@ -8,10 +8,10 @@ import java.util.Map;
 
 public class ChatbotController {
 
-    public String highriskLevel(int possiblesymptomSize, int highestcount, int idk) {
+    public String highriskLevel(int possiblesymptomSize, int highestcount, int symptomsMatchedAgainstDisease) {
 
 
-        if (possiblesymptomSize <= 3 || (float) highestcount / idk < 0.5) {
+        if (possiblesymptomSize <= 3 || (float) highestcount / symptomsMatchedAgainstDisease < 0.5) {
             return "false";
         } else {
             return "true";
@@ -50,27 +50,27 @@ public class ChatbotController {
         }
 
 
-        int idk = 0;
+        int symptomsMatchedAgainstDisease = 0;
         for (Map.Entry<String, ArrayList<String>> entry : myMap.entrySet()) {
             String diseasename2 = entry.getKey();
             for (int s = 0; s < highestcountdiseasearray.size(); s++) {
                 if (diseasename2.equals(highestcountdiseasearray.get(s))) {
                     ArrayList<String> highestcountdiseasesymptoms = new ArrayList<String>();
                     ArrayList<String> arraysymptoms = entry.getValue();
-                    idk = 0;
+                    symptomsMatchedAgainstDisease = 0;
                     for (int t = 0; t < arraysymptoms.size(); t++) {
 
                         if (arraysymptoms.get(t).equals("fatigue") || arraysymptoms.get(t).equals("nausea") || arraysymptoms.get(t).equals("swollen glands") || arraysymptoms.get(t).equals("rash") || arraysymptoms.get(t).equals("headache") || arraysymptoms.get(t).equals("abdominal pain") || arraysymptoms.get(t).equals("appetite loss") || arraysymptoms.get(t).equals("fever") || arraysymptoms.get(t).equals("dark urine") || arraysymptoms.get(t).equals("joint pain") || arraysymptoms.get(t).equals("jaundice") || arraysymptoms.get(t).equals("flu") || arraysymptoms.get(t).equals("diarrhea") || arraysymptoms.get(t).equals("cough") || arraysymptoms.get(t).equals("red eyes")) {
                             highestcountdiseasesymptoms.add(arraysymptoms.get(t));
-                            idk++;
+                            symptomsMatchedAgainstDisease++;
                         }
                     }
                 }
             }
         }
-        Chatstats cs= new Chatstats(highestcountdiseasearray, possiblediseases.size(), highestcount, idk);
+        Chatstats cs= new Chatstats(highestcountdiseasearray, possiblediseases.size(), highestcount, symptomsMatchedAgainstDisease);
         return cs;
-        //printriskLevel(highestcountdiseasearray, possiblediseases.size(), highestcount, idk);
+        //printriskLevel(highestcountdiseasearray, possiblediseases.size(), highestcount, symptomsMatchedAgainstDisease);
     }
 
 
