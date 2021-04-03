@@ -32,7 +32,7 @@ public class MapAdapterPharmacy {
     private static List<Marker> markers = new ArrayList<>();
     //private final ArrayList<Clinic> CLINICDATA = new ArrayList<>();
     //private ClinicAdapter clinicAdapter = new ClinicAdapter();
-    private ArrayList<DistanceClinicToMe> DistToMe = new ArrayList<>();
+    private ArrayList<DistanceClinicToMe> DistToMe;
     final ArrayList<Pharmacy> PHARMACYDATA = new ArrayList<>();
     public MapAdapterPharmacy(){
         this.gmap=null;
@@ -175,22 +175,31 @@ public class MapAdapterPharmacy {
 
     public void findnearestclinic(GoogleMap mMap, LatLng LL){
         Log.d("tag","Finding nearest pharmacy..");
+        DistToMe=new ArrayList<>();
         for(int i=0;i<markers.size();i++){
-            DistToMe.add(new DistanceClinicToMe(markers.get(i).getTitle(),SphericalUtil.computeDistanceBetween(LL,markers.get(i).getPosition())));
-        } Collections.sort(DistToMe, new Comparator<DistanceClinicToMe>() {
+            if(markers.get(i).getTag() != null){
+            DistToMe.add(new DistanceClinicToMe((String) markers.get(i).getTag(),SphericalUtil.computeDistanceBetween(LL,markers.get(i).getPosition()),markers.get(i).getTitle()));
+            }
+        }
+        Collections.sort(DistToMe, new Comparator<DistanceClinicToMe>() {
             @Override
             public int compare(DistanceClinicToMe o1, DistanceClinicToMe o2) {
-                if(o1.Distance == o2.Distance)
+                if(o1.getDistance() == o2.getDistance())
                     return 0;
-                return o1.Distance < o2.Distance ? -1:1;
+                return o1.getDistance() < o2.getDistance() ? -1:1;
             }
         });
-        Log.d("tag","Nearest pharmacy is "+DistToMe.get(0).getClinicName());
+        Log.d("tag","Nearest pharmacy is "+DistToMe.get(0).getClinicName()+ " "+ DistToMe.get(0).getDistance()+" "+DistToMe.get(0).getClinicID());
+        Log.d("tag","Nearest pharmacy is "+DistToMe.get(1).getClinicName()+ " "+ DistToMe.get(1).getDistance()+" "+DistToMe.get(1).getClinicID());
+        Log.d("tag","Nearest pharmacy is "+DistToMe.get(2).getClinicName()+ " "+ DistToMe.get(2).getDistance()+" "+DistToMe.get(2).getClinicID());
         for(int i=0;i<markers.size();i++){
-            if(markers.get(i).getTitle().equals(DistToMe.get(0).getClinicName())){
+            try{
+            if(markers.get(i).getTag().equals(DistToMe.get(0).getClinicID())){
                 markers.get(i).setVisible(true);
                 markers.get(i).showInfoWindow();
                 Log.d("tag","nearest pharmacy marker set to visible");
+            }}catch(NullPointerException e){
+                Log.d("e","Error: "+e);
             }
         }
     }

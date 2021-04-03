@@ -35,7 +35,7 @@ public class MapAdapter {
     //private final ArrayList<Clinic> CLINICDATA = new ArrayList<>();
     //private ClinicAdapter clinicAdapter = new ClinicAdapter();
     final ArrayList<Clinic> CLINICDATA = new ArrayList<>();
-    private ArrayList<DistanceClinicToMe> DistToMe = new ArrayList<>();
+    private static ArrayList<DistanceClinicToMe> DistToMe;
     public MapAdapter(){
         this.gmap=null;
        // this.clinicAdapter.setClinicData();
@@ -174,24 +174,38 @@ public class MapAdapter {
         }
     }
 
-    public void findnearestclinic(GoogleMap mMap, LatLng LL){
+    public void findnearestclinic(GoogleMap mMap, LatLng LL) throws InterruptedException {
+        DistToMe = new ArrayList<>();
         Log.d("tag","Finding nearest clinic..");
         for(int i=0;i<markers.size();i++){
-            DistToMe.add(new DistanceClinicToMe(markers.get(i).getTitle(),SphericalUtil.computeDistanceBetween(LL,markers.get(i).getPosition())));
-        } Collections.sort(DistToMe, new Comparator<DistanceClinicToMe>() {
+            if(markers.get(i).getTag() != null) {
+                DistToMe.add(new DistanceClinicToMe((String) markers.get(i).getTag(), SphericalUtil.computeDistanceBetween(LL, markers.get(i).getPosition()), markers.get(i).getTitle()));
+            }
+        }
+        Log.d("tag","Nearest clinic is "+DistToMe.get(0).getClinicName()+ " "+ DistToMe.get(0).getDistance()+" "+DistToMe.get(0).getClinicID());
+        Log.d("tag","Nearest clinic is "+DistToMe.get(1).getClinicName()+ " "+ DistToMe.get(1).getDistance()+" "+DistToMe.get(1).getClinicID());
+        Log.d("tag","Nearest clinic is "+DistToMe.get(2).getClinicName()+ " "+ DistToMe.get(2).getDistance()+" "+DistToMe.get(2).getClinicID());
+        Collections.sort(DistToMe, new Comparator<DistanceClinicToMe>() {
             @Override
             public int compare(DistanceClinicToMe o1, DistanceClinicToMe o2) {
-                if(o1.Distance == o2.Distance)
+                if(o1.getDistance() == o2.getDistance())
                 return 0;
-                return o1.Distance < o2.Distance ? -1:1;
+                return o1.getDistance() < o2.getDistance() ? -1:1;
+
             }
         });
-        Log.d("tag","Nearest clinic is "+DistToMe.get(0).getClinicName().toString());
+
+        Log.d("tag","Nearest clinic is "+DistToMe.get(0).getClinicName()+ " "+ DistToMe.get(0).getDistance()+" "+DistToMe.get(0).getClinicID());
+        Log.d("tag","Nearest clinic is "+DistToMe.get(1).getClinicName()+ " "+ DistToMe.get(1).getDistance()+" "+DistToMe.get(1).getClinicID());
+        Log.d("tag","Nearest clinic is "+DistToMe.get(2).getClinicName()+ " "+ DistToMe.get(2).getDistance()+" "+DistToMe.get(2).getClinicID());
         for(int i=0;i<markers.size();i++){
-            if(markers.get(i).getTitle().equals(DistToMe.get(0).getClinicName())){
+            try{
+            if( markers.get(i).getTag().equals(DistToMe.get(0).getClinicID())){
                 markers.get(i).setVisible(true);
                 markers.get(i).showInfoWindow();
-                Log.d("tag","nearest clnic marker set to visible");
+                Log.d("tag","nearest clinic marker set to visible");
+            }}catch(NullPointerException e){
+                Log.d("e","Error: "+e);
             }
         }
     }

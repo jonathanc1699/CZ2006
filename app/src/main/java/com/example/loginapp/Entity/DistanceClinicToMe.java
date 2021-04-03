@@ -1,17 +1,20 @@
 package com.example.loginapp.Entity;
 
 public class DistanceClinicToMe {
-    public String ClinicName;
-    public double Distance;
+    private String ClinicName;
+    private double Distance;
+    private String ClinicID;
 
-    public DistanceClinicToMe(String title, double computeDistanceBetween) {
+    public DistanceClinicToMe(String ClinicID, double computeDistanceBetween, String title) {
         this.ClinicName = title;
         this.Distance = computeDistanceBetween;
+        this.ClinicID = ClinicID;
     }
 
-    public void DistanceClinicToMe(String ClinicName, double Distance){
+    public void setDistanceClinicToMe(String ClinicName, double Distance, String ClinicID){
         this.ClinicName = ClinicName;
         this.Distance = Distance;
+        this.ClinicID = ClinicID;
     }
 
     public String getClinicName(){
@@ -19,6 +22,8 @@ public class DistanceClinicToMe {
     }
     public double getDistance() {
         return this.Distance;
-    }}
+    }
+    public String getClinicID(){ return this.ClinicID;}
+}
 
 

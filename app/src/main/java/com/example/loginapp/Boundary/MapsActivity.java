@@ -201,7 +201,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mFusedLocationClient.getLastLocation().addOnSuccessListener(this, location -> {
             if (location != null) {
                 LatLng myLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-                Log.d("tag", "My location is " + location);
+                Log.d("tag", "My location is " + myLatLng);
                 Marker m = mMap.addMarker(new MarkerOptions().position(myLatLng).title("You are here"));
                 m.showInfoWindow();
 
