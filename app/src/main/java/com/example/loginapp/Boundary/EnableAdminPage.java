@@ -46,7 +46,7 @@ public class EnableAdminPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_page);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
         //initialize the views
@@ -184,7 +184,12 @@ public class EnableAdminPage extends AppCompatActivity {
 
             return true;
         }
+        else{
+            Intent myIntent = new Intent(getApplicationContext(), mainactivityAdmin.class);
+            startActivityForResult(myIntent, 0);
+        }
         return super.onOptionsItemSelected(item);
+
     }
 
 

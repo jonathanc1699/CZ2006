@@ -48,6 +48,8 @@ public class ListofPharmacies extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_page);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
 
 
@@ -199,6 +201,7 @@ public class ListofPharmacies extends AppCompatActivity {
 
 
 
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -209,7 +212,11 @@ public class ListofPharmacies extends AppCompatActivity {
         startActivityForResult(myIntent, 0);
         super.onBackPressed();
     }
-
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
 
 
 

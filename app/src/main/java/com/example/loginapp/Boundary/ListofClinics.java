@@ -49,6 +49,8 @@ public class ListofClinics extends AppCompatActivity {
         setContentView(R.layout.activity_list_page);
 
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
 
         //initialize the views
@@ -195,10 +197,14 @@ public class ListofClinics extends AppCompatActivity {
 
                 return true;
 
-
-
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
     @Override
@@ -207,6 +213,9 @@ public class ListofClinics extends AppCompatActivity {
         startActivityForResult(myIntent, 0);
         super.onBackPressed();
     }
+
+
+
 
 
 

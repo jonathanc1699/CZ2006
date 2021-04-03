@@ -52,6 +52,8 @@ public class PharmacyPage extends AppCompatActivity {
         PharmacyName= getIntent().getStringExtra("Pharmacy Name");
 
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
 
 
@@ -116,6 +118,11 @@ public class PharmacyPage extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         this.finish();
+    }
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
 

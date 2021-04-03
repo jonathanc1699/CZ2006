@@ -18,11 +18,20 @@
             android:name=".Control.ChatbotActivity"
             android:parentActivityName=".Boundary.MainActivity" />
         <activity android:name=".Control.ClinicPage" />
-        <activity android:name=".Boundary.DisableAdminPage" />
+
         <activity android:name=".Boundary.MapsActivity" />
         <activity android:name=".Boundary.MapsActivityPharmacy" />
         <activity android:name=".Boundary.mainactivityAdmin" />
-        <activity android:name=".Boundary.EnableAdminPage" />
+
+
+        <activity android:name=".Boundary.DisableAdminPage"
+            >
+        </activity>
+
+        <activity android:name=".Boundary.EnableAdminPage"/>
+
+
+
         <activity
             android:name=".Boundary.Login"
             android:label="@string/app_name">

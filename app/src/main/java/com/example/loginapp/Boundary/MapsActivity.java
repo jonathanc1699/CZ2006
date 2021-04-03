@@ -1,5 +1,6 @@
 package com.example.loginapp.Boundary;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageButton;
@@ -18,6 +19,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -75,6 +77,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         Log.d("DEBUG", "Creating map activity");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
@@ -268,7 +271,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         });*/
 
     }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
+            Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivityForResult(myIntent, 0);
+
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public void onBackPressed() {
