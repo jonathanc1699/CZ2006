@@ -110,11 +110,11 @@ public class ChatbotActivity extends AppCompatActivity implements MessageAdapter
                             }
                         }
                         else if (tempList.contains(userinput)){
-                            sendMessage("Incorrect symptom. You entered a repeat symptom:" + userInput.getText().toString() + ". Enter 'stop' if you do not have anymore symptoms to add", false);
+                            sendMessage("Incorrect symptom. You entered a repeat symptom: " + userInput.getText().toString() + ". Enter 'stop' if you do not have anymore symptoms to add", false);
                         }
 
                         else if (!(allsymptoms.contains(userinput))){
-                            sendMessage("Incorrect symptom. Does not belong to symptom list. You entered:" + userInput.getText().toString() + ". Enter 'stop' if you do not have anymore symptoms to add", false);
+                            sendMessage("Incorrect symptom. Does not belong to symptom list. You entered: " + userInput.getText().toString() + ". Enter 'stop' if you do not have anymore symptoms to add", false);
                             sendMessage("List of possible symptoms: fatigue, nausea, swollen glands, rash, headache, abdominal pain, appetite loss, fever, dark urine, joint pain, jaundice, flu, diarrhea, cough, red eyes.", false);
                         }
 

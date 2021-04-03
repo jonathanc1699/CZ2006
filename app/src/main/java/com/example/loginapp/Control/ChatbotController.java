@@ -13,7 +13,7 @@ public class ChatbotController {
     public String highriskLevel(int possiblesymptomSize, int highestcount, int possibleSymptomsCount) {
 
 
-        if (possiblesymptomSize <= 3 || (float) highestcount / possibleSymptomsCount < 0.5) {
+        if (possiblesymptomSize <= 3 && (float) highestcount / possibleSymptomsCount < 0.5) {
             return "false";
         } else {
             return "true";
