@@ -1,4 +1,4 @@
-package com.example.loginapp.Control;
+package com.example.loginapp.Entity;
 
 public class ResponseMessage {
     String textMessage;

@@ -27,7 +27,7 @@
             />
 
         <activity
-            android:name=".Control.ChatbotActivity"
+            android:name=".Boundary.ChatbotActivity"
             android:parentActivityName=".Boundary.MainActivity"
             android:label="Chatbot"
             />
