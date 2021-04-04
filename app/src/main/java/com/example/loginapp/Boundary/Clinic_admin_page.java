@@ -14,7 +14,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 
 import com.example.loginapp.Control.ClinicAdminQueueController;
-import com.example.loginapp.Control.FirebaseCallback;
+import com.example.loginapp.FirebaseCallback;
 import com.example.loginapp.Entity.Clinic;
 import com.example.loginapp.Entity.User;
 import com.example.loginapp.R;
@@ -63,11 +63,9 @@ public class Clinic_admin_page extends AppCompatActivity implements FirebaseCall
     TextView textView_clinicname;
     TextView textView_totalpatient;
 
-    User user;
+
     String clinicID;
-    String userID;
-    int clinicQ;
-    String fullName;
+
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference clinicRef = db.collection("clinic");
 

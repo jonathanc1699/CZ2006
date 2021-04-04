@@ -3,7 +3,6 @@ package com.example.loginapp.Boundary;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
@@ -22,16 +21,10 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.loginapp.Control.ClinicAdapter;
-import com.example.loginapp.Control.ClinicController;
 import com.example.loginapp.Control.ClinicPage;
 import com.example.loginapp.Control.MapAdapter;
-import com.example.loginapp.Entity.Clinic;
 import com.example.loginapp.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -39,21 +32,9 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.gson.Gson;
-import com.paulrybitskyi.persistentsearchview.PersistentSearchView;
-import com.paulrybitskyi.persistentsearchview.listeners.OnSearchConfirmedListener;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 

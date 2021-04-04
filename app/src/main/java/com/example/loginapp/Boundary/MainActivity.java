@@ -13,7 +13,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.loginapp.Control.ClinicPage;
-import com.example.loginapp.Control.FirebaseCallback;
+import com.example.loginapp.FirebaseCallback;
 import com.example.loginapp.Control.UserQueueController;
 import com.example.loginapp.Entity.Clinic;
 import com.example.loginapp.Entity.User;
