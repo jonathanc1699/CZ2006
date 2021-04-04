@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseCallback 
     int currentQueueNumber=1;
     Intent intent;
     Button buttonname;
-    FloatingActionButton buttoncancelqueue;
+    Button buttoncancelqueue;
     TextView currentQueue;
     TextView timing;
     TextView clinic;
@@ -97,18 +97,13 @@ public class MainActivity extends AppCompatActivity implements FirebaseCallback 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        View deleteuserlist = findViewById(R.id.adminuserlist);
-        deleteuserlist.setVisibility(View.GONE);
-
-        View enableuserlist = findViewById(R.id.enableuserlist);
-        enableuserlist.setVisibility(View.GONE);
 
         View contraint = findViewById(R.id.Appointmentlayout);
         contraint.setVisibility(View.GONE);
 
 
         buttonname = (Button) findViewById(R.id.appointmentBox);
-        buttoncancelqueue = findViewById(R.id.Cancelqueuebutton);
+        buttoncancelqueue = (Button) findViewById(R.id.Cancelqueuebutton);
 
         currentQueue = (TextView) findViewById(R.id.currentqueuenumber);
         timing= (TextView) findViewById(R.id.timing);
@@ -257,5 +252,6 @@ public class MainActivity extends AppCompatActivity implements FirebaseCallback 
         startActivity(new Intent(getApplicationContext(),MapsActivityPharmacy.class));
         finish();
     }
+
 
 }

@@ -14,17 +14,9 @@ public class mainactivityAdmin extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_admin);
 
 
-        View two = findViewById(R.id.nearestClinic);
-        View three = findViewById(R.id.nearestPharmacy);
-        View four = findViewById(R.id.Appointmentlayout);
-        View five = findViewById(R.id.chatbot);
-        two.setVisibility(View.GONE);
-        three.setVisibility(View.GONE);
-        four.setVisibility(View.GONE);
-        five.setVisibility(View.GONE);
     }
 
     public void logout (View view){

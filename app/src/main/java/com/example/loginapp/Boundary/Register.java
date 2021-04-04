@@ -1,8 +1,5 @@
 package com.example.loginapp.Boundary;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -13,7 +10,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.loginapp.Control.GMailSender;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.loginapp.Entity.User;
 import com.example.loginapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -106,7 +105,6 @@ public class Register extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             String userId=FirebaseAuth.getInstance().getCurrentUser().getUid();
                             User user = new User(fullName, email,0, "nil" ,userId, false , false,false,"nil","nil"); // Set default to 0 and null
-                            //TODO: Add the rest of the attributes other than UserID
                             FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
 

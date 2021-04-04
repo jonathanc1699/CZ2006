@@ -22,23 +22,7 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/chatbot"
-        app:layout_constraintVertical_bias="0.016" />
-
-    <Button
-        android:id="@+id/nearestClinic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/white"
-        android:hapticFeedbackEnabled="false"
-        android:onClick="nearestClinic"
-        android:text="Nearest Clinic"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.096" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/nearestPharmacy"
@@ -48,12 +32,12 @@
         android:onClick="nearestPharmacy"
         android:text="Nearest Pharmacy"
         android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/chatbot"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.86"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.224" />
+        app:layout_constraintTop_toBottomOf="@+id/Appointmentlayout"
+        app:layout_constraintVertical_bias="0.622" />
 
     <Button
         android:id="@+id/chatbot"
@@ -68,69 +52,39 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.617" />
+        app:layout_constraintVertical_bias="0.705" />
 
-    <Button
-        android:id="@+id/adminuserlist"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/white"
-        android:onClick="adminuserlist"
-        android:text="Disable Userlist"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.125"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.844" />
-
-    <Button
-        android:id="@+id/enableuserlist"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/white"
-        android:onClick="enableuserlist"
-        android:text="Enable Userlist"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.934"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.844" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/Appointmentlayout"
-        android:layout_width="369dp"
-        android:layout_height="143dp"
+        android:layout_width="404dp"
+        android:layout_height="244dp"
         android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.642"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.428"
+        app:layout_constraintVertical_bias="0.13"
         tools:ignore="MissingConstraints">
 
 
         <Button
             android:id="@+id/appointmentBox"
-            android:layout_width="106dp"
-            android:layout_height="40dp"
+            android:layout_width="181dp"
+            android:layout_height="51dp"
             android:backgroundTint="@color/white"
             android:contentDescription="User's current appointment details"
             android:elevation="0dp"
             android:onClick="appointmentBox"
-            android:text="View appointment"
+            android:text="View booking"
             android:textColor="@color/black"
             android:textColorHint="#FFFFFF"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.707"
+            app:layout_constraintHorizontal_bias="0.106"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.932">
+            app:layout_constraintVertical_bias="0.974">
 
         </Button>
 
@@ -142,33 +96,35 @@
             android:text="Current Queue Number: "
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.92"
+            app:layout_constraintHorizontal_bias="0.895"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.673" />
 
         <TextView
             android:id="@+id/timing"
-            android:layout_width="147dp"
-            android:layout_height="39dp"
+            android:layout_width="173dp"
+            android:layout_height="43dp"
             android:elevation="2dp"
             android:text="Estimated waiting time:"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.072"
+            app:layout_constraintHorizontal_bias="0.082"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.98" />
+            app:layout_constraintVertical_bias="0.683" />
 
         <TextView
             android:id="@+id/currentclinic"
-            android:layout_width="147dp"
-            android:layout_height="49dp"
+            android:layout_width="232dp"
+            android:layout_height="50dp"
             android:elevation="2dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.068"
+            app:layout_constraintHorizontal_bias="0.619"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.351" />
 
         <TextView
             android:id="@+id/currentAppointmentprompt"
@@ -185,21 +141,39 @@
             app:layout_constraintVertical_bias="0.108"
             tools:ignore="MissingConstraints" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
+        <Button
             android:id="@+id/Cancelqueuebutton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:backgroundTint="@color/design_default_color_secondary_variant"
+            android:layout_width="178dp"
+            android:layout_height="48dp"
+            android:backgroundTint="@color/white"
+            android:onClick="Cancelqueuebutton"
+            android:text="Cancel booking"
+            android:textColor="@color/black"
+            android:textColorHint="#FFFFFF"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.948"
+            app:layout_constraintHorizontal_bias="0.932"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.977"
-            app:srcCompat="@android:drawable/ic_delete" />
+            app:layout_constraintVertical_bias="0.955" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:id="@+id/nearestClinic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:backgroundTint="@color/white"
+        android:hapticFeedbackEnabled="false"
+        android:onClick="nearestClinic"
+        android:text="Nearest Clinic"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@+id/chatbot"
+        app:layout_constraintEnd_toStartOf="@+id/nearestPharmacy"
+        app:layout_constraintTop_toBottomOf="@+id/Appointmentlayout"
+        app:layout_constraintVertical_bias="0.622" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

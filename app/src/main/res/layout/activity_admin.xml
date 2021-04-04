@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:label="Admin Page"
+    android:id="@+id/Adminmainmenu"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/places_autocomplete_search_hint"
+    tools:context=".Boundary.mainactivityAdmin">
+
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="128dp"
+        android:backgroundTint="@color/white"
+        android:onClick="logout"
+        android:text="Log Out"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/enableuserlist"
+        app:layout_constraintVertical_bias="0.402" />
+
+    <Button
+        android:id="@+id/adminuserlist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/white"
+        android:onClick="adminuserlist"
+        android:text="Disable Userlist"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.304" />
+
+    <Button
+        android:id="@+id/enableuserlist"
+        android:layout_width="170dp"
+        android:layout_height="51dp"
+        android:backgroundTint="@color/white"
+        android:onClick="enableuserlist"
+        android:text="Enable Userlist"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/adminuserlist"
+        app:layout_constraintVertical_bias="0.138" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

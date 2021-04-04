@@ -9,26 +9,54 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.LogInApp">
-        <activity android:name=".Control.PharmacyPage"></activity>
-        <activity android:name=".Boundary.Clinic_admin_page" />
-        <activity android:name=".Boundary.ListofClinics" />
-        <activity android:name=".Boundary.ListofPharmacies" />
+        <activity
+            android:name=".Control.PharmacyPage"
+            android:label="Pharmacy">
+        </activity>
+        <activity
+            android:name=".Boundary.Clinic_admin_page"
+            android:label="Clinic Admin"
+            />
+        <activity
+            android:name=".Boundary.ListofClinics"
+            android:label="Clinic List"
+            />
+        <activity
+            android:name=".Boundary.ListofPharmacies"
+            android:label="Pharmacy List"
+            />
 
         <activity
             android:name=".Control.ChatbotActivity"
-            android:parentActivityName=".Boundary.MainActivity" />
-        <activity android:name=".Control.ClinicPage" />
+            android:parentActivityName=".Boundary.MainActivity"
+            android:label="Chatbot"
+            />
+        <activity
+            android:name=".Control.ClinicPage"
+            android:label="Selected Clinic"
+            />
 
-        <activity android:name=".Boundary.MapsActivity" />
-        <activity android:name=".Boundary.MapsActivityPharmacy" />
-        <activity android:name=".Boundary.mainactivityAdmin" />
+        <activity
+            android:name=".Boundary.MapsActivity"
+            android:label="Nearest Clinics"
+            />
+        <activity
+            android:name=".Boundary.MapsActivityPharmacy"
+            android:label="Nearest Pharmacies"
+            />
+        <activity
+            android:name=".Boundary.mainactivityAdmin"
+            android:label="Admin"
+            />
 
 
         <activity android:name=".Boundary.DisableAdminPage"
+            android:label="Disable Users"
             >
         </activity>
 
-        <activity android:name=".Boundary.EnableAdminPage"/>
+        <activity android:name=".Boundary.EnableAdminPage"
+            android:label="Enable Users"/>
 
 
 
