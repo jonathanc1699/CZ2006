@@ -1,5 +1,6 @@
 package com.example.loginapp.Control;
 
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,7 +63,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.CustomVi
 
     @Override
     public void onBindViewHolder(@NonNull MessageAdapter.CustomViewHolder holder, int position) {
-        holder.textView.setText(responseMessageList.get(position).getTextMessage());
+        holder.textView.setText(Html.fromHtml(responseMessageList.get(position).getTextMessage()));
     }
 
     @Override
