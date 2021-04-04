@@ -19,12 +19,12 @@
         android:background="@drawable/bg_edit_text"
         android:elevation="3dp"
         android:hint="Please enter your symptoms one by one"
+        android:textColorHint="#A3000000"
         android:imeActionId="4"
         android:imeOptions="actionSend"
         android:inputType="text"
         android:padding="12dp"
-        android:textColor="#fff"
-        android:textColorHint="#fff"
+        android:textColor="#A3000000"
         android:textSize="18sp" />
 
     <androidx.recyclerview.widget.RecyclerView
