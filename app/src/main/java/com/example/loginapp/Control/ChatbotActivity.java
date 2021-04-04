@@ -106,7 +106,7 @@ public class ChatbotActivity extends AppCompatActivity implements MessageAdapter
                                 printriskLevel(cs.getHighestcountdiseasearray(),tempList.size(), cs.getHighestcount(), cs.getPossibleSymptomsCount());
                                 InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                                 imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-                                sendMessage("Chat has been disabled. To talk to chatbot again, click here", false);
+                                sendMessage("Chat has been disabled. To talk to chatbot again, <i><b><u>click here</u></b></i> ", false);
                             }
                         }
                         else if (tempList.contains(userinput)){
@@ -205,13 +205,13 @@ public class ChatbotActivity extends AppCompatActivity implements MessageAdapter
 
         if (highrisk=="false") {
             sendMessage("Your risk level is estimated to be low, we recommend that you visit a pharmacy to purchase medication and self-medicate.", false);
-            sendMessage("Click here to be redirected to the pharmacy page.", false);
+            sendMessage("<i><b><u>Click here</u></b></i> to be redirected to the pharmacy page. ", false);
             clinic = "false";
 
         }
         else {
             sendMessage("Your risk level is estimated to be high, we recommend that you visit a clinic to consult a doctor immediately.", false);
-            sendMessage("Click here to be redirected to the clinic page.", false);
+            sendMessage("<i><b><u>Click here</u></b></i> to be redirected to the clinic page.", false);
             clinic = "true";
         }
     }
