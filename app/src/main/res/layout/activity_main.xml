@@ -5,7 +5,7 @@
     android:id="@+id/mainmenu"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/places_autocomplete_search_hint"
+    android:background="@drawable/appbackground"
     tools:context=".Boundary.MainActivity">
 
     <Button
