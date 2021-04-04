@@ -83,6 +83,7 @@ public class DisableAdminPage extends AppCompatActivity {
                     String email=ds.child("email").getValue(String.class);
                     String name=ds.child("fullName").getValue(String.class);
                     Boolean isDisabled = ds.child("disabled").getValue(Boolean.class);
+                    Boolean isClinicAdmin = ds.child("clinicAdmin").getValue(Boolean.class);
                     Boolean isAdmin = ds.child("admin").getValue(Boolean.class);
                     if(isDisabled==null){
                         isDisabled = ds.child("Disabled").getValue(Boolean.class);
@@ -90,8 +91,11 @@ public class DisableAdminPage extends AppCompatActivity {
                     if(isAdmin==null){
                         isAdmin = ds.child("Admin").getValue(Boolean.class);
                     }
+                    if(isClinicAdmin==null){
+                        isClinicAdmin=false;
+                    }
 
-                    if(isAdmin==false && isDisabled==false){
+                    if(isAdmin==false && isDisabled==false && isClinicAdmin==false){
                         User.add(new User(name,email,0, "nil",uid,false,false,false,"nil","nil"));
                     }
 
