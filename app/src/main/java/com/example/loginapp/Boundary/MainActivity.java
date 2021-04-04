@@ -129,6 +129,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseCallback 
                     currentQueue.setText("");
                     timing.setText("");
                     buttonname.setEnabled(false);
+                    buttoncancelqueue.setEnabled(false);
 
                 }
             }

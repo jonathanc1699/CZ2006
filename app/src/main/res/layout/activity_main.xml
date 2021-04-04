@@ -146,7 +146,7 @@
             android:layout_width="178dp"
             android:layout_height="48dp"
             android:backgroundTint="@color/white"
-            android:onClick="Cancelqueuebutton"
+
             android:text="Cancel booking"
             android:textColor="@color/black"
             android:textColorHint="#FFFFFF"
