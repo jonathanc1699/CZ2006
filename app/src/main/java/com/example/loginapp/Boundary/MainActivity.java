@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.example.loginapp.Control.ChatbotActivity;
 import com.example.loginapp.Control.ClinicPage;
 import com.example.loginapp.Control.FirebaseCallback;
+import com.example.loginapp.Control.UserQueueController;
 import com.example.loginapp.Entity.Clinic;
 import com.example.loginapp.Entity.User;
 import com.example.loginapp.R;
@@ -35,7 +36,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity implements FirebaseCallback {
+
+public class MainActivity extends AppCompatActivity implements FirebaseCallback  {
     User user;
     String currentClinicID;
     String clinicName;
@@ -51,6 +53,10 @@ public class MainActivity extends AppCompatActivity implements FirebaseCallback 
     FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Users");
     final DatabaseReference currentUser = databaseReference.child(firebaseUser.getUid());
+
+    UserQueueController userQueueController = new UserQueueController();
+
+    final MainActivity context = this;
 
     @Override
     public void onCallback(String value) {
@@ -130,9 +136,6 @@ public class MainActivity extends AppCompatActivity implements FirebaseCallback 
                     buttonname.setEnabled(false);
 
                 }
-
-
-
             }
 
 
@@ -192,9 +195,35 @@ public class MainActivity extends AppCompatActivity implements FirebaseCallback 
 
                         @Override
                         public void onClick(View view) {
-                           //TODO cancel queue appointment
-                            Toast.makeText(MainActivity.this, "Cancelqueue",
-                                    Toast.LENGTH_LONG).show();
+                            //
+                            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                            //builder.setTitle("My title");\
+                            builder.setMessage("Are you sure you want to cancel your appointment? " +
+                                    "\n***ACTION IS IRREVERSIBLE***");
+
+                            builder.setPositiveButton(
+                                    "Yes",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+
+                                            userQueueController.sendCancellationEmail(clinicName);
+                                            userQueueController.cancelQUser(firebaseUser.getUid());
+                                        }
+                                    }
+                            );
+                            builder.setNegativeButton(
+                                    "Cancel",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            dialog.cancel();
+                                        }
+                                    });
+
+                            // create and show the alert dialog
+                            AlertDialog dialog = builder.create();
+                            dialog.show();
+
+                            //
                         }
                     });
                 }
@@ -204,28 +233,6 @@ public class MainActivity extends AppCompatActivity implements FirebaseCallback 
                 }
             }
         });
-
-
-
-        //Under cancel button function
-        /*
-        //Cancel appointment
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        builder.setMessage("Appoinment has been cancelled");
-
-        builder.setNegativeButton(
-                "Got it!",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-        AlertDialog dialog = builder.create();
-        dialog.show();
-        */
-
-
     }
 
 
@@ -250,19 +257,5 @@ public class MainActivity extends AppCompatActivity implements FirebaseCallback 
         startActivity(new Intent(getApplicationContext(),MapsActivityPharmacy.class));
         finish();
     }
-
-
-
-
-//    public void ClinicAdminPage(View view) {
-//        startActivity(new Intent(getApplicationContext(), Clinic_admin_page.class));
-//        finish();
-//    }
-
-
-
-
-
-
 
 }

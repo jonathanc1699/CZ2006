@@ -124,9 +124,10 @@ public class UserQueueController {
         currentUser.addListenerForSingleValueEvent(userListener);
     }
 
-    /*
+
     //Send Cancellation email to user
-    private void sendCancellationEmail() {
+    public void sendCancellationEmail(String clinicname) {
+
         String senderemail = "cz2006sickgowhere@gmail.com";
         String userEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
         String recipientemail = userEmail;// fetch user's email
@@ -138,7 +139,7 @@ public class UserQueueController {
                     GMailSender sender = new GMailSender("cz2006sickgowhere@gmail.com", "123456sickgowhere");
                     sender.sendMail("Appointment cancellation confirmation",
                             "This is a confirmation that your appointment with " +
-                                    + clinicname + " has been cancelled at your request." +
+                                    clinicname + " has been cancelled at your request." +
                                     " \n\nThank you for using SickGoWhere.\n\nSickGoWhere",
                             senderemail, recipientemail);
 
@@ -152,7 +153,7 @@ public class UserQueueController {
 
     }
 
-     */
+
 }
 
 
