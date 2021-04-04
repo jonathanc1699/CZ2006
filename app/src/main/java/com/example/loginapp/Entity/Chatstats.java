@@ -1,4 +1,4 @@
-package com.example.loginapp.Control;
+package com.example.loginapp.Entity;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package com.example.loginapp.Control;
+package com.example.loginapp.Boundary;
 
 
 import androidx.annotation.NonNull;
@@ -6,8 +6,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.loginapp.Boundary.MapsActivity;
-import com.example.loginapp.Boundary.MapsActivityPharmacy;
+import com.example.loginapp.Control.ChatbotController;
+import com.example.loginapp.Control.MessageAdapter;
+import com.example.loginapp.Entity.ResponseMessage;
+import com.example.loginapp.Entity.Chatstats;
 import com.example.loginapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -20,7 +22,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
