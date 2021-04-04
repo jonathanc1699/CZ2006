@@ -24,7 +24,7 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/enableuserlist"
-        app:layout_constraintVertical_bias="0.402" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/adminuserlist"
@@ -36,23 +36,25 @@
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.304" />
+        app:layout_constraintVertical_bias="0.461" />
 
     <Button
         android:id="@+id/enableuserlist"
-        android:layout_width="170dp"
-        android:layout_height="51dp"
+        android:layout_width="121dp"
+        android:layout_height="50dp"
         android:backgroundTint="@color/white"
         android:onClick="enableuserlist"
         android:text="Enable Userlist"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.751"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/adminuserlist"
-        app:layout_constraintVertical_bias="0.138" />
+        app:layout_constraintTop_toTopOf="@+id/adminuserlist"
+        app:layout_constraintVertical_bias="0.0" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,12 +8,10 @@
     tools:showIn="@layout/activity_clinic_page">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="397dp"
+        android:layout_height="727dp"
         android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -33,7 +31,7 @@
         <TextView
             android:id="@+id/textview_nameClinic"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="62dp"
             android:layout_margin="16dp"
 
             android:layout_weight="1"
@@ -42,7 +40,7 @@
         <TextView
             android:id="@+id/textview_addressClinic"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="47dp"
             android:layout_margin="16dp"
             android:layout_weight="1"
             android:text="Address" />
@@ -50,22 +48,19 @@
         <TextView
             android:id="@+id/textview_openingHoursClinic"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="44dp"
             android:layout_margin="16dp"
             android:layout_weight="1"
             android:text="Opening Hours" />
 
+
         <TextView
             android:id="@+id/textview_phoneClinic"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="39dp"
             android:layout_margin="16dp"
             android:layout_weight="1"
             android:text="Phone Number" />
-
-
-
-
 
         <LinearLayout
             android:layout_width="match_parent"

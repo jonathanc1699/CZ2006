@@ -72,7 +72,7 @@
             android:id="@+id/appointmentBox"
             android:layout_width="181dp"
             android:layout_height="51dp"
-            android:backgroundTint="@color/white"
+            android:backgroundTint="@color/quantum_grey50"
             android:contentDescription="User's current appointment details"
             android:elevation="0dp"
             android:onClick="appointmentBox"
@@ -81,25 +81,25 @@
             android:textColorHint="#FFFFFF"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.106"
+            app:layout_constraintHorizontal_bias="0.103"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.974">
+            app:layout_constraintVertical_bias="0.958">
 
         </Button>
 
         <TextView
             android:id="@+id/currentqueuenumber"
-            android:layout_width="167dp"
-            android:layout_height="41dp"
+            android:layout_width="173dp"
+            android:layout_height="43dp"
             android:elevation="2dp"
             android:text="Current Queue Number: "
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.895"
+            app:layout_constraintHorizontal_bias="0.936"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.673" />
+            app:layout_constraintVertical_bias="0.635" />
 
         <TextView
             android:id="@+id/timing"
@@ -109,10 +109,10 @@
             android:text="Estimated waiting time:"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.082"
+            app:layout_constraintHorizontal_bias="0.134"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.683" />
+            app:layout_constraintVertical_bias="0.641" />
 
         <TextView
             android:id="@+id/currentclinic"
@@ -121,10 +121,10 @@
             android:elevation="2dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.619"
+            app:layout_constraintHorizontal_bias="0.587"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.351" />
+            app:layout_constraintVertical_bias="0.335" />
 
         <TextView
             android:id="@+id/currentAppointmentprompt"
@@ -143,9 +143,9 @@
 
         <Button
             android:id="@+id/Cancelqueuebutton"
-            android:layout_width="178dp"
-            android:layout_height="48dp"
-            android:backgroundTint="@color/white"
+            android:layout_width="181dp"
+            android:layout_height="51dp"
+            android:backgroundTint="@color/quantum_grey100"
 
             android:text="Cancel booking"
             android:textColor="@color/black"
