@@ -60,15 +60,7 @@ public class DisableAdminPage extends AppCompatActivity {
         listView.setEmptyView(findViewById(R.id.empty_subtitle_text));
 
 
-        //TODO link with the rest
 
-        //to fetch all the users of firebase Auth app
-//        fAuth = FirebaseAuth.getInstance();
-//        String email = fAuth.getCurrentUser().getEmail();
-//        String name = fAuth.getCurrentUser().getDisplayName();
-//        User.add(new User(email, name));
-
-        // Start listing users from the beginning, 1000 at a time.
 
 
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
@@ -99,7 +91,7 @@ public class DisableAdminPage extends AppCompatActivity {
                         User.add(new User(name,email,0, "nil",uid,false,false,false,"nil","nil"));
                     }
 
-                    //TODO: Change user stuff
+
                 }
 
                 mAdminController = new AdminController(DisableAdminPage.this,User);
@@ -245,8 +237,6 @@ public class DisableAdminPage extends AppCompatActivity {
                 mAdminController.remove(User.get((int) position));
                 mAdminController.getFilter().filter(newtext);
 
-                //TODO fAuth.deleteUser(User.get((int) position).uid);
-                //delete in authentication
 
             }
         });

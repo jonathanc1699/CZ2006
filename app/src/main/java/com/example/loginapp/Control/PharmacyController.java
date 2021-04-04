@@ -22,9 +22,7 @@ import com.example.loginapp.R;
 
 import java.util.ArrayList;
 
-//TODO
-//load data: arraylist<admin>
-//save data(adminlist)
+
 
 public class PharmacyController extends ArrayAdapter<Pharmacy> implements Filterable {
 
@@ -161,21 +159,7 @@ public class PharmacyController extends ArrayAdapter<Pharmacy> implements Filter
         };
         return filter;
     }
-    public static ArrayList<Pharmacy> passMeAllData(){ return FIREBASEDATA;}
-/*public  ArrayList<Pharmacy> getAllDocs(){
-        PharmacyRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                ArrayList<Pharmacy> PharmacyDATA = null;
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        PharmacyDATA = (ArrayList<Pharmacy>) document.get("Pharmacy");
-                    }
-                }
-                return PharmacyDATA;
-            }
-        });
-}*/
+
 
 }
 

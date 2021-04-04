@@ -3,9 +3,6 @@ package com.example.loginapp.Boundary;
 
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,7 +11,9 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
 
-import com.example.loginapp.Control.PharmacyPage;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.loginapp.Control.PharmacyController;
 import com.example.loginapp.Control.PharmacyPage;
 import com.example.loginapp.Entity.Pharmacy;
@@ -25,7 +24,6 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-
 
 import java.util.ArrayList;
 import java.util.Collections;

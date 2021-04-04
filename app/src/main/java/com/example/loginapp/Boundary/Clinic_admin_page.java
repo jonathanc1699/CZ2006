@@ -14,7 +14,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 
 import com.example.loginapp.Control.ClinicAdminQueueController;
-import com.example.loginapp.FirebaseCallback;
+import com.example.loginapp.Interface.FirebaseCallback;
 import com.example.loginapp.Entity.Clinic;
 import com.example.loginapp.Entity.User;
 import com.example.loginapp.R;

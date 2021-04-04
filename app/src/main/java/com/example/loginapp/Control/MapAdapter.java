@@ -4,7 +4,6 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.example.loginapp.Boundary.MapsActivity;
 import com.example.loginapp.Entity.Clinic;
 import com.example.loginapp.Entity.DistanceClinicToMe;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -19,15 +18,12 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.gson.Gson;
 import com.google.maps.android.SphericalUtil;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 
 public class MapAdapter {
     private static GoogleMap gmap;

@@ -4,7 +4,6 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.example.loginapp.Entity.Clinic;
 import com.example.loginapp.Entity.DistanceClinicToMe;
 import com.example.loginapp.Entity.Pharmacy;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -19,7 +18,6 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.gson.Gson;
 import com.google.maps.android.SphericalUtil;
 
 import java.util.ArrayList;

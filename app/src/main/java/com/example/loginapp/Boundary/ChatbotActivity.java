@@ -200,11 +200,11 @@ public class ChatbotActivity extends AppCompatActivity implements MessageAdapter
         }
 
 
-        String highrisk= "true";
+        String highrisk;
         highrisk=cb.highriskLevel(possiblesymptomSize,highestcount,possibleSymptomsCount);
 
 
-        if (highrisk=="false") {
+        if (highrisk.equals("false")) {
             sendMessage("Your risk level is estimated to be low, we recommend that you visit a pharmacy to purchase medication and self-medicate.", false);
             sendMessage("<i><b><u>Click here</u></b></i> to be redirected to the pharmacy page. ", false);
             clinic = "false";

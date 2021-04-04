@@ -16,7 +16,6 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,8 +23,6 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
-import com.example.loginapp.Control.ClinicController;
-import com.example.loginapp.Control.ClinicPage;
 import com.example.loginapp.Control.MapAdapterPharmacy;
 import com.example.loginapp.Control.PharmacyPage;
 import com.example.loginapp.R;
@@ -38,7 +35,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.paulrybitskyi.persistentsearchview.PersistentSearchView;
 
 public class MapsActivityPharmacy extends AppCompatActivity implements OnMapReadyCallback {
 
