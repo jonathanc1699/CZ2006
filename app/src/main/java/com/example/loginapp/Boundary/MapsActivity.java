@@ -59,18 +59,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private GoogleMap mMap;
     private MapAdapter mController;
-    private ClinicController clinicController;
-    private PersistentSearchView persistentSearchView;
     private Button nearbyBtn;
-    private ProgressBar progressBar;
     private Button nearestBtn;
     private  Button listviewBtn;
-    private boolean result;
     private static int TIME_OUT = 1000*10;
     ProgressDialog progressDialog;
     private FusedLocationProviderClient mFusedLocationClient;
-    //private final ArrayList<Clinic> CLINICDATA = ClinicAdapter.getFirebasedata();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,43 +77,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         mController = new MapAdapter();
 
-        //persistentSearchView = (PersistentSearchView) findViewById(R.id.persistentSearchView);
         nearbyBtn = (Button) findViewById(R.id.nearbyBtn);
         nearestBtn = (Button) findViewById(R.id.nearestbutton);
         listviewBtn = (Button) findViewById(R.id.listviewbutton);
-//        progressBar = findViewById(R.id.progressBar3);
-//        progressBar.setVisibility(View.VISIBLE);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        /*View locationButton = ((View) mapFragment.getView().findViewById(Integer.parseInt("1")).getParent()).findViewById(Integer.parseInt("2"));
-        RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
-        rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
-        rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-        rlp.setMargins(0, 0, 30, 250);
 
-        persistentSearchView.setSuggestionsDisabled(false);
-        persistentSearchView.isDismissibleOnTouchOutside();
-        persistentSearchView.setOnSearchConfirmedListener(new OnSearchConfirmedListener() {
-            @Override
-            public void onSearchConfirmed(PersistentSearchView searchView, String query) {
-                mMap.clear();
-                searchView.collapse(true);
-                result = mController.plotSearchMarkers(query);
-
-                if (result == false) {
-                    Toast.makeText(getApplicationContext(), "No Results Found", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });*/
         listviewBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), ListofClinics.class));
-                // insert on button click, start queueActivity
                 finish();
             }
         });
+
         nearestBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -160,16 +132,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
-//        AppCompatImageButton viewClinicBtn = (AppCompatImageButton) findViewById(R.id.viewClinicsBtn);
-//        viewClinicBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View r) {
-//                Log.d("TAG", "Clicked View Clinics Button");
-//                Intent i = new Intent(MapsActivity.this, ListofClinics.class);
-//                MapsActivity.this.startActivity(i);
-//            }
-//        });
-
 
     }
 
@@ -186,8 +148,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         getGPSPermission();
         mMap.getUiSettings().setMapToolbarEnabled(false);
        mMap = mController.getGmap(mMap);
-        Toast.makeText(getApplicationContext(),"Map is being loaded...",Toast.LENGTH_LONG).show();
-        //Location myLocation = mMap.getMyLocation();
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -215,8 +175,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         }, TIME_OUT);
 
-
-
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
@@ -231,44 +189,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
-//        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-//            @Override
-//            public boolean onMarkerClick(Marker marker) {
-//                if (marker.getTitle() != "You are here"){
-//                Intent intent = new Intent(getApplicationContext(),ClinicPage.class);
-//                intent.putExtra("Clinic Name", marker.getTitle());
-//                intent.putExtra("Clinic ID", marker.getSnippet());
-//                Log.d("intent", String.valueOf(intent.getStringExtra("Clinic Name")));
-//                Log.d("intent", String.valueOf(intent.getStringExtra("Clinic ID")));
-//                startActivity(intent);}
-//                return false;
-//            }
-//        });
-
-        //LatLng myLatLng = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
-
-        //mController.revealMarkers(mMap, myLatLng);
-
-        /*mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-            @Override
-            public void onInfoWindowClick(Marker marker) {
-                String markerInfo = (String) marker.getTag();
-                String clinicObject = markerInfo.substring(0, markerInfo.indexOf("|"));
-
-                String stringPosition = markerInfo.substring(markerInfo.lastIndexOf("|") + 1);
-                int position = Integer.parseInt(stringPosition);
-
-                JSONObject obj = null;
-                try {
-                    obj = new JSONObject(clinicObject);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                Intent i = new Intent(MapsActivity.this, ListofClinics.class);
-                MapsActivity.this.startActivity(i);
-            }
-        });*/
 
     }
     @Override

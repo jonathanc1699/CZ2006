@@ -32,15 +32,10 @@ import java.util.Map;
 public class MapAdapter {
     private static GoogleMap gmap;
     private static List<Marker> markers = new ArrayList<>();
-    //private final ArrayList<Clinic> CLINICDATA = new ArrayList<>();
-    //private ClinicAdapter clinicAdapter = new ClinicAdapter();
     final ArrayList<Clinic> CLINICDATA = new ArrayList<>();
     private static ArrayList<DistanceClinicToMe> DistToMe;
     public MapAdapter(){
         this.gmap=null;
-       // this.clinicAdapter.setClinicData();
-       // this.CLINICDATA = clinicAdapter.getClinicData();
-
     }
 
     public void setGmap(GoogleMap gmap){
@@ -82,12 +77,9 @@ public class MapAdapter {
                                 LatLng Clinic = new LatLng(fb.getLatitude(), fb.getLongitude());
                                 Log.d("tag", "Current clinic's location is " + Clinic);
                                 markerOptions.position(Clinic);
-                                //markerOptions.snippet(fb.getClinicID());
                                 markerOptions.title(fb.getClinicName());
                                 markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN));
                                 Marker m = gmap.addMarker(markerOptions);
-                                //int position = CLINICDATA.indexOf(fb);
-                                //Object DATA = new Gson().toJson(CLINICDATA.get(position));
                                 m.setTag(fb.getClinicID());
                                 gmap.moveCamera(CameraUpdateFactory.newLatLng(Clinic));
                             gmap.moveCamera(CameraUpdateFactory.newLatLngZoom(SGLatLng, zoom));
@@ -102,33 +94,6 @@ public class MapAdapter {
                 }
             }
         });
-
-
-
-        /*try{
-            MarkerOptions markerOptions = new MarkerOptions();
-            LatLng RafflesClinic = new LatLng(1.284349546,103.8510725);
-            gmap.addMarker(new MarkerOptions().position(RafflesClinic).title("OC Medical Raffles Place"));
-            System.out.println(CLINICDATA);
-
-            for(Clinic fb: CLINICDATA){
-                LatLng Clinic = new LatLng(fb.getLatitude(), fb.getLongitude());
-                Log.d("tag","Current clinic's location is "+Clinic);
-                markerOptions.position(Clinic);
-                markerOptions.title(fb.getClinicName());
-                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN));
-                Marker m = gmap.addMarker(markerOptions);
-                int position = CLINICDATA.indexOf(fb);
-                Object DATA = new Gson().toJson(CLINICDATA.get(position));
-                m.setTag(DATA + "|"+position);
-                gmap.moveCamera(CameraUpdateFactory.newLatLng(Clinic));
-                gmap.moveCamera(CameraUpdateFactory.newLatLngZoom(SGLatLng,zoom));
-                markers.add(m);
-                Log.d("tag","Adding Marker");
-            }
-        }catch(Exception e){
-            Log.d("tag", "Error in Data \n" + e);
-        }*/
         gmap.moveCamera(CameraUpdateFactory.newLatLngZoom(SGLatLng,zoom));
         return gmap;
     }
@@ -147,13 +112,10 @@ public class MapAdapter {
                 LatLng Clinic = new LatLng(fb.getLatitude(), fb.getLongitude());
                 Log.d("tag", "Current clinic's location is " + Clinic);
                 markerOptions.position(Clinic);
-                //markerOptions.snippet(fb.getClinicID());
                 markerOptions.title(fb.getClinicName());
                 markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN));
                 Marker m = gmap.addMarker(markerOptions);
                 m.setVisible(false);
-                //int position = CLINICDATA.indexOf(fb);
-                //Object DATA = new Gson().toJson(CLINICDATA.get(position));
                 m.setTag(fb.getClinicID());
                 markers.add(m);
             }
@@ -183,8 +145,6 @@ public class MapAdapter {
             }
         }
         Log.d("tag","Nearest clinic is "+DistToMe.get(0).getClinicName()+ " "+ DistToMe.get(0).getDistance()+" "+DistToMe.get(0).getClinicID());
-        Log.d("tag","Nearest clinic is "+DistToMe.get(1).getClinicName()+ " "+ DistToMe.get(1).getDistance()+" "+DistToMe.get(1).getClinicID());
-        Log.d("tag","Nearest clinic is "+DistToMe.get(2).getClinicName()+ " "+ DistToMe.get(2).getDistance()+" "+DistToMe.get(2).getClinicID());
         Collections.sort(DistToMe, new Comparator<DistanceClinicToMe>() {
             @Override
             public int compare(DistanceClinicToMe o1, DistanceClinicToMe o2) {
@@ -196,8 +156,6 @@ public class MapAdapter {
         });
 
         Log.d("tag","Nearest clinic is "+DistToMe.get(0).getClinicName()+ " "+ DistToMe.get(0).getDistance()+" "+DistToMe.get(0).getClinicID());
-        Log.d("tag","Nearest clinic is "+DistToMe.get(1).getClinicName()+ " "+ DistToMe.get(1).getDistance()+" "+DistToMe.get(1).getClinicID());
-        Log.d("tag","Nearest clinic is "+DistToMe.get(2).getClinicName()+ " "+ DistToMe.get(2).getDistance()+" "+DistToMe.get(2).getClinicID());
         for(int i=0;i<markers.size();i++){
             try{
             if( markers.get(i).getTag().equals(DistToMe.get(0).getClinicID())){
@@ -209,85 +167,4 @@ public class MapAdapter {
             }
         }
     }
-
-
-    /*public boolean plotSearchMarkers (String Query){
-            if(Query.isEmpty()){
-                return false;
-            }
-
-            boolean plot = false;
-            boolean check;
-            boolean existClinicName;
-            int postalCode =-1;
-
-            check = isMyQueryValid(Query);
-
-            if(check==true){
-                postalCode = Integer.parseInt(Query);
-            }
-
-            CharSequence subQuery = Query.toLowerCase();
-
-            MarkerOptions markerOptions= new MarkerOptions();
-
-            for (Clinic fb: CLINICDATA){
-                LatLng clinicLocation = new LatLng(fb.getLatitude(),fb.getLongitude());
-                existClinicName = fb.getClinicName().toLowerCase().contains(subQuery);
-
-                if(existClinicName ==true){
-                    markerOptions.position(clinicLocation);
-                    markerOptions.title(fb.getClinicName());
-                    Marker m = gmap.addMarker(markerOptions);
-                    int position = CLINICDATA.indexOf(fb);
-                    Object DATA = new Gson().toJson(CLINICDATA.get(position));
-                    m.setTag(DATA+"|"+position);
-                    plot = true;
-                }
-
-                if (fb.getPostal()== postalCode){
-                    markerOptions.position(clinicLocation);
-                    markerOptions.title(fb.getClinicName());
-                    gmap.addMarker(markerOptions);
-                    Marker m = gmap.addMarker(markerOptions);
-                    int position = CLINICDATA.indexOf(fb);
-                    Object DATA = new Gson().toJson(CLINICDATA.get(position));
-                    m.setTag(DATA+"|"+position);
-                    plot = true;
-                }
-            }
-            return plot;
-        }*/
-    public static Long convertToLong(Object o){
-        String stringToConvert = String.valueOf(o);
-        Long convertedLong = Long.parseLong(stringToConvert);
-        return convertedLong;
-    }
-
-    private static boolean isMyQueryValid(String str){
-        if(str == null){
-            return false;
-        }
-        int length = str.length();
-        if (length == 0){
-            return false;
-        }
-        int i=0;
-        if(str.charAt(0)=='-'){
-            if(length==1){
-                return false;
-            } i=1;
-        }
-        for(;i<length;i++){
-            char c = str.charAt(i);
-            if (c<'0'||c>'9'){
-                return false;
-            }
-        }
-        return true;
-    }
-
-
-
-
 }

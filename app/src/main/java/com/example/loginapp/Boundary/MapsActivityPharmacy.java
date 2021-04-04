@@ -44,17 +44,12 @@ public class MapsActivityPharmacy extends AppCompatActivity implements OnMapRead
 
     private GoogleMap mMap;
     private MapAdapterPharmacy mController;
-    private ClinicController clinicController;
-    private PersistentSearchView persistentSearchView;
     private Button nearbyBtn;
     private Button nearestBtn;
     private Button listviewBtn;
-    private ProgressBar progressBar;
     private static int TIME_OUT = 1000*5;
-    private boolean result;
     ProgressDialog progressDialog;
     private FusedLocationProviderClient mFusedLocationClient;
-    //private final ArrayList<Clinic> CLINICDATA = ClinicAdapter.getFirebasedata();
 
 
     @Override
@@ -68,40 +63,17 @@ public class MapsActivityPharmacy extends AppCompatActivity implements OnMapRead
 
         mController = new MapAdapterPharmacy();
 
-        //persistentSearchView = (PersistentSearchView) findViewById(R.id.persistentSearchView);
         nearbyBtn = (Button) findViewById(R.id.nearbyBtn1);
         nearestBtn = (Button) findViewById(R.id.nearestbutton1);
         listviewBtn = (Button) findViewById(R.id.listviewbutton1);
-//        progressBar = findViewById(R.id.progressBar3);
-//        progressBar.setVisibility(View.VISIBLE);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        /*View locationButton = ((View) mapFragment.getView().findViewById(Integer.parseInt("1")).getParent()).findViewById(Integer.parseInt("2"));
-        RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
-        rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
-        rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-        rlp.setMargins(0, 0, 30, 250);
 
-        persistentSearchView.setSuggestionsDisabled(false);
-        persistentSearchView.isDismissibleOnTouchOutside();
-        persistentSearchView.setOnSearchConfirmedListener(new OnSearchConfirmedListener() {
-            @Override
-            public void onSearchConfirmed(PersistentSearchView searchView, String query) {
-                mMap.clear();
-                searchView.collapse(true);
-                result = mController.plotSearchMarkers(query);
-
-                if (result == false) {
-                    Toast.makeText(getApplicationContext(), "No Results Found", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });*/
         listviewBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), ListofPharmacies.class));
-                // insert on button click, start queueActivity
                 finish();
             }
         });
@@ -144,17 +116,6 @@ public class MapsActivityPharmacy extends AppCompatActivity implements OnMapRead
             }
         });
 
-//        AppCompatImageButton viewClinicBtn = (AppCompatImageButton) findViewById(R.id.viewClinicsBtn);
-//        viewClinicBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View r) {
-//                Log.d("TAG", "Clicked View Clinics Button");
-//                Intent i = new Intent(MapsActivity.this, ListofClinics.class);
-//                MapsActivity.this.startActivity(i);
-//            }
-//        });
-
-
     }
 
 
@@ -171,7 +132,6 @@ public class MapsActivityPharmacy extends AppCompatActivity implements OnMapRead
         mMap.getUiSettings().setMapToolbarEnabled(false);
        mMap = mController.getGmap(mMap);
         Toast.makeText(getApplicationContext(),"Map is being loaded...",Toast.LENGTH_LONG).show();
-        //Location myLocation = mMap.getMyLocation();
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -213,33 +173,6 @@ public class MapsActivityPharmacy extends AppCompatActivity implements OnMapRead
                     startActivity(intent);}
             }
         });
-
-
-        //LatLng myLatLng = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
-
-        //mController.revealMarkers(mMap, myLatLng);
-
-        /*mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-            @Override
-            public void onInfoWindowClick(Marker marker) {
-                String markerInfo = (String) marker.getTag();
-                String clinicObject = markerInfo.substring(0, markerInfo.indexOf("|"));
-
-                String stringPosition = markerInfo.substring(markerInfo.lastIndexOf("|") + 1);
-                int position = Integer.parseInt(stringPosition);
-
-                JSONObject obj = null;
-                try {
-                    obj = new JSONObject(clinicObject);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                Intent i = new Intent(MapsActivity.this, ListofClinics.class);
-                MapsActivity.this.startActivity(i);
-            }
-        });*/
-
     }
 
     @Override
