@@ -12,6 +12,7 @@ import java.util.Map;
 
 public class ChatbotController {
 
+    //checks user's risk level
     public String highriskLevel(int possiblesymptomSize, int highestcount, int possibleSymptomsCount) {
 
 
@@ -22,6 +23,7 @@ public class ChatbotController {
         }
     }
 
+    //gets list and number of diseases user might have, number of recognized user's symptoms and highest number of possible symptoms from the diseases the user might have
     public Chatstats getRecommend(ArrayList<String> possiblediseases, HashMap<String, ArrayList<String>> myMap, List<String> tempList) {
         //start with all the disease
         int matchcount = 0;
@@ -47,10 +49,7 @@ public class ChatbotController {
                         highestcountdiseasearray.add(diseasename1);
                     }
                 }
-
             }
-
-
         }
 
 
@@ -61,15 +60,12 @@ public class ChatbotController {
             String diseasename2 = entry.getKey();
             for (int s = 0; s < highestcountdiseasearray.size(); s++) {
                 if (diseasename2.equals(highestcountdiseasearray.get(s))) {
-                    //ArrayList<String> highestcountdiseasesymptoms = new ArrayList<String>();
-                    ArrayList<String> arraysymptoms = entry.getValue(); //arraylist of all the possible symptoms for diseasename2
+                    ArrayList<String> arraysymptoms = entry.getValue(); //arraylist of all the possible symptoms for selected disease
 
 
                     for (int t = 0; t < arraysymptoms.size(); t++) {
                         if (arraysymptoms.get(t).equals("fatigue") || arraysymptoms.get(t).equals("nausea") || arraysymptoms.get(t).equals("swollen glands") || arraysymptoms.get(t).equals("rash") || arraysymptoms.get(t).equals("headache") || arraysymptoms.get(t).equals("abdominal pain") || arraysymptoms.get(t).equals("appetite loss") || arraysymptoms.get(t).equals("fever") || arraysymptoms.get(t).equals("dark urine") || arraysymptoms.get(t).equals("joint pain") || arraysymptoms.get(t).equals("jaundice") || arraysymptoms.get(t).equals("flu") || arraysymptoms.get(t).equals("diarrhea") || arraysymptoms.get(t).equals("cough") || arraysymptoms.get(t).equals("red eyes")) {
-                            //highestcountdiseasesymptoms.add(arraysymptoms.get(t));
                             tempPossibleSymptomsCount++;
-                            Log.d("debug", arraysymptoms.get(t).toString() + " possibleSymptomsCount: " + String.valueOf(possibleSymptomsCount) + " tempPossibleSymptomsCount: " + String.valueOf(tempPossibleSymptomsCount));
                         }
                     }
                     symptomsForPossibleDiseases.add(tempPossibleSymptomsCount);
@@ -84,12 +80,11 @@ public class ChatbotController {
 
         Chatstats cs= new Chatstats(highestcountdiseasearray, possiblediseases.size(), highestcount, possibleSymptomsCount);
         return cs;
-        //printriskLevel(highestcountdiseasearray, possiblediseases.size(), highestcount, possibleSymptomsCount);
     }
 
 
 
-
+    //checks if user has previously entered any symptoms
     public boolean checkEmpty(List<String>templist) {
         if (templist.size() == 0) {
             return true;
