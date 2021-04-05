@@ -104,7 +104,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     mMap.addMarker(new MarkerOptions().position(myLatLng).title("You are here"));
                     mController.revealMarkers(mMap, myLatLng);
                     Log.d("tag", "markers placed");
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLatLng, 15));
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLatLng, 12));
                 } catch (Exception e) {
                     e.printStackTrace();
                     Toast.makeText(getApplicationContext(), "Please enable GPS location", Toast.LENGTH_SHORT).show();

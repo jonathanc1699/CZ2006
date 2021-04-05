@@ -24,48 +24,47 @@
         app:layout_constraintTop_toBottomOf="@+id/chatbot"
         app:layout_constraintVertical_bias="0.0" />
 
+
     <Button
         android:id="@+id/nearestPharmacy"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/white"
+        android:layout_width="252dp"
+        android:layout_height="58dp"
+        android:layout_marginTop="36dp"
+        android:background="@drawable/oval_btn"
+        android:backgroundTint="#0191B4"
         android:onClick="nearestPharmacy"
         android:text="Pharmacy"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toTopOf="@+id/chatbot"
+        android:textColor="@color/white"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.86"
+        app:layout_constraintHorizontal_bias="0.536"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Appointmentlayout"
-        app:layout_constraintVertical_bias="0.622" />
-
+        app:layout_constraintTop_toBottomOf="@+id/nearestClinic" />
 
     <Button
         android:id="@+id/chatbot"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/white"
+        android:layout_width="252dp"
+        android:layout_height="58dp"
+        android:layout_marginTop="36dp"
+        android:background="@drawable/oval_btn"
+        android:backgroundTint="#0191B4"
         android:onClick="chatbot"
         android:text="Chatbot"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textColor="@color/white"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.533"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.704" />
+        app:layout_constraintTop_toBottomOf="@+id/nearestPharmacy" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/Appointmentlayout"
         android:layout_width="404dp"
         android:layout_height="244dp"
         android:background="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.428"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
         tools:ignore="MissingConstraints">
 
 
@@ -73,17 +72,17 @@
             android:id="@+id/appointmentBox"
             android:layout_width="181dp"
             android:layout_height="51dp"
-            android:backgroundTint="@color/quantum_grey50"
+            android:background="@drawable/oval_btn"
+            android:backgroundTint="#005A6F"
             android:contentDescription="User's current appointment details"
             android:elevation="0dp"
             android:fontFamily="sans-serif-medium"
-            android:onClick="appointmentBox"
             android:text="View booking"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textColorHint="#FFFFFF"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.103"
+            app:layout_constraintHorizontal_bias="0.071"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.958">
@@ -96,6 +95,7 @@
             android:layout_height="43dp"
             android:elevation="2dp"
             android:text="Current Queue Number: "
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.936"
@@ -109,6 +109,7 @@
             android:layout_height="43dp"
             android:elevation="2dp"
             android:text="Estimated waiting time:"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.134"
@@ -122,6 +123,7 @@
             android:layout_height="50dp"
             android:elevation="2dp"
             android:textAlignment="center"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -134,6 +136,7 @@
             android:layout_height="wrap_content"
             android:elevation="2dp"
             android:text="Current Appointment:"
+            android:textColor="@color/black"
             android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -147,36 +150,37 @@
             android:id="@+id/Cancelqueuebutton"
             android:layout_width="181dp"
             android:layout_height="51dp"
-            android:backgroundTint="@color/quantum_grey100"
-
+            android:background='@drawable/oval_btn'
+            android:backgroundTint="#005A6F"
             android:text="Cancel booking"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textColorHint="#FFFFFF"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.932"
+            app:layout_constraintHorizontal_bias="0.968"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.955" />
+            app:layout_constraintVertical_bias="0.958" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
         android:id="@+id/nearestClinic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="52dp"
-        android:backgroundTint="@color/white"
+        android:layout_width="252dp"
+        android:layout_height="58dp"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/oval_btn"
+        android:backgroundTint="#0191B4"
         android:hapticFeedbackEnabled="false"
         android:onClick="nearestClinic"
         android:text="Clinic"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toTopOf="@+id/chatbot"
-        app:layout_constraintEnd_toStartOf="@+id/nearestPharmacy"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.522"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Appointmentlayout"
-        app:layout_constraintVertical_bias="0.624" />
+        app:layout_constraintTop_toBottomOf="@+id/Appointmentlayout" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
