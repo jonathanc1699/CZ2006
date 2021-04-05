@@ -185,7 +185,7 @@ public class ClinicAdminQueueController extends AppCompatActivity {
                 }
 
                 for (int i = 0; i < userArrayList.size(); i++) {
-                    if(userArrayList.get(i).getCurrentQueue() != 0 && userArrayList.get(i).getFullName() != Clinic_name)
+                    if(userArrayList.get(i).getCurrentQueue() != 0 && !userArrayList.get(i).isClinicAdmin() && userArrayList.get(i).getFullName() != Clinic_name)
                     {
                         userArrayList.get(i).setCurrentQueue(0);
                         userArrayList.get(i).setCurrentClinic("nil");

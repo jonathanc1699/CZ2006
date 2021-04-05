@@ -188,7 +188,6 @@ public class Clinic_admin_page extends AppCompatActivity implements FirebaseCall
         else{
             builder.setMessage("No more patients ahead");
             //Reset last guy in queue: Q number and Currentclinic
-            clinicAdminQueueController.clearUserClinicandQueue(clinicID, current_patient_count);
             builder.setNegativeButton(
                     "OK",
                     new DialogInterface.OnClickListener() {
