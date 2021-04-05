@@ -9,12 +9,12 @@
 
     <Button
         android:id="@+id/loginBtn"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="198dp"
+        android:layout_height="42dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
-        android:fontFamily="@font/roboto_slab"
+        android:fontFamily="sans-serif-medium"
         android:text="Log In"
         android:textSize="13sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,14 +23,14 @@
 
     <EditText
         android:id="@+id/Password"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="287dp"
+        android:layout_height="36dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="16dp"
         android:background="@color/black"
         android:ems="10"
-        android:fontFamily="@font/roboto_slab"
+        android:fontFamily="sans-serif-medium"
         android:hint="Password"
         android:inputType="textPersonName"
         android:padding="10dp"
@@ -44,13 +44,13 @@
 
     <EditText
         android:id="@+id/Email"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="287dp"
+        android:layout_height="36dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:background="@color/black"
         android:ems="10"
-        android:fontFamily="@font/roboto_slab"
+        android:fontFamily="sans-serif-medium"
         android:hint="Email"
         android:inputType="textPersonName"
         android:padding="10dp"
@@ -59,10 +59,9 @@
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2"
-        app:layout_constraintVertical_bias="0.145" />
+        app:layout_constraintVertical_bias="0.143" />
 
     <ProgressBar
         android:id="@+id/progressBar2"
@@ -80,7 +79,7 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/roboto_slab"
+        android:fontFamily="sans-serif-medium"
         android:text="SickGoWhere"
         android:textColor="#FF9800"
         android:textSize="30sp"
@@ -95,6 +94,7 @@
         android:id="@+id/createText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-light"
         android:text="New Here? Create Account"
         android:textColor="#FF5722"
         app:layout_constraintEnd_toEndOf="parent"
@@ -106,7 +106,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:fontFamily="@font/roboto_slab"
+        android:fontFamily="sans-serif-medium"
         android:text="Log In"
         android:textColor="#FFFFFF"
         android:textSize="18sp"

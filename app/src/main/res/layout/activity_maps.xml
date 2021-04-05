@@ -24,16 +24,16 @@
         android:layout_height="52dp"
         android:alpha="0.8"
         android:background="@color/white"
-        android:fontFamily="@font/roboto_slab"
+        android:fontFamily="sans-serif-medium"
         android:padding="10dp"
         android:text="Clinics within 5km"
-        android:textSize="10sp"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.067"
+        app:layout_constraintHorizontal_bias="0.898"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.852" />
+        app:layout_constraintVertical_bias="0.851" />
 
     <Button
         android:id="@+id/nearestbutton"
@@ -41,16 +41,16 @@
         android:layout_height="50dp"
         android:alpha="0.8"
         android:background="@color/white"
-        android:fontFamily="@font/roboto_slab"
+        android:fontFamily="sans-serif-medium"
         android:padding="10dp"
         android:text="Nearest Clinic"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.895"
+        app:layout_constraintHorizontal_bias="0.066"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.853" />
+        app:layout_constraintVertical_bias="0.848" />
 
     <Button
         android:id="@+id/listviewbutton"
@@ -58,16 +58,15 @@
         android:layout_height="51dp"
         android:alpha="0.8"
         android:background="@color/white"
-        android:fontFamily="@font/roboto_slab"
+        android:fontFamily="sans-serif-medium"
         android:padding="10dp"
         android:text="List of Clinics"
         android:textColor="@color/black"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.899"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.957" />
+        app:layout_constraintVertical_bias="0.976" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
