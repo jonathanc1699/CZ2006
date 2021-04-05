@@ -178,9 +178,42 @@
         android:textColor="@color/white"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.522"
+        app:layout_constraintHorizontal_bias="0.534"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Appointmentlayout" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="69dp"
+        android:layout_height="121dp"
+        android:onClick="chatbot"
+        android:translationZ="90dp"
+        app:layout_constraintBottom_toBottomOf="@+id/chatbot"
+        app:layout_constraintStart_toStartOf="@+id/chatbot"
+        app:layout_constraintTop_toTopOf="@+id/chatbot"
+        app:srcCompat="@drawable/chatbot" />
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="64dp"
+        android:layout_height="62dp"
+        android:onClick="nearestClinic"
+        android:translationZ="90dp"
+        app:layout_constraintBottom_toBottomOf="@+id/nearestClinic"
+        app:layout_constraintStart_toStartOf="@+id/nearestClinic"
+        app:layout_constraintTop_toTopOf="@+id/nearestClinic"
+        app:srcCompat="@drawable/findclinic" />
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="73dp"
+        android:layout_height="62dp"
+        android:onClick="nearestPharmacy"
+        android:translationZ="90dp"
+        app:layout_constraintBottom_toBottomOf="@+id/nearestPharmacy"
+        app:layout_constraintStart_toStartOf="@+id/nearestPharmacy"
+        app:layout_constraintTop_toTopOf="@+id/nearestPharmacy"
+        app:srcCompat="@drawable/findpharmacy" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
