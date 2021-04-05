@@ -34,10 +34,13 @@ public class MapAdapter {
         this.gmap=null;
     }
 
+    //set method for map
     public void setGmap(GoogleMap gmap){
         this.gmap = gmap;
     }
 
+    //get method for map
+    //main method that gets all clinic info from the database and adds all clinics as markers to the app
     public GoogleMap getGmap(GoogleMap mMap){
         setGmap(mMap);
         LatLng SGLatLng = new LatLng(1.3521,103.8198);
@@ -94,11 +97,8 @@ public class MapAdapter {
         return gmap;
     }
 
-    /**
-     * Get Map however when User have enabled Phone GPS function
-     * this method will be called instead of the default getMap
-     * @param mMap
-     */
+
+    //a quicker method to add markers to map, markers are invisible because this method is called along with revealmarkers() or findnearestclinic()
     public GoogleMap getGmapWithGPS(GoogleMap mMap){
         setGmap(mMap);
         try{
@@ -123,6 +123,7 @@ public class MapAdapter {
         return gmap;
     }
 
+    //reveals markers that are within 5km of the user
     public void revealMarkers(GoogleMap mMap , LatLng LL){
         Log.d("tag", "Markers"+ markers);
         for(int i=0;i<markers.size();i++){
@@ -132,6 +133,8 @@ public class MapAdapter {
         }
     }
 
+
+    //creates a new array list (DistToMe) that stores the distance of every clinic to the user,sorts it by distance and reveals the marker of the clinic nearest to the user
     public void findnearestclinic(GoogleMap mMap, LatLng LL) throws InterruptedException {
         DistToMe = new ArrayList<>();
         Log.d("tag","Finding nearest clinic..");
@@ -150,7 +153,6 @@ public class MapAdapter {
 
             }
         });
-
         Log.d("tag","Nearest clinic is "+DistToMe.get(0).getClinicName()+ " "+ DistToMe.get(0).getDistance()+" "+DistToMe.get(0).getClinicID());
         for(int i=0;i<markers.size();i++){
             try{

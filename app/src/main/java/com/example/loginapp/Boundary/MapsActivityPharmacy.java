@@ -65,7 +65,7 @@ public class MapsActivityPharmacy extends AppCompatActivity implements OnMapRead
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-
+        //list button, when clicked, opens list view of pharmacies
         listviewBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,6 +73,8 @@ public class MapsActivityPharmacy extends AppCompatActivity implements OnMapRead
                 finish();
             }
         });
+
+        //nearest button, when clicked, shows nearest pharmacy to user
         nearestBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,6 +94,7 @@ public class MapsActivityPharmacy extends AppCompatActivity implements OnMapRead
             }
         });
 
+        //nearby button, when clicked, shows pharmacies within 5km of user
         nearbyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -114,7 +117,7 @@ public class MapsActivityPharmacy extends AppCompatActivity implements OnMapRead
 
     }
 
-
+    //Boundary level processes that occur when the map has loaded, gets user's current location and adds a marker to it, loading window for map
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -155,7 +158,7 @@ public class MapsActivityPharmacy extends AppCompatActivity implements OnMapRead
             }
         }, TIME_OUT);
 
-
+        //when user clicks on the name of the clinic on the marker, it will direct them to pharmacy page of the selected pharmacy
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {

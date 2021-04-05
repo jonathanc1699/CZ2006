@@ -35,10 +35,13 @@ public class MapAdapterPharmacy {
 
     }
 
+    //set method for map
     public void setGmap(GoogleMap gmap){
         this.gmap = gmap;
     }
 
+    //get method for map
+    //main method that gets all clinic info from the database and adds all pharmacies as markers to the app
     public GoogleMap getGmap(GoogleMap mMap){
         setGmap(mMap);
         LatLng SGLatLng = new LatLng(1.3521,103.8198);
@@ -96,11 +99,8 @@ public class MapAdapterPharmacy {
         return gmap;
     }
 
-    /**
-     * Get Map however when User have enabled Phone GPS function
-     * this method will be called instead of the default getMap
-     * @param mMap
-     */
+
+    //a quicker method to add markers to map, markers are invisible because this method is called along with revealmarkers() or findnearestclinic()
     public GoogleMap getGmapWithGPS(GoogleMap mMap){
         setGmap(mMap);
         try{
@@ -125,6 +125,7 @@ public class MapAdapterPharmacy {
         return gmap;
     }
 
+    //reveals markers that are within 5km of the user
     public void revealMarkers(GoogleMap mMap , LatLng LL){
         Log.d("tag", "Markers"+ markers);
         for(int i=0;i<markers.size();i++){
@@ -134,6 +135,7 @@ public class MapAdapterPharmacy {
         }
     }
 
+ //creates a new array list (DistToMe) that stores the distance of every pharmacy to the user,sorts it by distance and reveals the marker of the pharmacy nearest to the user
     public void findnearestclinic(GoogleMap mMap, LatLng LL){
         Log.d("tag","Finding nearest pharmacy..");
         DistToMe=new ArrayList<>();
