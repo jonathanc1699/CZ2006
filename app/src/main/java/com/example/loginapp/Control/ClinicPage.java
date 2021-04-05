@@ -177,7 +177,7 @@ public class ClinicPage extends AppCompatActivity {
         mbutton_queue.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             public void onClick(View v) {
-                showfilterselection();
+                takeQNumber();
             }
         });
         mbutton_direction.setOnClickListener(new View.OnClickListener() {
@@ -226,7 +226,7 @@ public class ClinicPage extends AppCompatActivity {
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public void showfilterselection() {
+    public void takeQNumber() {
         LayoutInflater li = LayoutInflater.from(context);
         View promptsView = li.inflate(R.layout.popup_clinic_page, null);
         final TextView mTextview_yourqueuenumber = (TextView) promptsView.findViewById(R.id.textView_yourQueueNumber);
@@ -246,7 +246,7 @@ public class ClinicPage extends AppCompatActivity {
         Timestamp local = new Timestamp(date.getTime());
         //TODO strrtime
         //String strTime = sdf.format(date);
-        String strTime = "10:00:00";
+        String strTime = "19:59:00";
 
         System.out.println("Local in String format " + strTime);
 
