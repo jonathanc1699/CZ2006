@@ -57,6 +57,7 @@ public class EnableAdminPage extends AppCompatActivity {
 
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
         DatabaseReference usersdRef = rootRef.child("Users");
+        //get list of users, making sure that they aren't already disabled, an admin, or a clinic admin
         ValueEventListener eventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -100,14 +101,6 @@ public class EnableAdminPage extends AppCompatActivity {
         usersdRef.addListenerForSingleValueEvent(eventListener);
 
 
-        //
-//        String[] username = {"Russell","Jon","Xuanhui"};
-//        String[] useremail = {"Russell@gmail.com","Jon@gmail.com","Xuanhui@gmail.com"};
-//
-//        for(int i=0;i<username.length;i++){
-//            User.add(new User(useremail[i],username[i]));
-//        }
-        //
 
 
 
@@ -122,7 +115,7 @@ public class EnableAdminPage extends AppCompatActivity {
 
 
 
-    //From this
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -196,21 +189,20 @@ public class EnableAdminPage extends AppCompatActivity {
 
 
 
-
-
+    //shows dialog to ask admin if he really wants to delete user
     private void showEnableDialog(final long position) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Enable User?");
-
+        //finds user in database and enables account
         builder.setPositiveButton("Enable", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                //delete user and refresh page
+                //enable user and refresh page
                 DatabaseReference UserToUpdate = FirebaseDatabase.getInstance().getReference("Users").child((User.get(((int)position))).getUserId());
                 HashMap<String, Object> map = new HashMap<>();
                 map.put("disabled", false);
-                //removeUser.removeValue();
+
 
 
 

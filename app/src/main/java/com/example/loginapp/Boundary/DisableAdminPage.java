@@ -65,6 +65,7 @@ public class DisableAdminPage extends AppCompatActivity {
 
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
         DatabaseReference usersdRef = rootRef.child("Users");
+        //get list of users, making sure that they aren't already disabled, an admin, or a clinic admin
         ValueEventListener eventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -113,14 +114,7 @@ public class DisableAdminPage extends AppCompatActivity {
         usersdRef.addListenerForSingleValueEvent(eventListener);
 
 
-        //
-//        String[] username = {"Russell","Jon","Xuanhui"};
-//        String[] useremail = {"Russell@gmail.com","Jon@gmail.com","Xuanhui@gmail.com"};
-//
-//        for(int i=0;i<username.length;i++){
-//            User.add(new User(useremail[i],username[i]));
-//        }
-        //
+
 
 
 
@@ -197,7 +191,6 @@ public class DisableAdminPage extends AppCompatActivity {
 
 
 
-//To this
 
 
 
@@ -211,12 +204,13 @@ public class DisableAdminPage extends AppCompatActivity {
 
 
 
+//shows dialog to ask admin if he really wants to delete user
 
     private void showdeleteDialog(final long position) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Delete User?");
-
+//finds user in database and disables account
         builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {

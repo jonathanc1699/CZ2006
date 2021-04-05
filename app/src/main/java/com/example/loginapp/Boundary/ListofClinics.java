@@ -61,7 +61,7 @@ public class ListofClinics extends AppCompatActivity {
 
 
 
-        //TODO link with the rest
+        //get all clinic details
 
         clinicRef.get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -112,13 +112,8 @@ public class ListofClinics extends AppCompatActivity {
 
 
 
-        //TODO Filter location : Default (nearest 10), by location.....
 
 
-        //TODO REMINDER TO SET UP THE SEARCH FUNCTION
-
-//pop up message when an item on the list is clicked
-        //to be changed such that clicking on item redirects user to page containing info on clinic and queue
 
 
 
@@ -128,19 +123,12 @@ public class ListofClinics extends AppCompatActivity {
 
 
 
-    //
-//        String[] username = {"Russell","Jon","Xuanhui"};
-//        String[] useremail = {"Russell@gmail.com","Jon@gmail.com","Xuanhui@gmail.com"};
-//
-//        for(int i=0;i<username.length;i++){
-//            User.add(new User(useremail[i],username[i]));
-//        }
-    //
 
 
 
 
-    //From this
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

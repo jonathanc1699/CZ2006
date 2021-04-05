@@ -4,7 +4,7 @@ import android.util.Log;
 
 public class EnableDeletedUser {
 
-
+//send delete email format
     public void sendDeleteEmail(String useremail,String username)
     {
         String senderemail = "cz2006sickgowhere@gmail.com";
@@ -32,7 +32,7 @@ public class EnableDeletedUser {
         sender.start();
 
     }
-
+    //send enable email format
     public void sendEnableEmail(String useremail,String username)
     {
         String senderemail = "cz2006sickgowhere@gmail.com";

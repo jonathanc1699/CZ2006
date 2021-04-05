@@ -60,7 +60,7 @@ public class ListofPharmacies extends AppCompatActivity {
 
 
 
-        //TODO link with the rest
+        //get all pharmacy details
 
         PharmacyRef.get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -71,10 +71,6 @@ public class ListofPharmacies extends AppCompatActivity {
                                 //Log.d("Pharmacy Names","Pharmacy Names" + PharmacyList.getString("Pharmacy Name"));
                                 String PharmacyID=PharmacyList.getId();
                                 String PharmacyName = PharmacyList.getString("pharmacy_name");
-
-                                //Log.d("TAG", PharmacyID);
-
-
 
                                 if(PharmacyName!=null){
                                     Pharmacy.add(new Pharmacy(0, 0, PharmacyID,PharmacyName, null));
@@ -87,7 +83,7 @@ public class ListofPharmacies extends AppCompatActivity {
                                 @Override
                                 public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
 
-                                    //Toast.makeText(ListofPharmacys.this, "clicked item"+i+" "+arrayList.get(i).toString(),Toast.LENGTH_SHORT).show();
+
                                     Intent intent = new Intent(ListofPharmacies.this, PharmacyPage.class);
                                     intent.putExtra("Pharmacy Name",PharmacyController.getItem(i).getPharmacy_name());
                                     intent.putExtra("Pharmacy ID",PharmacyController.getItem(i).getPharmacy_ID());
@@ -109,38 +105,11 @@ public class ListofPharmacies extends AppCompatActivity {
 
         // Start listing users from the beginning, 1000 at a time.
 
-
-
-
-        //TODO Filter location : Default (nearest 10), by location.....
-
-
-        //TODO REMINDER TO SET UP THE SEARCH FUNCTION
-
-//pop up message when an item on the list is clicked
-        //to be changed such that clicking on item redirects user to page containing info on Pharmacy and queue
-
-
-
     }
 
 
 
 
-
-    //
-//        String[] username = {"Russell","Jon","Xuanhui"};
-//        String[] useremail = {"Russell@gmail.com","Jon@gmail.com","Xuanhui@gmail.com"};
-//
-//        for(int i=0;i<username.length;i++){
-//            User.add(new User(useremail[i],username[i]));
-//        }
-    //
-
-
-
-
-    //From this
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
