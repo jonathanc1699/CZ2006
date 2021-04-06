@@ -238,7 +238,8 @@ public class Clinic_admin_page extends AppCompatActivity implements FirebaseCall
 
         java.util.Date date = new java.util.Date();
         Timestamp local = new Timestamp(date.getTime());
-        String strTime = sdf.format(date);
+       //String strTime = sdf.format(date);
+        String strTime="21:00:00";
 
         // set time constraint only after clinic operating hours
         if ((LocalTime.parse(strTime).isAfter(LocalTime.parse(close))) ||

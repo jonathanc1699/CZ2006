@@ -246,7 +246,7 @@ public class ClinicPage extends AppCompatActivity {
         Timestamp local = new Timestamp(date.getTime());
         //TODO strrtime
         //String strTime = sdf.format(date);
-        String strTime = "19:59:00";
+        String strTime = "21:00:00";
 
         System.out.println("Local in String format " + strTime);
 
