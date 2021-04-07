@@ -43,7 +43,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Button nearbyBtn;
     private Button nearestBtn;
     private  Button listviewBtn;
-    private static int TIME_OUT = 1000*10;
+    private static int TIME_OUT = 1000*8;
     ProgressDialog progressDialog;
     private FusedLocationProviderClient mFusedLocationClient;
 

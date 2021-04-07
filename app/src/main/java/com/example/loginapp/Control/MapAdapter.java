@@ -77,7 +77,7 @@ public class MapAdapter {
                                 Log.d("tag", "Current clinic's location is " + Clinic);
                                 markerOptions.position(Clinic);
                                 markerOptions.title(fb.getClinicName());
-                                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN));
+                                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
                                 Marker m = gmap.addMarker(markerOptions);
                                 m.setTag(fb.getClinicID());
                                 gmap.moveCamera(CameraUpdateFactory.newLatLng(Clinic));
@@ -109,7 +109,7 @@ public class MapAdapter {
                 Log.d("tag", "Current clinic's location is " + Clinic);
                 markerOptions.position(Clinic);
                 markerOptions.title(fb.getClinicName());
-                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN));
+                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
                 Marker m = gmap.addMarker(markerOptions);
                 m.setVisible(false);
                 m.setTag(fb.getClinicID());
