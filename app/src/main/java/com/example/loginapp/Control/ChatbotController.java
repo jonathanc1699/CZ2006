@@ -1,8 +1,4 @@
 package com.example.loginapp.Control;
-
-
-import android.util.Log;
-
 import com.example.loginapp.Entity.Chatstats;
 
 import java.util.ArrayList;
@@ -10,9 +6,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * ChatbotController is a control class used to derive the end output of the chatbot after the user enters
+ * their symptoms.
+ * End output includes : the user's symptom match rate, risk level and possible diseases
+ *
+ * @author Goh Shan Ying, Jonathan Chang, Lee Xuanhui, Luke Chin Peng Hao, Lynn Masillamoni, Russell Leung
+ */
+
 public class ChatbotController {
 
-    //checks user's risk level
+    /**
+     * checks user's risk level
+     * @param possiblesymptomSize number of possible symptoms
+     * @param highestcount number of valid symptoms that the user has
+     * @param possibleSymptomsCount the smallest number of symptoms for all the diseases the user is at risk
+     * @return risk level
+     */
     public String highriskLevel(int possiblesymptomSize, int highestcount, int possibleSymptomsCount) {
 
 
@@ -23,6 +33,13 @@ public class ChatbotController {
         }
     }
 
+    /**
+     * gets list and number of diseases user might have, number of recognized user's symptoms and highest number of possible symptoms from the diseases the user might have
+     * @param possiblediseases list and number of diseases user might have
+     * @param myMap keys are the infectious diseases and their values are the symptoms for each disease
+     * @param tempList list of the user's valid symptoms
+     * @return recommendation for user based on
+     */
     //gets list and number of diseases user might have, number of recognized user's symptoms and highest number of possible symptoms from the diseases the user might have
     public Chatstats getRecommend(ArrayList<String> possiblediseases, HashMap<String, ArrayList<String>> myMap, List<String> tempList) {
         //start with all the disease
@@ -83,7 +100,11 @@ public class ChatbotController {
     }
 
 
-
+    /**
+     * checks if user has previously entered any symptoms
+     * @param templist list of symptoms user have entered
+     * @return true if user have entered at least 1 valid symptom
+     */
     //checks if user has previously entered any symptoms
     public boolean checkEmpty(List<String>templist) {
         if (templist.size() == 0) {

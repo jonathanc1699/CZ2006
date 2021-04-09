@@ -21,6 +21,8 @@ import java.util.Properties;
  * This class is used to set up email so that the SickGoWhere app (which is a third party app) is able to send email from our project email
  * to the logged-in user
  * This class can be reused for multiple functions such as: booking confirmation email, booking cancellation email, etc.
+ *
+ * @author Goh Shan Ying, Jonathan Chang, Lee Xuanhui, Luke Chin Peng Hao, Lynn Masillamoni, Russell Leung
  */
 public class GMailSender extends javax.mail.Authenticator {
     private String mailhost = "smtp.gmail.com";
@@ -32,7 +34,12 @@ public class GMailSender extends javax.mail.Authenticator {
         Security.addProvider(new JSSEProvider());
     }
 
-    //set up gmail sender
+
+    /**
+     * Setting up Gmail sender and socket properties
+     * @param user SickGoWhere's email address
+     * @param password SickGoWhere's email password
+     */
     public GMailSender(String user, String password) {
         this.user = user;
         this.password = password;
@@ -51,11 +58,24 @@ public class GMailSender extends javax.mail.Authenticator {
         session = Session.getDefaultInstance(props, this);
     }
 
+    /**
+     * Authenticate the sending email and password
+     * @return Authenticated email and password
+     */
+
     //Authenticate the sending email and password
     protected PasswordAuthentication getPasswordAuthentication() {
         return new PasswordAuthentication(user, password);
     }
 
+    /**
+     * Send email from Gmail to user's email
+     * @param subject subject of email
+     * @param body body of email
+     * @param sender SickGoWhere's email
+     * @param recipients intended user's email
+     * @throws Exception
+     */
     public synchronized void sendMail(String subject, String body, String sender, String recipients) throws Exception {
         try{
             MimeMessage message = new MimeMessage(session);
@@ -73,6 +93,9 @@ public class GMailSender extends javax.mail.Authenticator {
         }
     }
 
+    /**
+     *Function required for javax.mail
+     */
     public class ByteArrayDataSource implements DataSource {
         private byte[] data;
         private String type;

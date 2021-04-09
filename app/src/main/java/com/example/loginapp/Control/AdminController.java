@@ -14,6 +14,14 @@ import com.example.loginapp.R;
 
 import java.util.ArrayList;
 
+/**
+ * AdminController is a control class takes in an arraylist of user objects and
+ * populates the activity_admin class with the details.
+ *
+ * It also does the filtering of users for the search bar.
+ *
+ * @author Goh Shan Ying, Jonathan Chang, Lee Xuanhui, Luke Chin Peng Hao, Lynn Masillamoni, Russell Leung
+ */
 
 public class AdminController extends ArrayAdapter<User> implements Filterable {
 
@@ -23,7 +31,11 @@ public class AdminController extends ArrayAdapter<User> implements Filterable {
     LayoutInflater inflater;
 
 
-
+    /**
+     * initialize the ArrayAdapter's internal storage for the context and the list.
+     * @param context current state of the application
+     * @param Users array list of users
+     */
     public AdminController(Activity context, ArrayList<User> Users) {
         // initialize the ArrayAdapter's internal storage for the context and the list.
         super(context, 0, Users);
@@ -37,6 +49,7 @@ public class AdminController extends ArrayAdapter<User> implements Filterable {
 
 
     }
+
     @Override
     public int getCount() {
         return Usersfiltered.size();
@@ -64,8 +77,6 @@ public class AdminController extends ArrayAdapter<User> implements Filterable {
         return itemID;
     }
 
-//fill each item in the list of views
-
     @Override
     public View getView (final int position,
                          View convertView,
@@ -91,6 +102,12 @@ public class AdminController extends ArrayAdapter<User> implements Filterable {
 
 //implement filter logic
 
+    /**
+     * This function is used to search for the string entered by the user among the list of users.
+     * If this string is a substring of any of the users in the array list,
+     * the system will return all the users that match this string in a list
+     * @return all users that are a match with the entered string in the search bar
+     */
     @Override
     public Filter getFilter() {
         Filter filter = new Filter() {

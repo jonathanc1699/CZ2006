@@ -32,6 +32,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
+/**
+ * This class is used by an admin to disable a user from using the SickGoWhere app
+ * if he has violated any code and conduct set by SickGoWhere
+ *
+ * @author Goh Shan Ying, Jonathan Chang, Lee Xuanhui, Luke Chin Peng Hao, Lynn Masillamoni, Russell Leung
+ */
+
 public class DisableAdminPage extends AppCompatActivity {
 
 
@@ -42,10 +49,6 @@ public class DisableAdminPage extends AppCompatActivity {
     ListView listView;
     FirebaseAuth fAuth=FirebaseAuth.getInstance();
     String newtext;
-
-
-
-
 
 
     @Override
@@ -125,12 +128,6 @@ public class DisableAdminPage extends AppCompatActivity {
 
     }
 
-
-
-
-
-    //From this
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -188,29 +185,17 @@ public class DisableAdminPage extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//shows dialog to ask admin if he really wants to delete user
-
+    /**
+     * This function is used to shows a confirmation dialog to ask admin if he really wants to delete user
+     * if yes , system will find user in database and disable account
+     * An email notification will be sent to user
+     * @param position index of user to be deleted
+     */
     private void showdeleteDialog(final long position) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Delete User?");
-//finds user in database and disables account
+
         builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -218,7 +203,6 @@ public class DisableAdminPage extends AppCompatActivity {
                 DatabaseReference UserToUpdate =FirebaseDatabase.getInstance().getReference("Users").child((User.get(((int)position))).getUserId());
                 HashMap<String, Object> map = new HashMap<>();
                 map.put("disabled", true);
-                //removeUser.removeValue();
 
                 String username =User.get(((int)position)).getFullName();
                 Log.d("username", username);
@@ -246,6 +230,9 @@ public class DisableAdminPage extends AppCompatActivity {
         alertDialog.show();
     }
 
+    /**
+     * Return to Admin homepage
+     */
     @Override
     public void onBackPressed() {
         Intent myIntent = new Intent(getApplicationContext(), mainactivityAdmin.class);

@@ -22,7 +22,14 @@ import com.example.loginapp.R;
 
 import java.util.ArrayList;
 
-
+/**
+ * ClinicController is a control class takes in an arraylist of clinic objects and
+ * populates the ListofClinics class with the details.
+ *
+ * It also does the filtering of clinics for the search bar.
+ *
+ * @author Goh Shan Ying, Jonathan Chang, Lee Xuanhui, Luke Chin Peng Hao, Lynn Masillamoni, Russell Leung
+ */
 
 public class ClinicController extends ArrayAdapter<Clinic> implements Filterable {
 
@@ -36,7 +43,11 @@ public class ClinicController extends ArrayAdapter<Clinic> implements Filterable
     LayoutInflater inflater;
 
 
-
+    /**
+     * initialize the ArrayAdapter's internal storage for the context and the list
+     * @param context  current state of the application
+     * @param Clinics array list of clincics
+     */
     public ClinicController(Activity context, ArrayList<Clinic> Clinics) {
         //initialize the ArrayAdapter's internal storage for the context and the list.
 
@@ -53,11 +64,6 @@ public class ClinicController extends ArrayAdapter<Clinic> implements Filterable
 
 
     }
-
-
-
-
-
 
 
     @Override
@@ -88,7 +94,7 @@ public class ClinicController extends ArrayAdapter<Clinic> implements Filterable
     }
 
 
-//fill textview with the username
+//fill textview with the clinic name
     @Override
     public View getView (final int position,
                          View convertView,
@@ -113,6 +119,12 @@ public class ClinicController extends ArrayAdapter<Clinic> implements Filterable
 
 //implement filter logic
 
+    /**
+     * This function is used to search for the string entered by the user among the list of clinics.
+     * If this string is a substring of any of the clinics in the array list,
+     * the system will return all the clinics that match this string in a list
+     * @return all clinics that are a match with the entered string in the search bar
+     */
     @Override
     public Filter getFilter() {
         Filter filter = new Filter() {

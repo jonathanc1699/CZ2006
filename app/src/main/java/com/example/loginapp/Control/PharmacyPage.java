@@ -21,6 +21,13 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Map;
 
+/**
+ * This class implements the PharmacyPage Controller where it shows the details of the selected pharmacy.
+ * It also contains functions such as getting directions to the pharmacy by walking or by car.
+ *
+ * @author Goh Shan Ying, Jonathan Chang, Lee Xuanhui, Luke Chin Peng Hao, Lynn Masillamoni, Russell Leung
+ */
+
 public class PharmacyPage extends AppCompatActivity {
     TextView mTextView_namePharmacy;
     TextView mTextView_openingHoursPharmacy;
@@ -58,6 +65,9 @@ public class PharmacyPage extends AppCompatActivity {
         pharmacyRef.document(PharmacyID).get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
+                    /**
+                     * Displaying Clinic's information such as pharmacy name, address and operating hours
+                     */
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {
                             DocumentSnapshot PharmacyDetailList = task.getResult();
@@ -81,9 +91,11 @@ public class PharmacyPage extends AppCompatActivity {
 
         mbutton_direction.setOnClickListener(new View.OnClickListener() {
             @Override
+            /**
+             * Getting directions from current location to selected pharmacy by car
+             * This function will redirect user to google maps
+             */
             public void onClick(View v) {
-                //TODO need to link to googlemap
-                // Create a Uri from an intent string. Use the result to create an Intent.
                 Log.d("directions","trying to open gmaps for directions to "+ selectedPharmacy.getPharmacy_address());
                 Uri gmmIntentUri = Uri.parse("google.navigation:q= "+ selectedPharmacy.getLatitude() + ","+ selectedPharmacy.getLongitude());
                 // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
@@ -97,6 +109,10 @@ public class PharmacyPage extends AppCompatActivity {
 
         mbutton_direction_walk.setOnClickListener(new View.OnClickListener() {
             @Override
+            /**
+             * Getting directions from current location to selected pharmacy by walking
+             * This function will redirect user to google maps
+             */
             public void onClick(View v) {
                 //TODO need to link to googlemap
                 // Create a Uri from an intent string. Use the result to create an Intent.

@@ -34,6 +34,13 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Map;
 
+/**
+ * This class is used to display the user's main menu and to facilitate user from accessing functions
+ * such as viewing current appointment, taking queue number, cancel queue number, get directions to clinic and pharmacies,
+ * view clinic and pharmacies details, as well as chatting with chatbot
+ *
+ * @author Goh Shan Ying, Jonathan Chang, Lee Xuanhui, Luke Chin Peng Hao, Lynn Masillamoni, Russell Leung
+ */
 
 public class MainActivity extends AppCompatActivity implements FirebaseCallback  {
     User user;
@@ -111,6 +118,9 @@ public class MainActivity extends AppCompatActivity implements FirebaseCallback 
 
         ValueEventListener userListener = new ValueEventListener() {
             @Override
+            /**
+             * Update current appointment every time the user book or cancel an appointment
+             */
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 user = snapshot.getValue(User.class);
                 currentClinicID = user.getClinicID();
@@ -176,6 +186,10 @@ public class MainActivity extends AppCompatActivity implements FirebaseCallback 
                             });
                     buttonname.setOnClickListener(new View.OnClickListener() {
 
+                        /**
+                         * Redirect user to the user's current appointment's clinic page for more information about the clinic
+                         * @param view current appointment's clinic page
+                         */
                         @Override
                         public void onClick(View view) {
                             // Log.d("3", clinicName);
@@ -188,11 +202,14 @@ public class MainActivity extends AppCompatActivity implements FirebaseCallback 
                     });
                     buttoncancelqueue.setOnClickListener(new View.OnClickListener() {
 
+                        /**
+                         * Function to allow user to cancel their current appointment
+                         * @param view confirm cancel appointment alert box
+                         */
                         @Override
                         public void onClick(View view) {
                             //
                             AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                            //builder.setTitle("My title");\
                             builder.setMessage("Are you sure you want to cancel your appointment? " +
                                     "\n***ACTION IS IRREVERSIBLE***");
 
@@ -231,7 +248,11 @@ public class MainActivity extends AppCompatActivity implements FirebaseCallback 
     }
 
 
-
+    /**
+     * sign user out of the app
+     * Redirect user back to the Login class
+     * @param view Login page
+     */
 
     public void logout (View view){
         FirebaseAuth.getInstance().signOut();
@@ -239,15 +260,29 @@ public class MainActivity extends AppCompatActivity implements FirebaseCallback 
         finish();
     }
 
+
+    /**
+     * Redirect user to the Chatbot page
+     * @param view chatbot page
+     */
     public void chatbot (View view) {
         Intent chatbot = new Intent(this, ChatbotActivity.class);
         startActivity(chatbot);
     }
 
+    /**
+     * Redirect user to the Clinic Map view page
+     * @param view Clinic Map page
+     */
     public void nearestClinic (View view) {
         startActivity(new Intent(getApplicationContext(),MapsActivity.class));
         finish();
     }
+
+    /**
+     * Redirect user to the Pharmacy Map view page
+     * @param view Pharmacy Map page
+     */
     public void nearestPharmacy (View view) {
         startActivity(new Intent(getApplicationContext(),MapsActivityPharmacy.class));
         finish();

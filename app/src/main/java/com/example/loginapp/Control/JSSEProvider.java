@@ -1,9 +1,13 @@
 package com.example.loginapp.Control;
 import java.security.AccessController;
 import java.security.Provider;
-//JSSEProvider is used to link the modified versions of SSLContext,
-// KeyManagerFactory for X509, TrustManagerFactory for X509 and the AndroidCAstore
 
+/**
+ *JSSEProvider is used to link the modified versions of SSLContext,
+ * KeyManagerFactory for X509, TrustManagerFactory for X509 and the AndroidCAstore
+ *
+ * @author Goh Shan Ying, Jonathan Chang, Lee Xuanhui, Luke Chin Peng Hao, Lynn Masillamoni, Russell Leung
+ */
 public final class JSSEProvider extends Provider {
 
     public JSSEProvider() {

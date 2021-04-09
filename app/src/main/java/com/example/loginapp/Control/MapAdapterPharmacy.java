@@ -25,6 +25,13 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ *This class implements a Map adapter controller to derive all pharmacies in singapore on the map
+ * and to filter the map to show the nearest pharmacy or pharmacies within 5 km .
+ *
+ * @author Goh Shan Ying, Jonathan Chang, Lee Xuanhui, Luke Chin Peng Hao, Lynn Masillamoni, Russell Leung
+ */
+
 public class MapAdapterPharmacy {
     private static GoogleMap gmap;
     private static List<Marker> markers = new ArrayList<>();
@@ -35,13 +42,23 @@ public class MapAdapterPharmacy {
 
     }
 
+    /**
+     * set method for map
+     * @param gmap google map
+     */
     //set method for map
     public void setGmap(GoogleMap gmap){
         this.gmap = gmap;
     }
 
+    /**
+     * get method for map
+     * main method that gets all pharmacy info from the database and adds all pharmacies as markers to the app
+     * @param mMap google map
+     * @return  all pharmacy info from the database and adds all pharmacy as markers to the app
+     */
     //get method for map
-    //main method that gets all clinic info from the database and adds all pharmacies as markers to the app
+    //main method that gets all pharmacy info from the database and adds all pharmacies as markers to the app
     public GoogleMap getGmap(GoogleMap mMap){
         setGmap(mMap);
         LatLng SGLatLng = new LatLng(1.3521,103.8198);
@@ -100,6 +117,12 @@ public class MapAdapterPharmacy {
     }
 
 
+    /**
+     * a quicker method to add markers to map, markers are invisible because
+     * this method is called along with revealmarkers() or findnearestclinic()
+     * @param mMap google map
+     * @return clinic markers on map
+     */
     //a quicker method to add markers to map, markers are invisible because this method is called along with revealmarkers() or findnearestclinic()
     public GoogleMap getGmapWithGPS(GoogleMap mMap){
         setGmap(mMap);
@@ -125,6 +148,11 @@ public class MapAdapterPharmacy {
         return gmap;
     }
 
+    /**
+     * reveals pharmacy markers that are within 5km of the user
+     * @param mMap google map
+     * @param LL Longitude and latitude of pharmacy
+     */
     //reveals markers that are within 5km of the user
     public void revealMarkers(GoogleMap mMap , LatLng LL){
         Log.d("tag", "Markers"+ markers);
@@ -135,6 +163,13 @@ public class MapAdapterPharmacy {
         }
     }
 
+    /**
+     * creates a new array list (DistToMe) that stores the distance of every pharmacy to the user,
+     * sorts it by distance and reveals the marker of the pharmacy nearest to the user
+     *
+     * @param mMap google map
+     * @param LL Longitude and latitude of pharmacy
+     */
  //creates a new array list (DistToMe) that stores the distance of every pharmacy to the user,sorts it by distance and reveals the marker of the pharmacy nearest to the user
     public void findnearestclinic(GoogleMap mMap, LatLng LL){
         Log.d("tag","Finding nearest pharmacy..");

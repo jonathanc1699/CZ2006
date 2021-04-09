@@ -29,6 +29,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+/**
+ * This class is to handle the login process of all users by calling Firebase authenticator
+ *
+ * @author Goh Shan Ying, Jonathan Chang, Lee Xuanhui, Luke Chin Peng Hao, Lynn Masillamoni, Russell Leung
+ */
+
 public class Login extends AppCompatActivity {
     EditText mEmail, mPassword;
     Button mLoginBtn;
@@ -57,6 +63,10 @@ public class Login extends AppCompatActivity {
 
         mLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
+            /**
+             * This function is used to validate if email and password exist in the user's database
+             * Also checks for empty fields when user is trying to log in, by returning appropriate message
+             */
             public void onClick(View v) {
                 String email = mEmail.getText().toString().trim();
                 String password = mPassword.getText().toString().trim();
@@ -142,16 +152,12 @@ public class Login extends AppCompatActivity {
                                         startActivity(new Intent(getApplicationContext(), MainActivity.class));
 
 
-//                                    Intent intent = new Intent(ListofClinics.this,ClinicPage.class);
-//                                    intent.putExtra("CLINIC_NAME", arrayList.get(i));
                                     }
                                     else {
-                                        //Toast.makeText(getApplicationContext(), "Your account has been disabled", Toast.LENGTH_LONG).show();
-
                                         AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
-                                        //builder.setTitle("My title");
+
                                         builder.setMessage("Your account has been disabled");
-                                        // add a button
+
                                             builder.setPositiveButton(
                                                     "OK",
                                                     new DialogInterface.OnClickListener() {
@@ -159,14 +165,9 @@ public class Login extends AppCompatActivity {
                                                             dialog.cancel();
                                                             startActivity(new Intent(getApplicationContext(),Login.class));
                                                             finish();
-//                                                            finish();
-//                                                            startActivity(getIntent());
                                                         }
                                                     });
 
-
-
-                                        // create and show the alert dialog
                                         AlertDialog dialog = builder.create();
                                         dialog.show();
                                     }
@@ -179,14 +180,6 @@ public class Login extends AppCompatActivity {
 
                                 }
                             });
-
-
-
-                                //TODO: isAdmin, we need reference to AdminActivity
-
-
-
-
                             } else {
                                 firebaseUser.sendEmailVerification();
                                 Toast.makeText(getApplicationContext(), "check your email to verify your acccount", Toast.LENGTH_LONG).show();

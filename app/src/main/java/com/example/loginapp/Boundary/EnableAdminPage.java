@@ -28,6 +28,12 @@ import java.util.HashMap;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+/**
+ * This class is used by an admin to enable a user so he can use the SickGoWhere app
+ *
+ * @author Goh Shan Ying, Jonathan Chang, Lee Xuanhui, Luke Chin Peng Hao, Lynn Masillamoni, Russell Leung
+ */
+
 
 public class EnableAdminPage extends AppCompatActivity {
     ArrayList<com.example.loginapp.Entity.User> User=new ArrayList<com.example.loginapp.Entity.User>();
@@ -36,11 +42,6 @@ public class EnableAdminPage extends AppCompatActivity {
     ListView listView;
     FirebaseAuth fAuth=FirebaseAuth.getInstance();
     String newtext;
-
-
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,21 +102,7 @@ public class EnableAdminPage extends AppCompatActivity {
         usersdRef.addListenerForSingleValueEvent(eventListener);
 
 
-
-
-
-
-
-
-
-
     }
-
-
-
-
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -174,22 +161,12 @@ public class EnableAdminPage extends AppCompatActivity {
 
     }
 
-
-
-//To this
-
-
-
-
-
-
-
-
-
-
-
-
-    //shows dialog to ask admin if he really wants to delete user
+    /**
+     * This function is used to shows a confirmation dialog to ask admin if he really wants to enable user
+     * if yes , system will find user in database and enable the account
+     * An email notification will be sent to user
+     * @param position index of user to be deleted
+     */
     private void showEnableDialog(final long position) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -232,6 +209,9 @@ public class EnableAdminPage extends AppCompatActivity {
         alertDialog.show();
     }
 
+    /**
+     *  Return back to Admin homepage
+     */
     @Override
     public void onBackPressed() {
         Intent myIntent = new Intent(getApplicationContext(), mainactivityAdmin.class);

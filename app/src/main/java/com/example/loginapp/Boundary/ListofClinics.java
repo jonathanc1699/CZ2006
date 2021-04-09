@@ -29,14 +29,18 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * This class is used to display all the clinics in singapore in a list view
+ *
+ * @author Goh Shan Ying, Jonathan Chang, Lee Xuanhui, Luke Chin Peng Hao, Lynn Masillamoni, Russell Leung
+ */
+
 public class ListofClinics extends AppCompatActivity {
 
 
     ListView listView;
-    //EditText SearchFilter;
     com.example.loginapp.Control.ClinicController ClinicController;
     String newtext;
-    //private ArrayAdapter arrayAdapter;
     ArrayList<com.example.loginapp.Entity.Clinic> Clinic=new ArrayList<Clinic>();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference clinicRef = db.collection("clinic");
@@ -57,24 +61,15 @@ public class ListofClinics extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.List_view_users);
         listView.setEmptyView(findViewById(R.id.empty_subtitle_text));
 
-
-
-
-
         //get all clinic details
-
         clinicRef.get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot ClinicList : task.getResult()) {
-                                //Log.d("Clinic Names","Clinic Names" + ClinicList.getString("Clinic Name"));
                                 String clinicID=ClinicList.getId();
                                 String clinicName = ClinicList.getString("Clinic Name");
-                                //Log.d("TAG", clinicID);
-
-
 
                                 if(clinicName!=null){
                                     Clinic.add(new Clinic(clinicID,clinicName));
@@ -86,15 +81,11 @@ public class ListofClinics extends AppCompatActivity {
                             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
-
-                                    //Toast.makeText(ListofClinics.this, "clicked item"+i+" "+arrayList.get(i).toString(),Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(ListofClinics.this, ClinicPage.class);
                                     intent.putExtra("Clinic Name",ClinicController.getItem(i).getClinicName());
                                     intent.putExtra("Clinic ID",ClinicController.getItem(i).getClinicID());
                                     Log.d("intent", String.valueOf(intent.getStringExtra("Clinic Name")));
                                     Log.d("intent", String.valueOf(intent.getStringExtra("Clinic ID")));
-                                    //TODO send intents for image, phone and address
-                                    //TODO and your queue number, current queue number
                                     startActivity(intent);
                                 }
                             });
@@ -104,29 +95,7 @@ public class ListofClinics extends AppCompatActivity {
                     }
                 });
 
-
-
-
-        // Start listing users from the beginning, 1000 at a time.
-
-
-
-
-
-
-
-
-
     }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -136,9 +105,6 @@ public class ListofClinics extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu, menu);
 
         MenuItem menuItem = menu.findItem(R.id.searchView);
-
-
-
 
         SearchView searchView = (SearchView) menuItem.getActionView();
 
@@ -195,6 +161,9 @@ public class ListofClinics extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Return back to Clinic's  Maps view
+     */
     @Override
     public void onBackPressed() {
         Intent myIntent = new Intent(getApplicationContext(), MapsActivity.class);

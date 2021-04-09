@@ -32,6 +32,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+/**
+ * This class creates the chatbot, retrieve user input and return a message to user
+ * by calling the following classes: ChatbotController, Chatstats, ResponseMessage and MessageAdapter
+ *
+ * @author  Goh Shan Ying, Jonathan Chang, Lee Xuanhui, Luke Chin Peng Hao, Lynn Masillamoni, Russell Leung
+
+ */
+
+
 
 public class ChatbotActivity extends AppCompatActivity implements MessageAdapter.OnNoteListener {
 
@@ -139,6 +148,9 @@ public class ChatbotActivity extends AppCompatActivity implements MessageAdapter
         });
     }
 
+    /**
+     * returns position of last message that can be seen on the screen
+     */
     //returns position of last message that can be seen on the screen
     public boolean isVisible(){
         LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
@@ -147,12 +159,23 @@ public class ChatbotActivity extends AppCompatActivity implements MessageAdapter
         return (positionOfLastVisibleItem>=itemCount);
     }
 
+    /**
+     * adds user and chatbot messages to list of messages to be displayed
+     * @param message text that is going to be displayed in the speech bubble for the user or chatbot
+     * @param isUser boolean value to know if the message is sent by the user or the chatbot so when the speech bubble is displayed in the chat it'll be on the correct side
+     */
     //adds user and chatbot messages to list of messages to be displayed
     public void sendMessage(String message, boolean isUser) {
         ResponseMessage newMessage = new ResponseMessage(message, isUser);
         responseMessageList.add(newMessage);
     }
 
+    /**
+     * converts a arraylist to string
+     * @param convertedString convert arraylist to string
+     * @param arraylist arraylist
+     * @return string what was converted from the string array list
+     */
     //converts a arraylist to string
     public String arraylistToString(String convertedString, ArrayList<String> arraylist) {
         for (int x = 1; x < arraylist.size(); x++) {
@@ -161,6 +184,9 @@ public class ChatbotActivity extends AppCompatActivity implements MessageAdapter
         return convertedString;
     }
 
+    /**
+     * creates hashmap where the keys are diseases and values are their respective symptoms
+     */
     //creates hashmap where the keys are diseases and values are their respective symptoms
     public void createHashMap() {
         diseaseRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -194,6 +220,13 @@ public class ChatbotActivity extends AppCompatActivity implements MessageAdapter
         });
     }
 
+    /**
+     * prints possible diseases the user might have, maximum symptom match rate and user's evaluated risk level
+     * @param highestcountdiseasearray string arraylist of the diseases the user might have
+     * @param possiblesymptomSize number of possible symptoms
+     * @param highestcount number of valid symptoms that the user has
+     * @param possibleSymptomsCount the smallest number of symptoms for all the diseases the user is at risk
+     */
     //prints possible diseases the user might have, maximum symptom match rate and user's evaluated risk level
     public void printriskLevel(ArrayList<String> highestcountdiseasearray, int possiblesymptomSize, int highestcount, int possibleSymptomsCount){
 
@@ -226,9 +259,11 @@ public class ChatbotActivity extends AppCompatActivity implements MessageAdapter
             clinic = "true";
         }
     }
-    
 
 
+    /**
+     * @param position position of the message in the list
+     */
 
     @Override
     public void onNoteClick(int position) {

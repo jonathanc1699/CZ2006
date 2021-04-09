@@ -1,7 +1,5 @@
 package com.example.loginapp.Control;
 
-
-
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
@@ -22,7 +20,12 @@ import com.example.loginapp.R;
 
 import java.util.ArrayList;
 
-
+/**
+ * This class implements a PharmacyController which retrieves the pharmacy data from the database and display it in a list.
+ * It also allows the user to search for a pharmacy.
+ *
+ * @author Goh Shan Ying, Jonathan Chang, Lee Xuanhui, Luke Chin Peng Hao, Lynn Masillamoni, Russell Leung
+ */
 
 public class PharmacyController extends ArrayAdapter<Pharmacy> implements Filterable {
 
@@ -30,7 +33,6 @@ public class PharmacyController extends ArrayAdapter<Pharmacy> implements Filter
     ArrayList<Pharmacy> PharmaciesTotal;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference PharmacyRef = db.collection("pharmacy");
-    public static ArrayList<Pharmacy> FIREBASEDATA;
     ArrayList<Pharmacy> Pharmaciesfiltered;
     Context context;
     LayoutInflater inflater;
@@ -112,6 +114,12 @@ public class PharmacyController extends ArrayAdapter<Pharmacy> implements Filter
 
 //filter logic
 
+    /**
+     * This function is used to search for the string entered by the user among the list of pharmacies.
+     * If this string is a substring of any of the pharmacies,
+     * the system will return all the pharmacies that match this string in a list
+     * @return all pharmacies that are a match with the entered string in the search bar
+     */
 
     @Override
     public Filter getFilter() {

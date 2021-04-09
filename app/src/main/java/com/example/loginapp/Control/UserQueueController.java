@@ -16,17 +16,21 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
+/**
+ * This class implements the UserQueueController controller which will be used to update Firestore
+ * Functions in this class includes, updating the user's queue number (assign or to cancel queue),
+ * and to send booking confirmation email to user
+ *
+ * @author Goh Shan Ying, Jonathan Chang, Lee Xuanhui, Luke Chin Peng Hao, Lynn Masillamoni, Russell Leung
+ */
 
 public class UserQueueController {
-
-
 
     final UserQueueController context = this;
 
     // upon registration, default for queue and current clinic are 0 and null respectively
     // queueController is used to modify the values in firebase
     FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-    //should be another way to ensure its the same current user thats logged in
     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Users");
     // opens up the current user's database reference
     final DatabaseReference currentUser = databaseReference.child(firebaseUser.getUid());
@@ -43,8 +47,12 @@ public class UserQueueController {
     String fullName;
     String bookedClinic;
 
-
-    // update current user clinic and queue to firebase
+    /**
+     * update current user clinic and queue to firebase
+     * @param latestclinicq user's queue number
+     * @param clinicName  name of clinic booked by user
+     * @param clinicID  ID of clinic booked by user
+     */
     public void assignQToUser(int latestclinicq, String clinicName, String clinicID) {
         ValueEventListener userListener = new ValueEventListener() {
             @Override
@@ -79,8 +87,10 @@ public class UserQueueController {
         currentUser.addListenerForSingleValueEvent(userListener);
     }
 
-    //TODO add this to code
-    // update current user clinic and queue to firebase when user cancel booking
+    /**
+     * Set user's current appointment to default(No current appointment)
+     * @param userID user's ID
+     */
     public void cancelQUser(String userID) {
         ValueEventListener userListener = new ValueEventListener() {
             @Override
@@ -115,7 +125,10 @@ public class UserQueueController {
         currentUser.addListenerForSingleValueEvent(userListener);
     }
 
-
+    /**
+     * Send cancellation email to user
+     * @param clinicname name of clinic which was cancelled by the user
+     */
     //Send Cancellation email to user
     public void sendCancellationEmail(String clinicname) {
 

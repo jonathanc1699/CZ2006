@@ -20,6 +20,15 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+/**
+ *This class implements the ClinicAdminQueueController controller which will be used to update
+ * both Firestore and Firebase.
+ * Functions in this class includes, incrementing the clinic's currently serving queue number,
+ * clear user's current clinic and queue, send reminder email to the third user in queue
+ * and to reset clinic's latest and currently serving queue number.
+ *
+ * @author Goh Shan Ying, Jonathan Chang, Lee Xuanhui, Luke Chin Peng Hao, Lynn Masillamoni, Russell Leung
+ */
 
 public class ClinicAdminQueueController extends AppCompatActivity {
 
@@ -33,8 +42,12 @@ public class ClinicAdminQueueController extends AppCompatActivity {
     //should be another way to ensure its the same current user thats logged in
     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Users");
 
+    /**
+     * Updates the incremented queue number to Firestore
+     * @param clinicID clinic admin's clinic ID
+     * @param current_patient_count incremented serving queue number
+     */
     public void incServeQ(String clinicID, int current_patient_count) {
-
 
         clinicRef.document(clinicID).
                 update("ClinicCurrentQ", current_patient_count)
@@ -55,6 +68,16 @@ public class ClinicAdminQueueController extends AppCompatActivity {
 
     }
 
+    /**
+     * Update the user's ClinicID, CurrentClinic and CurrentQueue to default value (No current Appointment)
+     * This function is used for those user who finished their appointment
+     *
+     * Only the user whose clinicID and CurrentQueue data matches the passed in parameters
+     * will have their data updated in Firebase
+     *
+     * @param clinicID Clinic ID
+     * @param current_patient_count CurrentQueue number
+     */
     public void clearUserClinicandQueue(String clinicID, int current_patient_count)
     {
 
@@ -92,6 +115,13 @@ public class ClinicAdminQueueController extends AppCompatActivity {
 
     }
 
+    /**
+     * Fetch the email and username of third person in queue and send an email reminder to the user
+     * So that the user can make their way down
+     * @param Clinic_name clinic Name
+     * @param clinicID clinic's ID
+     * @param thirduserQ Queue number of the 3rd person in queue
+     */
     //Send email reminder to the 3rd person in queue
     //So that the user can make their way down
     public void sendReminderEmail(String Clinic_name, String clinicID, int thirduserQ)
@@ -142,6 +172,11 @@ public class ClinicAdminQueueController extends AppCompatActivity {
 
     }
 
+    /**
+     * Reset the Clinic's latest queue number and currently serving queue number to 0
+     * @param clinicID Clinic's ID
+     * @param Clinic_name clinic's name
+     */
     public void wipeAll(String clinicID, String Clinic_name)
     {
         //wipe current_patient_count

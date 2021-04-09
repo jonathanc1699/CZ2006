@@ -14,6 +14,14 @@ import com.example.loginapp.R;
 
 import java.util.List;
 
+/**
+ * This class implements the MessageAdapter controller which will a the backbone of the chatbot function
+ * It creates the UI for the chatbot to work, takes the messages and
+ * displays them along with the chat bubbles and ensure that they're on the correct side
+ *
+ *@author Goh Shan Ying, Jonathan Chang, Lee Xuanhui, Luke Chin Peng Hao, Lynn Masillamoni, Russell Leung
+ */
+
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.CustomViewHolder> {
 
     private OnNoteListener onNoteListener;
@@ -43,6 +51,11 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.CustomVi
 
     List<ResponseMessage> responseMessageList;
 
+    /**
+     *
+     * @param responseMessageList  list of messages sent by the user and chatbot to be displayed in the chat
+     * @param onNoteListener check if the send button in the keyboard was pressed then can get what the user typed in
+     */
     public MessageAdapter(List<ResponseMessage> responseMessageList, OnNoteListener onNoteListener) {
         this.responseMessageList = responseMessageList;
         this.onNoteListener = onNoteListener;
@@ -55,6 +68,14 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.CustomVi
         }
         return R.layout.chatbot_bubble;
     }
+
+    /**
+     *creates the layout of the chat when the chatbot is first opened
+     *
+     * @param parent parent of view group
+     * @param viewType view type
+     * @return layout of chat
+     */
     @NonNull
     @Override
     public CustomViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -62,11 +83,21 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.CustomVi
 
     }
 
+    /**
+     *binds the messages to be displayed in the chatbot to the chat
+     *
+     * @param holder position of the message to be displayed in the responseMessage list
+     * @param position position to get text message
+     */
     @Override
     public void onBindViewHolder(@NonNull MessageAdapter.CustomViewHolder holder, int position) {
         holder.textView.setText(Html.fromHtml(responseMessageList.get(position).getTextMessage()));
     }
 
+    /**
+     * get the number of messages to be displayed
+     * @return size of response message list
+     */
     @Override
     public int getItemCount() {
         return responseMessageList.size();

@@ -28,19 +28,21 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * This class is used to display all the pharmacies in singapore in a list view
+ *
+ * @author Goh Shan Ying, Jonathan Chang, Lee Xuanhui, Luke Chin Peng Hao, Lynn Masillamoni, Russell Leung
+ */
+
 public class ListofPharmacies extends AppCompatActivity {
 
 
     ListView listView;
-    //EditText SearchFilter;
     com.example.loginapp.Control.PharmacyController PharmacyController;
     String newtext;
-    //private ArrayAdapter arrayAdapter;
     ArrayList<com.example.loginapp.Entity.Pharmacy> Pharmacy=new ArrayList<Pharmacy>();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference PharmacyRef = db.collection("pharmacy");
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,16 +51,9 @@ public class ListofPharmacies extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-
-
-
         //initialize the views
         listView = (ListView) findViewById(R.id.List_view_users);
         listView.setEmptyView(findViewById(R.id.empty_subtitle_text));
-
-
-
-
 
         //get all pharmacy details
 
@@ -100,15 +95,7 @@ public class ListofPharmacies extends AppCompatActivity {
                     }
                 });
 
-
-
-
-        // Start listing users from the beginning, 1000 at a time.
-
     }
-
-
-
 
 
     @Override
@@ -117,9 +104,6 @@ public class ListofPharmacies extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu, menu);
 
         MenuItem menuItem = menu.findItem(R.id.searchView);
-
-
-
 
         SearchView searchView = (SearchView) menuItem.getActionView();
 
@@ -173,6 +157,9 @@ public class ListofPharmacies extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Return back to Pharmacy's map view
+     */
     @Override
     public void onBackPressed() {
         Intent myIntent = new Intent(getApplicationContext(), MapsActivityPharmacy.class);

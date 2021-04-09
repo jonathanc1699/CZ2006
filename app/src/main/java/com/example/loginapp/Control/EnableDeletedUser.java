@@ -2,9 +2,22 @@ package com.example.loginapp.Control;
 
 import android.util.Log;
 
+/**
+ * This class implements the EnableDeletedUser controller where relevant emails will be sent to user.
+ * This class is used in DisableAdminPage and EnableAdminPage class.
+ * These class will either call EnableDeletedUser class to send a delete email or enable email to user.
+ *
+ * @author Goh Shan Ying, Jonathan Chang, Lee Xuanhui, Luke Chin Peng Hao, Lynn Masillamoni, Russell Leung
+ */
+
+
 public class EnableDeletedUser {
 
-//send delete email format
+    /**
+     * send email to deleted user
+     * @param useremail deleted user's email
+     * @param username deleted user's full name
+     */
     public void sendDeleteEmail(String useremail,String username)
     {
         String senderemail = "cz2006sickgowhere@gmail.com";
@@ -32,6 +45,12 @@ public class EnableDeletedUser {
         sender.start();
 
     }
+
+    /**
+     * send email to enabled user
+     * @param useremail enabled user's email
+     * @param username enabled user's full name
+     */
     //send enable email format
     public void sendEnableEmail(String useremail,String username)
     {

@@ -46,6 +46,14 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
+/**
+ * This class implements the ClinicPage Controller where it shows the details of the selected clinic.
+ * It also contains functions such as getting directions to the clinic by walking or by car.
+ * It also allows user to book an appointment with the selected clinic.
+ *
+ * @author Goh Shan Ying, Jonathan Chang, Lee Xuanhui, Luke Chin Peng Hao, Lynn Masillamoni, Russell Leung
+ */
+
 public class ClinicPage extends AppCompatActivity {
 
     final Context context = this;
@@ -181,6 +189,10 @@ public class ClinicPage extends AppCompatActivity {
             }
         });
         mbutton_direction.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Getting directions from current location to selected clinic by car
+             * This function will redirect user to google maps
+             */
             public void onClick(View v) {
                 //TODO need to link to googlemap
                 // Create a Uri from an intent string. Use the result to create an Intent.
@@ -196,6 +208,10 @@ public class ClinicPage extends AppCompatActivity {
             }
         });
         mbutton_directionwalk.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Getting directions from current location to selected clinic by walking
+             * This function will redirect user to google maps
+             */
             public void onClick(View v) {
                 //TODO need to link to googlemap
                 // Create a Uri from an intent string. Use the result to create an Intent.
@@ -224,7 +240,14 @@ public class ClinicPage extends AppCompatActivity {
         return true;
     }
 
-
+    /**
+     * This function allows user to book an appointment with their preferred clinic
+     * However the user cannot book an appointment with the clinic if the time is after operating hours,
+     * if the current time is during the last hour of operation ( clinic closing soon)
+     * and if the clinic if fully booked for the day
+     *
+     * Upon successful booking , the user will receive a booking confirmation email.
+     */
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void takeQNumber() {
         LayoutInflater li = LayoutInflater.from(context);
@@ -244,9 +267,7 @@ public class ClinicPage extends AppCompatActivity {
 
         java.util.Date date = new java.util.Date();
         Timestamp local = new Timestamp(date.getTime());
-        //TODO strrtime
         String strTime = sdf.format(date);
-        //String strTime = "21:00:00";
 
         System.out.println("Local in String format " + strTime);
 
@@ -393,6 +414,13 @@ public class ClinicPage extends AppCompatActivity {
 
     }
 
+    /**
+     * Check if the user have a pending appointment
+     * If yes, system will check if user if he wish to cancel his current appointment and book a new appointment with the selected clinic
+     * If yes, system will cancel his current appointment and book a new appointment
+     * then send a booking confirmation email to the user
+     * @param waitingTime estimated waiting time
+     */
     private void checkCurrentUserInfo(int waitingTime)
     {
         UserQueueController userQueueController = new UserQueueController();
@@ -477,6 +505,10 @@ public class ClinicPage extends AppCompatActivity {
 
     }
 
+    /**
+     * Send booking confirmation email to user
+     * Update Firestore with the clinic's latest queue number
+     */
     //Send Confirmation email to user
     private void sendConfirmationEmail() {
         String senderemail = "cz2006sickgowhere@gmail.com";
@@ -491,7 +523,6 @@ public class ClinicPage extends AppCompatActivity {
         Thread sender = new Thread(new Runnable() {
             public void run() {
                 try {
-                    //ToDO GET the booking details for the confirmation email.
                     GMailSender sender = new GMailSender("cz2006sickgowhere@gmail.com", "123456sickgowhere");
                     sender.sendMail("Booking Confirmation: "+ selectedClinic.getClinicName() + ", Queue No:",
                                 "Hello,\nThis is your Confirmation email, your queue no is "+(latestclinicq-1)+".\n"+

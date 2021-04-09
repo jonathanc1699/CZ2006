@@ -26,6 +26,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+/**
+ *This class is to handle the Registration process of all users by calling Firebase authenticator
+ *
+ * @author Goh Shan Ying, Jonathan Chang, Lee Xuanhui, Luke Chin Peng Hao, Lynn Masillamoni, Russell Leung
+ */
 
 public class Register extends AppCompatActivity {
     EditText mFullName, mEmail, mPassword, mConfirmPassword;
@@ -57,6 +62,10 @@ public class Register extends AppCompatActivity {
 
         mRegisterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
+            /**
+             * This function is used to validate if email and password does not already in the user's database
+             * Also checks for invalid fields when user is trying to register, by returning appropriate message
+             */
             public void onClick(View v) {
                 String email = mEmail.getText().toString().trim();
                 String password = mPassword.getText().toString().trim();

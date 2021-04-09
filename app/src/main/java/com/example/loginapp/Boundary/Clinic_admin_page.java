@@ -35,19 +35,24 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.util.Locale;
-import java.util.Map;
 import java.util.TimeZone;
+
+/**
+ * This class is used to display the clinic admin's main menu
+ * It is used by a clinic's admin to either increment the currently serving queue number or
+ * to reset the queue number to zero after operating hours
+ *
+ * @author Goh Shan Ying, Jonathan Chang, Lee Xuanhui, Luke Chin Peng Hao, Lynn Masillamoni, Russell Leung
+ */
 
 public class Clinic_admin_page extends AppCompatActivity implements FirebaseCallback{
 
     // upon registration, default for queue and current clinic are 0 and null respectively
     // queueController is used to modify the values in firebase
     FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-    //should be another way to ensure its the same current user thats logged in
     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Users");
     // opens up the current user's database reference
     final DatabaseReference currentUser = databaseReference.child(firebaseUser.getUid());
@@ -56,8 +61,6 @@ public class Clinic_admin_page extends AppCompatActivity implements FirebaseCall
     private int current_patient_count;
     private int total_patient_count;
     private String Clinic_name;
-
-
 
     TextView textview_currentpatient;
     TextView textView_clinicname;
@@ -73,13 +76,13 @@ public class Clinic_admin_page extends AppCompatActivity implements FirebaseCall
 
 
     public void onCallback(String value){}
+
     public void loadClinic(FirebaseCallback Callback) {
 
         ValueEventListener userlistener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User user = snapshot.getValue(User.class);
-                //Map<String, Object> userValues = user.altMap();
                 String clinicID = user.getClinicID();
                 Log.d("firebase", clinicID);
                 String Clinic_name = user.getClinicName();
@@ -97,8 +100,6 @@ public class Clinic_admin_page extends AppCompatActivity implements FirebaseCall
         };
         currentUser.addListenerForSingleValueEvent(userlistener);
     }
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,6 +143,14 @@ public class Clinic_admin_page extends AppCompatActivity implements FirebaseCall
             }
         });
         }
+
+    /**
+     * To increment the clinic's currently serving queue number
+     * Clinic admin is only able to increment queue if total patient count is more than currently serving queue number
+     * The user who have finished his appointment will have his current clinic set to default
+     * A reminder email will be sent to the third user in queue if there exist more than 3 people in queue
+     * @param view Increment alert box
+     */
     public void button_increment(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         //builder.setTitle("My title");
@@ -203,6 +212,11 @@ public class Clinic_admin_page extends AppCompatActivity implements FirebaseCall
     }
 
 
+    /**
+     * Clinic admin will be able to reset currently serving queue number and latest queue number to 0
+     * Only able to use this function after operating hours
+     * @param view Reset queue alert box
+     */
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void button_wipe(View view) {
@@ -218,7 +232,6 @@ public class Clinic_admin_page extends AppCompatActivity implements FirebaseCall
                         if (task.isSuccessful()) {
                             DocumentSnapshot ClinicDetailList = task.getResult();
 
-                            Map<String, Object> map = ClinicDetailList.getData();
                             clinic[0] = ClinicDetailList.toObject(Clinic.class);
                         }
                         else {
@@ -230,16 +243,12 @@ public class Clinic_admin_page extends AppCompatActivity implements FirebaseCall
         start = clinic[0].getStartTime();
         close = clinic[0].getClosingTime();
 
-        LocalTime startTime = LocalTime.parse(start);
-        LocalTime closingTime = LocalTime.parse(close);
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH);
         TimeZone tz = TimeZone.getTimeZone("Asia/Singapore");
         sdf.setTimeZone(tz);
 
         java.util.Date date = new java.util.Date();
-        Timestamp local = new Timestamp(date.getTime());
         String strTime = sdf.format(date);
-        //String strTime="21:00:00";
 
         // set time constraint only after clinic operating hours
         if ((LocalTime.parse(strTime).isAfter(LocalTime.parse(close))) ||
@@ -298,13 +307,18 @@ public class Clinic_admin_page extends AppCompatActivity implements FirebaseCall
 
     }
 
+    /**
+     * Return back to Login page
+     */
     @Override
     public void onBackPressed() {
         Intent myIntent = new Intent(getApplicationContext(), Login.class);
         startActivityForResult(myIntent, 0);
         super.onBackPressed();
     }
-
+    /**
+     * Logout of Clinic admin account and return back to login page
+     */
     public void button_logout (View view){
         FirebaseAuth.getInstance().signOut();
         startActivity(new Intent(getApplicationContext(),Login.class));

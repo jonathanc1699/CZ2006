@@ -36,6 +36,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+/**
+ *This class implements MapsActivity controller which is used to display the map and other map functions
+ *
+ * @author Goh Shan Ying, Jonathan Chang, Lee Xuanhui, Luke Chin Peng Hao, Lynn Masillamoni, Russell Leung
+ */
+
 public class MapsActivityPharmacy extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
@@ -67,6 +73,9 @@ public class MapsActivityPharmacy extends AppCompatActivity implements OnMapRead
 
         //list button, when clicked, opens list view of pharmacies
         listviewBtn.setOnClickListener(new View.OnClickListener() {
+            /**
+             * list button, when clicked, opens list view of pharmacies
+             */
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), ListofPharmacies.class));
@@ -77,6 +86,9 @@ public class MapsActivityPharmacy extends AppCompatActivity implements OnMapRead
         //nearest button, when clicked, shows nearest pharmacy to user
         nearestBtn.setOnClickListener(new View.OnClickListener() {
             @Override
+            /**
+             * nearest button, when clicked, shows nearest pharmacy to the user
+             */
             public void onClick(View v) {
                 try {
                     mMap.clear();
@@ -97,6 +109,9 @@ public class MapsActivityPharmacy extends AppCompatActivity implements OnMapRead
         //nearby button, when clicked, shows pharmacies within 5km of user
         nearbyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
+            /**
+             * shows pharmacies within 5km of user
+             */
             public void onClick(View view) {
                 try {
                     mMap.clear();
@@ -118,6 +133,12 @@ public class MapsActivityPharmacy extends AppCompatActivity implements OnMapRead
     }
 
     //Boundary level processes that occur when the map has loaded, gets user's current location and adds a marker to it, loading window for map
+
+    /**
+     *Boundary level processes that occur when the map has loaded, gets user's current location and adds a marker to it
+     *loading window for map
+     * @param googleMap google map
+     */
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -161,6 +182,9 @@ public class MapsActivityPharmacy extends AppCompatActivity implements OnMapRead
         //when user clicks on the name of the clinic on the marker, it will direct them to pharmacy page of the selected pharmacy
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
+            /**
+             * when user clicks on the name of the clinic on the marker, it will direct them to clinic page of the selected clinic
+             */
             public void onInfoWindowClick(Marker marker) {
                 marker.hideInfoWindow();
                 if (marker.getTitle() != "You are here"){
@@ -174,6 +198,11 @@ public class MapsActivityPharmacy extends AppCompatActivity implements OnMapRead
         });
     }
 
+    /**
+     *
+     * @param item menu item that user have selected
+     * @return start activity based on selected menu item
+     */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
@@ -183,6 +212,9 @@ public class MapsActivityPharmacy extends AppCompatActivity implements OnMapRead
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Return to user's main menu page
+     */
     @Override
     public void onBackPressed() {
             Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
@@ -190,6 +222,12 @@ public class MapsActivityPharmacy extends AppCompatActivity implements OnMapRead
             super.onBackPressed();
     }
 
+    /**
+     *Called when a long press has occurred
+     * @param keyCode The value in event.getKeyCode().
+     * @param event Description of the key event.
+     * @return Either exit or stay
+     */
     @Override
     public boolean onKeyLongPress(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -208,6 +246,9 @@ public class MapsActivityPharmacy extends AppCompatActivity implements OnMapRead
         return super.onKeyLongPress(keyCode, event);
     }
 
+    /**
+     *  getting GPS permission from user
+     */
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void getGPSPermission() {
         if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -218,6 +259,13 @@ public class MapsActivityPharmacy extends AppCompatActivity implements OnMapRead
         }
     }
 
+    /**
+     *Getting for user to enable location on phone if he have not granted GPS permission
+     *
+     * @param requestCode request code
+     * @param permissions The requested permission , GPS permission
+     * @param grantResults permission is either granted or denied
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
