@@ -155,6 +155,21 @@ public class User {
     }
 
     /**
+     * Get disabled status
+     * @return Boolean Disabled
+     */
+    public Boolean getdisabled() {
+        return Disabled;
+    }
+    /**
+     * Get admin status
+     * @return Boolean Admin
+     */
+    public Boolean getadmin() {
+        return Admin;
+    }
+
+    /**
      * Map a custom user object into a Map data type
      * @return Map of a user object
      */
@@ -166,8 +181,8 @@ public class User {
         result.put("currentQueue", currentQueue);
         result.put("currentClinic", currentClinic);
         result.put("email", email);
-        result.put("Admin", Admin);
-        result.put("Disabled", Disabled);
+        result.put("admin", Admin);
+        result.put("disabled", Disabled);
         result.put("clinicAdmin", clinicAdmin);
         result.put("clinicID", clinicID);
         result.put("clinicName", clinicName);
